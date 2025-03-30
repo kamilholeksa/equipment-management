@@ -1,0 +1,26 @@
+spring:
+
+# Datasource
+  datasource:
+    url: jdbc:postgresql://localhost:5432/equipment_management
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+# JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+# Liquibase
+  liquibase:
+    change-log: classpath:db/db.changelog-master.xml
+
+application:
+
+  # Security
+  security:
+    jwt:
+      secret-key: secret_key
+      token-validity: 1800 # Seconds

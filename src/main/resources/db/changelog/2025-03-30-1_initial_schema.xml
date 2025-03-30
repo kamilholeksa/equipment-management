@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!--  Create tables  -->
+    <changeSet id="2025-03-30-1-1"
+               author="kamilholeksa">
+        <createTable tableName="address">
+            <column autoIncrement="true"
+                    name="id"
+                    type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_address"/>
+            </column>
+            <column name="postal_code"
+                    type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city"
+                    type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street"
+                    type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number"
+                    type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description"
+                    type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-2"
+               author="kamilholeksa">
+        <createTable tableName="app_user">
+            <column autoIncrement="true"
+                    name="id"
+                    type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_app_user"/>
+            </column>
+            <column name="created_by"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date"
+                    type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by"
+                    type="VARCHAR(50)"/>
+            <column name="last_modified_date"
+                    type="DATETIME"/>
+            <column name="first_name"
+                    type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name"
+                    type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+            <column name="password"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email"
+                    type="VARCHAR(100)">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+            <column name="phone_number"
+                    type="VARCHAR(20)"/>
+            <column name="active"
+                    type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-3"
+               author="kamilholeksa">
+        <createTable tableName="equipment">
+            <column autoIncrement="true"
+                    name="id"
+                    type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_equipment"/>
+            </column>
+            <column name="created_by"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date"
+                    type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by"
+                    type="VARCHAR(50)"/>
+            <column name="last_modified_date"
+                    type="DATETIME"/>
+            <column name="manufacturer"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description"
+                    type="TEXT"/>
+            <column name="inventory_number"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+            <column name="serial_number"
+                    type="VARCHAR(50)">
+                <constraints unique="true"/>
+            </column>
+            <column name="status"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location"
+                    type="VARCHAR(255)"/>
+            <column name="purchase_date"
+                    type="DATE"/>
+            <column name="warranty_until"
+                    type="DATE"/>
+            <column name="withdrawal_date"
+                    type="DATE"/>
+            <column name="equipment_type_id"
+                    type="BIGINT"/>
+            <column name="address_id"
+                    type="BIGINT"/>
+            <column name="user_id"
+                    type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-4"
+               author="kamilholeksa">
+        <createTable tableName="equipment_history">
+            <column autoIncrement="true"
+                    name="id"
+                    type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_equipmenthistory"/>
+            </column>
+            <column name="equipment_id"
+                    type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="old_location"
+                    type="VARCHAR(255)"/>
+            <column name="new_location"
+                    type="VARCHAR(255)"/>
+            <column name="old_user_id"
+                    type="BIGINT"/>
+            <column name="new_user_id"
+                    type="BIGINT"/>
+            <column name="timestamp"
+                    type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-5"
+               author="kamilholeksa">
+        <createTable tableName="equipment_type">
+            <column autoIncrement="true"
+                    name="id"
+                    type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_equipmenttype"/>
+            </column>
+            <column name="name"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description"
+                    type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-6"
+               author="kamilholeksa">
+        <createTable tableName="role">
+            <column name="name"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_role"/>
+            </column>
+            <column name="description"
+                    type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-7"
+               author="kamilholeksa">
+        <createTable tableName="service_request">
+            <column autoIncrement="true"
+                    name="id"
+                    type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_servicerequest"/>
+            </column>
+            <column name="created_by"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date"
+                    type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by"
+                    type="VARCHAR(50)"/>
+            <column name="last_modified_date"
+                    type="DATETIME"/>
+            <column name="title"
+                    type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description"
+                    type="TEXT"/>
+            <column name="status"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="close_info"
+                    type="TEXT"/>
+            <column name="equipment_id"
+                    type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id"
+                    type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="technician_id"
+                    type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-8"
+               author="kamilholeksa">
+        <createTable tableName="service_request_note">
+            <column autoIncrement="true"
+                    name="id"
+                    type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_servicerequestnote"/>
+            </column>
+            <column name="created_by"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date"
+                    type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by"
+                    type="VARCHAR(50)"/>
+            <column name="last_modified_date"
+                    type="DATETIME"/>
+            <column name="description"
+                    type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="service_request_id"
+                    type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-9"
+               author="kamilholeksa">
+        <createTable tableName="transfer">
+            <column autoIncrement="true"
+                    name="id"
+                    type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_transfer"/>
+            </column>
+            <column name="created_by"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date"
+                    type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by"
+                    type="VARCHAR(50)"/>
+            <column name="last_modified_date"
+                    type="DATETIME"/>
+            <column name="request_date"
+                    type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="decision_date"
+                    type="DATE"/>
+            <column name="status"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="equipment_id"
+                    type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transferor_id"
+                    type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="obtainer_id"
+                    type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-10"
+               author="kamilholeksa">
+        <createTable tableName="user_role">
+            <column name="role_name"
+                    type="VARCHAR(50)">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_user_role"/>
+            </column>
+            <column name="user_id"
+                    type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="pk_user_role"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--  Create foreign keys  -->
+    <changeSet id="2025-03-30-1-11"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="equipment_id"
+                                 baseTableName="equipment_history"
+                                 constraintName="fk_equipment_history_on_equipment"
+                                 referencedColumnNames="id"
+                                 referencedTableName="equipment"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-12"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="new_user_id"
+                                 baseTableName="equipment_history"
+                                 constraintName="fk_equipment_history_on_new_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-13"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="old_user_id"
+                                 baseTableName="equipment_history"
+                                 constraintName="fk_equipment_history_on_old_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-14"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="address_id"
+                                 baseTableName="equipment"
+                                 constraintName="fk_equipment_on_address"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-15"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="equipment_type_id"
+                                 baseTableName="equipment"
+                                 constraintName="fk_equipment_on_equipment_type"
+                                 referencedColumnNames="id"
+                                 referencedTableName="equipment_type"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-16"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="equipment"
+                                 constraintName="fk_equipment_on_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-17"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="service_request_id"
+                                 baseTableName="service_request_note"
+                                 constraintName="fk_service_request_note_on_service_request"
+                                 referencedColumnNames="id"
+                                 referencedTableName="service_request"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-18"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="equipment_id"
+                                 baseTableName="service_request"
+                                 constraintName="fk_service_request_on_equipment"
+                                 referencedColumnNames="id"
+                                 referencedTableName="equipment"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-19"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="technician_id"
+                                 baseTableName="service_request"
+                                 constraintName="fk_service_request_on_technician"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-20"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="service_request"
+                                 constraintName="fk_service_request_on_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-21"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="equipment_id"
+                                 baseTableName="transfer"
+                                 constraintName="fk_transfer_on_equipment"
+                                 referencedColumnNames="id"
+                                 referencedTableName="equipment"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-22"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="obtainer_id"
+                                 baseTableName="transfer"
+                                 constraintName="fk_transfer_on_obtainer"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-23"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="transferor_id"
+                                 baseTableName="transfer"
+                                 constraintName="fk_transfer_on_transferor"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-24"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="role_name"
+                                 baseTableName="user_role"
+                                 constraintName="fk_user_role_on_role"
+                                 referencedColumnNames="name"
+                                 referencedTableName="role"/>
+    </changeSet>
+
+    <changeSet id="2025-03-30-1-25"
+               author="kamilholeksa">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_role"
+                                 constraintName="fk_user_role_on_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"/>
+    </changeSet>
+
+</databaseChangeLog>
