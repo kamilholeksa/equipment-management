@@ -1,0 +1,43 @@
+<mat-dialog-content class="text-center">
+  <h2 mat-dialog-title class="mb-4">{{ this.isEditMode ? 'Edytuj lokalizację' : 'Dodaj nową lokalizację' }}</h2>
+
+  <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Opis</mat-label>
+      <input matInput formControlName="description">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Kod pocztowy</mat-label>
+      <input matInput formControlName="postalCode" required>
+      <mat-error *ngIf="addressForm.controls['postalCode'].hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Miasto</mat-label>
+      <input matInput formControlName="city" required>
+      <mat-error *ngIf="addressForm.controls['city'].hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Ulica</mat-label>
+      <input matInput formControlName="street" required>
+      <mat-error *ngIf="addressForm.controls['street'].hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Numer</mat-label>
+      <input matInput formControlName="number" required>
+      <mat-error *ngIf="addressForm.controls['number'].hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4" align="end">
+  <button mat-button mat-dialog-close>Anuluj</button>
+  <button mat-flat-button (click)="onSubmit()" [disabled]="addressForm.invalid">
+    <i class="bi bi-check-lg"></i>
+    Zapisz
+  </button>
+</mat-dialog-actions>

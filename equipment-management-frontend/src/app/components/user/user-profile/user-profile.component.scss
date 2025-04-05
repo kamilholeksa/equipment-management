@@ -1,0 +1,15 @@
+.user-profile-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-field {
+  color: black !important;
+}
+
+.profile-actions {
+  margin-top: 24px;
+}

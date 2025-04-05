@@ -1,0 +1,27 @@
+<mat-dialog-content xmlns="http://www.w3.org/1999/html">
+  <h2 mat-dialog-title class="mb-4">Szczegóły notatki</h2>
+
+  <form [formGroup]="noteForm">
+    <mat-form-field appearance="outline" class="form-field w-100">
+      <mat-label>Treść</mat-label>
+      <textarea matInput rows="8" formControlName="description" [readonly]="!isOwner" required></textarea>
+      <mat-error *ngIf="noteForm.controls['description'].hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+  </form>
+
+  <div class="mb-2">
+    <p class="d-inline-block me-1">Utworzone przez: </p>
+    <p class="d-inline-block fw-medium">{{ note.createdBy }}</p>
+  </div>
+
+  <div class="mb-2">
+    <p class="d-inline-block me-1">Data utworzenia: </p>
+    <p class="d-inline-block fw-medium">{{ note.createdDate | date:'dd-MM-yyyy HH:mm:ss' }}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Zamknij</button>
+  <button *ngIf="isOwner" mat-flat-button (click)="updateNote()">Zapisz</button>
+  <button *ngIf="isOwner" mat-flat-button (click)="deleteNote()" class="delete-button">Usuń</button>
+</mat-dialog-actions>

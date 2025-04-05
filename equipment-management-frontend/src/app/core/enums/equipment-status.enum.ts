@@ -1,0 +1,8 @@
+export enum EquipmentStatusEnum {
+  NEW = 'NEW',
+  IN_PREPARATION = 'IN_PREPARATION',
+  IN_USE = 'IN_USE',
+  IN_REPAIR = 'IN_REPAIR',
+  RESERVE = 'RESERVE',
+  DECOMMISSIONED = 'DECOMMISSIONED',
+}

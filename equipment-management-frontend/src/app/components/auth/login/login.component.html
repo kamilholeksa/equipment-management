@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-center mt-5">
+  <mat-card>
+    <mat-card-title class="mt-3 mb-5 text-center">Zaloguj się</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="submit()">
+        <mat-form-field class="form-field">
+          <mat-label>Nazwa użytkownika</mat-label>
+          <input matInput required formControlName="username"/>
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched">
+            Nazwa użytkownika jest wymagana
+          </mat-error>
+        </mat-form-field> <br/>
+
+        <mat-form-field class="form-field">
+          <mat-label>Hasło</mat-label>
+          <input matInput required type="password" formControlName="password"/>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched">
+            Hasło jest wymagane
+          </mat-error>
+        </mat-form-field> <br/> <br/>
+
+        <div class="button">
+          <button type="submit" mat-flat-button color="primary" [disabled]="loginForm.invalid">Zaloguj</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

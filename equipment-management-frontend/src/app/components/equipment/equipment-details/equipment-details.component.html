@@ -1,0 +1,110 @@
+<div class="container mt-4">
+  <h5>Szczegóły sprzętu</h5>
+
+  <table class="table table-bordered table-striped mat-elevation-z8">
+    <tbody>
+    <tr>
+      <td>Producent:</td>
+      <td>{{ equipment.manufacturer }}</td>
+    </tr>
+    <tr>
+      <td>Model:</td>
+      <td>{{ equipment.model }}</td>
+    </tr>
+    <tr>
+      <td>Opis:</td>
+      <td>{{ equipment.description }}</td>
+    </tr>
+    <tr>
+      <td>Typ:</td>
+      <td>{{ equipment.type.name }}</td>
+    </tr>
+    <tr>
+      <td>Numer inwentarzowy:</td>
+      <td>{{ equipment.inventoryNumber }}</td>
+    </tr>
+    <tr>
+      <td>Numer seryjny:</td>
+      <td>{{ equipment.serialNumber }}</td>
+    </tr>
+    <tr>
+      <td>Status:</td>
+      <td>{{ equipment.status | equipmentStatusDisplay }}</td>
+    </tr>
+    <tr>
+      <td>Użytkownik:</td>
+      <td>{{ equipment.user ? equipment.user.firstName + ' ' + equipment.user.lastName + ' (' + equipment.user.username + ')' : '' }}</td>
+    </tr>
+    <tr>
+      <td>Adres:</td>
+      <td>
+        {{ equipment.address ? equipment.address.street + ' ' + equipment.address.number + ', ' + equipment.address.postalCode + ' ' + equipment.address.city : '' }}
+      </td>
+    </tr>
+    <tr>
+      <td>Lokalizacja:</td>
+      <td>
+        {{ equipment.location }}
+      </td>
+    </tr>
+    <tr>
+      <td>Data zakupu:</td>
+      <td>{{ equipment.purchaseDate | date: 'dd.MM.yyyy' }}</td>
+    </tr>
+    <tr>
+      <td>Gwarancja do:</td>
+      <td>{{ equipment.warrantyUntil | date: 'dd.MM.yyyy' }}</td>
+    </tr>
+    <tr>
+      <td>Data wycofania:</td>
+      <td>{{ equipment.withdrawalDate }}</td>
+    </tr>
+    <tr>
+      <td>Utworzony przez:</td>
+      <td>{{ equipment.createdBy }}</td>
+    </tr>
+    <tr>
+      <td>Data utworzenia:</td>
+      <td>{{ equipment.createdDate | date: 'dd-MM-yyyy HH:mm' }}</td>
+    </tr>
+    <tr>
+      <td>Ostatnia modyfikacja przez:</td>
+      <td>{{ equipment.lastModifiedBy }}</td>
+    </tr>
+    <tr>
+      <td>Data ostatniej modyfikacji:</td>
+      <td>{{ equipment.lastModifiedDate | date: 'dd-MM-yyyy HH:mm' }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="mt-4">
+    <button mat-stroked-button (click)="openHistoryDialog()" class="me-2">
+      <i class="bi bi-clock-history"></i>
+      Historia
+    </button>
+    <button mat-stroked-button *ngIf="canTransfer()" (click)="transfer()" class="me-2">
+      <i class="bi bi-arrow-left-right"></i>
+      Przekaż
+    </button>
+    <button mat-stroked-button (click)="goToServiceRequests()" class="me-2">
+      <i class="bi bi-tools"></i>
+      Zgłoszenia serwisowe
+    </button>
+    <button mat-stroked-button *appHasAnyRole="['ROLE_ADMIN', 'ROLE_MANAGER']" (click)="decommission()">
+      <i class="bi bi-x-square"></i>
+      Wycofaj z użytku
+    </button>
+  </div>
+
+  <div class="mt-4">
+    <button mat-flat-button (click)="goBack()" class="me-4">
+      <i class="bi bi-arrow-left"></i>
+      Wróć
+    </button>
+    <button mat-flat-button *appHasAnyRole="['ROLE_ADMIN', 'ROLE_MANAGER']" (click)="edit()">
+      <i class="bi bi-pencil-square"></i>
+      Edytuj
+    </button>
+  </div>
+</div>

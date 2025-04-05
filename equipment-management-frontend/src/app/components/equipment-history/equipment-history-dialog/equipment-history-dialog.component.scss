@@ -1,0 +1,46 @@
+.history-item {
+  margin-bottom: 15px;
+}
+
+.history-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.change {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.old-value, .new-value {
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.old-value {
+  background-color: #f9f9f9;
+  color: #555;
+}
+
+.new-value {
+  background-color: #e0f6fa;
+  color: #006779;
+}
+
+.arrow {
+  font-size: 1.2em;
+  margin: 0 8px 5px 8px;
+  color: #888;
+}
+
+.change-date {
+  font-size: 0.9em;
+  color: #666;
+}

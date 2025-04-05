@@ -1,0 +1,43 @@
+<mat-dialog-content>
+  <h2 mat-dialog-title class="mb-4">Zgłoszenie serwisowe #{{ serviceRequest.id }}</h2>
+
+  <div class="mb-2">
+    <span class="mb-0">Temat: </span>
+    <span class="fw-medium mb-0">{{ serviceRequest.title }}</span>
+  </div>
+
+  <div class="mb-2">
+    <span class="mb-0">Opis: </span>
+    <span class="fw-medium mb-0">{{ serviceRequest.description }}</span>
+  </div>
+
+  <div class="mb-2">
+    <span class="mb-0">Sprzęt: </span>
+    <span class="fw-medium mb-0">{{ serviceRequest.equipment.manufacturer + ' ' + serviceRequest.equipment.model + ' (' + serviceRequest.equipment.inventoryNumber + ')' }}</span>
+  </div>
+
+  <div class="mb-2">
+    <span class="mb-0">Zgłaszający: </span>
+    <span class="fw-medium mb-0">{{ serviceRequest.user.firstName + ' ' + serviceRequest.user.lastName }}</span>
+  </div>
+
+  <div class="mb-2">
+    <span class="mb-0">Data zgłoszenia: </span>
+    <span class="fw-medium mb-0">{{ serviceRequest.createdDate | date: 'dd-MM-yyyy HH:mm' }}</span>
+  </div>
+
+  <div class="mb-2">
+    <span class="mb-0">Status: </span>
+    <span class="fw-medium mb-0">{{ serviceRequest.status | serviceRequestStatusDisplay }}</span>
+  </div>
+
+  <div class="mb-2" *ngIf="serviceRequest.closeInfo">
+    <span class="mb-0">Informacja o zamknięciu: </span>
+    <span class="fw-medium mb-0">{{ serviceRequest.closeInfo }}</span>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4" align="end">
+  <button mat-button mat-dialog-close>Zamknij</button>
+  <button *ngIf="serviceRequest.status === ServiceRequestStatusEnum.NEW" mat-flat-button (click)="cancelServiceRequest()" class="delete-button">Anuluj zgłoszenie</button>
+</mat-dialog-actions>

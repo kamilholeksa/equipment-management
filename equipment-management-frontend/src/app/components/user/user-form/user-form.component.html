@@ -1,0 +1,69 @@
+<div class="form-container">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <h5 class="text-center">{{ isEditMode ? 'Edytuj użytkownika' : 'Dodaj użytkownika' }}</h5>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Imię</mat-label>
+      <input matInput formControlName="firstName" required />
+      <mat-error *ngIf="userForm.controls['firstName'].hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Nazwisko</mat-label>
+      <input matInput formControlName="lastName" required />
+      <mat-error *ngIf="userForm.controls['lastName'].hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Nazwa użytkownika</mat-label>
+      <input matInput formControlName="username" required />
+      <mat-error *ngIf="userForm.controls['username'].hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" required />
+      <mat-error *ngIf="userForm.controls['email'].hasError('required')">Pole wymagane</mat-error>
+      <mat-error *ngIf="userForm.controls['email'].hasError('email')">Niepoprawny format maila</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Numer telefonu</mat-label>
+      <input matInput formControlName="phoneNumber" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="roles" multiple required>
+        <mat-option *ngFor="let role of roles" [value]="role.name">
+          {{ role.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!isEditMode" appearance="outline" class="form-field">
+      <mat-label>Hasło</mat-label>
+      <input matInput type="password" formControlName="password" required>
+      <mat-error *ngIf="userForm.controls['password'].hasError('required')">Pole wymagane</mat-error>
+      <mat-error *ngIf="userForm.controls['password'].hasError('minlength')">Hasło musi mieć min. 8 znaków</mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!isEditMode" appearance="outline" class="form-field">
+      <mat-label>Powtórz hasło</mat-label>
+      <input matInput type="password" formControlName="confirmPassword" required>
+      <mat-error *ngIf="userForm.controls['confirmPassword'].hasError('required')">Pole wymagane</mat-error>
+      <mat-error *ngIf="userForm.controls['confirmPassword'].hasError('passwordMismatch')">Hasła muszą być zgodne</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button type="submit" class="w-100" [disabled]="userForm.invalid">
+      <i class="bi bi-floppy-fill"></i>
+      Zapisz
+    </button>
+
+
+  </form>
+  <button mat-stroked-button (click)="goBack()">
+    <i class="bi bi-arrow-left"></i>
+    Wróć
+  </button>
+</div>
