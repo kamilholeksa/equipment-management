@@ -23,4 +23,5 @@ application:
   security:
     jwt:
       secret-key: secret_key
-      token-validity: 1800 # Seconds
+      token-validity: 1800 # Seconds / 30min
+      refresh-token-validity: 86400 # Seconds / 24hrs

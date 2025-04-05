@@ -13,7 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -27,30 +26,40 @@ public class UserAuthProvider {
     @Value("${application.security.jwt.token-validity}")
     private int tokenValidity;
 
+    @Value("${application.security.jwt.refresh-token-validity}")
+    private int refreshTokenValidity;
+
+    private Algorithm algorithm;
+
     @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    public void init() {
+        this.algorithm = Algorithm.HMAC256(secretKey);
     }
 
-    public String createToken(UserAuthDto user) {
+    public String createToken(Authentication authentication) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + 1000L * tokenValidity);
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         return JWT.create()
-                .withSubject(user.getUsername())
+                .withSubject(authentication.getName())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
-                .withClaim("username", user.getUsername())
-                .withClaim("firstName", user.getFirstName())
-                .withClaim("lastName", user.getLastName())
-                .withClaim("email", user.getEmail())
-                .withClaim("roles", user.getRoles())
+                .withClaim("auth", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                .sign(algorithm);
+    }
+
+    public String createRefreshToken(Authentication authentication) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + 1000L * refreshTokenValidity);
+
+        return JWT.create()
+                .withSubject(authentication.getName())
+                .withIssuedAt(now)
+                .withExpiresAt(validity)
                 .sign(algorithm);
     }
 
     public Authentication validateToken(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT decoded = verifier.verify(token);
 
@@ -68,4 +77,18 @@ public class UserAuthProvider {
         return new UsernamePasswordAuthenticationToken(user, null, authorities);
     }
 
+    public boolean isTokenValid(String token) {
+        try {
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            verifier.verify(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getUsernameFromToken(String token) {
+        DecodedJWT decoded = JWT.require(algorithm).build().verify(token);
+        return decoded.getSubject();
+    }
 }

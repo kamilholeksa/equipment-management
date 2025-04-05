@@ -38,7 +38,7 @@ public class Equipment extends Auditable {
 
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String inventoryNumber;
 
     private String serialNumber;

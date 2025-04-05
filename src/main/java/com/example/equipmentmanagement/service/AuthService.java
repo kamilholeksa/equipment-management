@@ -1,11 +1,13 @@
 package com.example.equipmentmanagement.service;
 
+import com.example.equipmentmanagement.auth.UserAuthProvider;
 import com.example.equipmentmanagement.dto.CredentialsDto;
 import com.example.equipmentmanagement.dto.UserAuthDto;
 import com.example.equipmentmanagement.exception.InvalidPasswordException;
 import com.example.equipmentmanagement.exception.UserNotFoundException;
 import com.example.equipmentmanagement.model.User;
 import com.example.equipmentmanagement.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserAuthProvider userAuthProvider;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserAuthProvider userAuthProvider, UserAuthProvider userAuthProvider1) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userAuthProvider = userAuthProvider1;
     }
 
     public UserAuthDto login(CredentialsDto credentialsDto) {

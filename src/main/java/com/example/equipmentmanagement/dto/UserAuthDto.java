@@ -19,4 +19,6 @@ public class UserAuthDto {
 
     private String token;
 
+    private String refreshToken;
+
 }

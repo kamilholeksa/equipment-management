@@ -13,9 +13,6 @@ spring:
       ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        format_sql: true
 
   # Liquibase
   liquibase:
@@ -28,4 +25,5 @@ application:
   security:
     jwt:
       secret-key: ab6d29e4ce55855f7b1d927233dc92a189653c727f2b810917830b53f90b5180
-      token-validity: 1800 # Seconds
+      token-validity: 1800 # Seconds / 30min
+      refresh-token-validity: 86400 # Seconds / 24hrs
