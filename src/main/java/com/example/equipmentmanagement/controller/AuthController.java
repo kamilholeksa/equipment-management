@@ -1,23 +1,20 @@
 package com.example.equipmentmanagement.controller;
 
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.equipmentmanagement.auth.UserAuthProvider;
+import com.example.equipmentmanagement.dto.AccountDto;
 import com.example.equipmentmanagement.dto.AuthResponseDto;
 import com.example.equipmentmanagement.dto.CredentialsDto;
-import com.example.equipmentmanagement.dto.UserAuthDto;
-import com.example.equipmentmanagement.service.AuthService;
+import com.example.equipmentmanagement.service.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,10 +22,12 @@ public class AuthController {
 
     private final UserAuthProvider userAuthProvider;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
-    public AuthController(UserAuthProvider userAuthProvider, AuthenticationManager authenticationManager) {
+    public AuthController(UserAuthProvider userAuthProvider, AuthenticationManager authenticationManager, UserService userService) {
         this.userAuthProvider = userAuthProvider;
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -55,5 +54,10 @@ public class AuthController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @GetMapping("/account")
+    public ResponseEntity<AccountDto> getAccount() {
+        return ResponseEntity.ok(userService.getCurrentUserAccount());
     }
 }

@@ -10,7 +10,7 @@ import { TransferFormDialogComponent } from '../../transfer/transfer-form-dialog
 import { EquipmentHistoryDialogComponent } from '../../equipment-history/equipment-history-dialog/equipment-history-dialog.component';
 import { NotificationService } from '../../../core/services/shared/notification.service';
 import { HasAnyRoleDirective } from '../../../core/directives/has-any-role.directive';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-equipment-details',
@@ -99,7 +99,7 @@ export class EquipmentDetailsComponent implements OnInit {
   canTransfer(): boolean {
     return (
       this.authService.hasAnyRole(['ROLE_ADMIN', 'ROLE_MANAGER']) ||
-      this.equipment.user.username === this.authService.userData.username
+      this.equipment.user.username === this.authService.account.username
     );
   }
 }

@@ -39,7 +39,7 @@
         <ul class="navbar-nav ms-auto">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ this.authService.userData.firstName + ' ' + this.authService.userData.lastName }}
+              {{ this.authService.account?.firstName + ' ' + this.authService.account?.lastName }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" routerLink="/profile">Mój profil</a></li>

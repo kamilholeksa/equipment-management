@@ -10,7 +10,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { ServiceRequestNoteService } from '../../../core/services/service-request-note.service';
 import { NotificationService } from '../../../core/services/shared/notification.service';
 
@@ -42,7 +42,7 @@ export class ServiceRequestNoteDialogComponent {
   ) {
     this.note = data.note;
 
-    if (this.note.createdBy === this.authService.userData.username) {
+    if (this.note.createdBy === this.authService.account.username) {
       this.isOwner = true;
     }
 

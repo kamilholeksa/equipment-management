@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { NgIf } from '@angular/common';
 import { HasRoleDirective } from '../../../core/directives/has-role.directive';
 import { HasAnyRoleDirective } from '../../../core/directives/has-any-role.directive';

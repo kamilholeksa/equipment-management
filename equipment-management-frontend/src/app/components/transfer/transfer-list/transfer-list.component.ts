@@ -15,7 +15,7 @@ import { TransferStatusDisplayPipe } from '../../../core/pipes/transfer-status-d
 import { NotificationService } from '../../../core/services/shared/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TransferAcceptDialogComponent } from '../transfer-accept-dialog/transfer-accept-dialog.component';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-transfer-list',

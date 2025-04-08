@@ -72,12 +72,12 @@ public class EquipmentService {
             String sortField,
             String sortOrder
     ) {
-        UserAuthDto user = (UserAuthDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
 
-        return equipmentRepository.findAllByUserUsername(user.getUsername(), pageRequest).map(EquipmentMapper::toDto);
+        return equipmentRepository.findAllByUserUsername(username, pageRequest).map(EquipmentMapper::toDto);
     }
 
     public EquipmentDto getEquipment(Long id) {

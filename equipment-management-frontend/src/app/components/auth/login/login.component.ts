@@ -11,8 +11,12 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { NgIf } from '@angular/common';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { NotificationService } from '../../../core/services/shared/notification.service';
+import {AuthResponse} from '../../../core/models/auth/auth-response.model';
+import {AccountModel} from '../../../core/models/auth/account.model';
+import {Router} from '@angular/router';
+import {TokenStorageService} from '../../../core/services/auth/token-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -37,11 +41,12 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private formBuilder: FormBuilder,
+    private tokenStorageService: TokenStorageService,
     private notificationService: NotificationService,
+    private router: Router,
   ) {
     if (authService.isLoggedIn()) {
-      window.location.href = '/';
+      this.router.navigate(['/']);
     }
   }
 
@@ -52,13 +57,23 @@ export class LoginComponent {
     this.authService
       .login({ username: formData.username, password: formData.password })
       .subscribe({
-        next: (res) => {
-          this.authService.setAuthToken(res.token);
-          window.location.href = '/';
+        next: (res: AuthResponse) => {
+          this.tokenStorageService.setAccessToken(res.accessToken);
+          this.tokenStorageService.setRefreshToken(res.refreshToken);
+          this.authService.getAccount().subscribe({
+            next: (account: AccountModel) => {
+              this.authService.setAccount(account);
+              this.router.navigate(['/']);
+            },
+            error: (err) =>
+              this.notificationService.showError(
+                err?.error?.message || 'Nie udało się pobrać danych użytkownika'
+              ),
+          });
         },
         error: (err) =>
           this.notificationService.showError(
-            err.error.message ? err.error.message : 'Wystąpił błąd',
+            err?.error?.message || 'Wystąpił błąd podczas logowania'
           ),
       });
   }

@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -74,19 +75,30 @@ public class UserService {
     }
 
     public UserDto getCurrentUser() {
-        UserAuthDto principal = (UserAuthDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        User user = userRepository.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UserNotFoundException(principal.getUsername()));
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
 
         return toDto(user);
     }
 
     public User getCurrentUserEntity() {
-        UserAuthDto principal = (UserAuthDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+    }
 
-        return userRepository.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UserNotFoundException(principal.getUsername()));
+    public AccountDto getCurrentUserAccount() {
+        UserDto currentUser = this.getCurrentUser();
+        AccountDto account = new AccountDto();
+        account.setId(currentUser.getId());
+        account.setUsername(currentUser.getUsername());
+        account.setFirstName(currentUser.getFirstName());
+        account.setLastName(currentUser.getLastName());
+        account.setActive(currentUser.isActive());
+        account.setRoles(currentUser.getRoles());
+
+        return account;
     }
 
     public UserDto getUser(Long id) {
@@ -155,9 +167,7 @@ public class UserService {
             throw new PasswordMismatchException();
         }
 
-        UserAuthDto principal = (UserAuthDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UserNotFoundException(principal.getUsername()));
+        User user = this.getCurrentUserEntity();
 
         if (!passwordEncoder.matches(String.valueOf(dto.getCurrentPassword()), user.getPassword())) {
             throw new InvalidPasswordException();
