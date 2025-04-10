@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EquipmentService } from '../../../core/services/equipment.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EquipmentModel } from '../../../core/models/equipment/equipment.model';
 import { DatePipe, Location, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +19,6 @@ import { AuthService } from '../../../core/services/auth/auth.service';
     DatePipe,
     MatButtonModule,
     EquipmentStatusDisplayPipe,
-    RouterLink,
     HasAnyRoleDirective,
     NgIf,
   ],
@@ -99,7 +98,7 @@ export class EquipmentDetailsComponent implements OnInit {
   canTransfer(): boolean {
     return (
       this.authService.hasAnyRole(['ROLE_ADMIN', 'ROLE_MANAGER']) ||
-      this.equipment.user.username === this.authService.account.username
+      this.equipment.user.username === this.authService.account()?.username
     );
   }
 }

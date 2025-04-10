@@ -3,6 +3,19 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #ffffff;
+
+  &.app-notification-error {
+    --mdc-snackbar-container-color: #d0271f;
+  }
+
+  &.app-notification-success {
+    --mdc-snackbar-container-color: #43a446;
+  }
+}
+
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 @import "bootstrap-icons/font/bootstrap-icons.css";

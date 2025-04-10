@@ -42,7 +42,7 @@ export class ServiceRequestNoteDialogComponent {
   ) {
     this.note = data.note;
 
-    if (this.note.createdBy === this.authService.account.username) {
+    if (this.note.createdBy === this.authService.account()?.username) {
       this.isOwner = true;
     }
 

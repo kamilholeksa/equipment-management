@@ -1,60 +1,68 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {JwtHelperService} from '@auth0/angular-jwt';
-import {AccountModel} from '../../models/auth/account.model';
-import {TokenStorageService} from './token-storage.service';
+import {computed, Injectable, signal} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, Observable, of, switchMap, tap } from 'rxjs';
+import { AccountModel } from '../../models/auth/account.model';
+import { TokenStorageService } from './token-storage.service';
+import { AuthResponse } from '../../models/auth/auth-response.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  account!: AccountModel;
+  private readonly _account = signal<AccountModel | null>(null);
+  readonly account = computed(() => this._account());
 
-  private jwtHelper = new JwtHelperService();
+  constructor(
+    private http: HttpClient,
+    private tokenStorageService: TokenStorageService,
+    private router: Router,
+  ) {}
 
-  constructor(private http: HttpClient, private tokenStorageService: TokenStorageService) {
-    // const token = this.getAuthToken();
-    // if (token && !this.jwtHelper.isTokenExpired(token)) {
-    //   this.getAccount().subscribe({
-    //     next: (account) => this.setAccount(account),
-    //     error: () => this.logout()
-    //   });
-    // } else {
-    //   this.logout();
-    // }
+  login(username: string, password: string): Observable<AccountModel | null> {
+    return this.http
+      .post<AuthResponse>('http://localhost:8080/login', { username, password })
+      .pipe(
+        tap((res: AuthResponse) => this.tokenStorageService.storeTokens(res)),
+        switchMap(() => this.fetchUserData()),
+      );
   }
 
-  getJwtData(): any {
-    const token = this.tokenStorageService.getAccessToken();
-    return token != null ? this.jwtHelper.decodeToken(token) : [];
-    // return token != null ? jwtDecode(token) : [];
+  refreshToken(): Observable<AuthResponse | null> {
+    const refreshToken = this.tokenStorageService.getRefreshToken();
+    if (!refreshToken) return of(null);
+
+    return this.http
+      .post<AuthResponse>('http://localhost:8080/refresh-token', {
+        refreshToken,
+      })
+      .pipe(
+        tap((res: AuthResponse) => this.tokenStorageService.storeTokens(res)),
+        catchError(() => {
+          this.logout();
+          return of(null);
+        }),
+      );
   }
 
-  login(credentials: any): Observable<any> {
-    return this.http.post('http://localhost:8080/login', credentials);
+  fetchUserData(): Observable<AccountModel | null> {
+    return this.http.get<AccountModel>('http://localhost:8080/account').pipe(
+      tap((account: AccountModel) => this._account.set(account)),
+      catchError(() => {
+        this.logout();
+        return of(null);
+      }),
+    );
   }
 
-  refreshToken(token: string) {
-    return this.http.post('http://localhost:8080/refresh-token', token);
-  }
-
-  loadAccountData() {
-    this.getAccount().subscribe({
-      next: (account: AccountModel) => this.account = account,
-    });
-  }
-
-  getAccount(): Observable<AccountModel> {
-    return this.http.get<AccountModel>('http://localhost:8080/account');
-  }
-
-  setAccount(account: AccountModel) {
-    this.account = account;
+  getAccessToken(): string | null {
+    return this.tokenStorageService.getAccessToken();
   }
 
   logout() {
+    this._account.set(null);
     this.tokenStorageService.clearTokens();
+    this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
@@ -62,10 +70,10 @@ export class AuthService {
   }
 
   hasRole(role: string): boolean {
-    return this.account?.roles.includes(role) ?? false;
+    return this.account()?.roles.includes(role) ?? false;
   }
 
   hasAnyRole(roles: string[]): boolean {
-    return this.account?.roles.some((role) => roles.includes(role)) ?? false;
+    return this.account()?.roles.some((role) => roles.includes(role)) ?? false;
   }
 }

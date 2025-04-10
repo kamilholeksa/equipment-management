@@ -1,21 +1,23 @@
-import {ApplicationConfig, inject, provideAppInitializer, provideZoneChangeDetection} from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
-import {PolishPaginatorIntl} from './core/config/material/polish-paginator-intl';
-import {MatPaginatorIntl} from '@angular/material/paginator';
-import {AuthInterceptor} from './core/interceptors/auth.interceptor';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {AuthService} from './core/services/auth/auth.service';
+import {
+  MAT_DATE_LOCALE,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
+import { PolishPaginatorIntl } from './core/config/material/polish-paginator-intl';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAppInitializer(() => {
-      const authService = inject(AuthService);
-      authService.loadAccountData();
-    }),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
@@ -28,5 +30,5 @@ export const appConfig: ApplicationConfig = {
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
     { provide: MatPaginatorIntl, useClass: PolishPaginatorIntl },
     provideNativeDateAdapter(),
-  ]
+  ],
 };

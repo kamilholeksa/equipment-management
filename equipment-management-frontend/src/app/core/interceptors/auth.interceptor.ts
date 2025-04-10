@@ -1,30 +1,47 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
   HttpEvent,
+  HttpHandler,
   HttpInterceptor,
+  HttpRequest,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, switchMap } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
-import {TokenStorageService} from '../services/auth/token-storage.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private tokenStorageService: TokenStorageService) {}
+  private authService = inject(AuthService);
 
   intercept(
-    request: HttpRequest<any>,
+    req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    const token = this.tokenStorageService.getAccessToken();
-    let headers = {};
-
-    if (token !== null) {
-      headers = { Authorization: 'Bearer ' + token };
+    const accessToken = this.authService.getAccessToken();
+    if (accessToken) {
+      req = req.clone({
+        setHeaders: { Authorization: `Bearer ${accessToken}` },
+      });
     }
 
-    request = request.clone({ setHeaders: headers });
-    return next.handle(request);
+    return next.handle(req).pipe(
+      catchError((error) => {
+        if (error.status === 401) {
+          return this.authService.refreshToken().pipe(
+            switchMap(() => {
+              const newToken = this.authService.getAccessToken();
+              if (newToken) {
+                const cloned = req.clone({
+                  setHeaders: { Authorization: `Bearer ${newToken}` },
+                });
+                return next.handle(cloned);
+              }
+              return next.handle(req);
+            }),
+          );
+        }
+
+        throw error;
+      }),
+    );
   }
 }

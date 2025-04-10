@@ -1,5 +1,5 @@
 export interface AccountModel {
-  id: string;
+  id: number;
   username: string;
   firstName: string;
   lastName: string;
