@@ -1,22 +1,22 @@
 import { Routes } from '@angular/router';
-import {authRoutes} from './components/auth/auth.routes';
-import {userRoutes} from './components/user/user.routes';
-import {equipmentRoutes} from './components/equipment/equipment.routes';
-import {equipmentTypeRoutes} from './components/equipment-type/equipment-type.routes';
-import {addressRoutes} from './components/address/address.routes';
-import {transferRoutes} from './components/transfer/transfer.routes';
-import {serviceRequestRoutes} from './components/service-request/service-request.routes';
-import {UnauthorizedComponent} from './components/shared/unauthorized/unauthorized.component';
+import { userRoutes } from './features/user/user.routes';
+import { equipmentRoutes } from './features/equipment/equipment.routes';
+import { equipmentTypeRoutes } from './features/equipment-type/equipment-type.routes';
+import { addressRoutes } from './features/address/address.routes';
+import { transferRoutes } from './features/transfer/transfer.routes';
+import { serviceRequestRoutes } from './features/service-request/service-request.routes';
+import { AccessDeniedComponent } from './shared/components/access-denied/access-denied.component';
+import { LoginComponent } from './core/auth/components/login/login.component';
 
 export const routes: Routes = [
-  ...authRoutes,
   ...userRoutes,
   ...equipmentRoutes,
   ...equipmentTypeRoutes,
   ...addressRoutes,
   ...transferRoutes,
   ...serviceRequestRoutes,
-  { path: 'unauthorized', component: UnauthorizedComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'access-denied', component: AccessDeniedComponent },
   { path: '', redirectTo: '/my-equipment', pathMatch: 'full' },
   { path: '**', redirectTo: '/my-equipment' },
 ];

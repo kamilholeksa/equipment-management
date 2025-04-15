@@ -15,8 +15,8 @@ import { PolishPaginatorIntl } from './core/config/material/polish-paginator-int
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { AuthService } from './core/services/auth/auth.service';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { AuthService } from './core/auth/services/auth.service';
+import { authInterceptor } from './core/auth/interceptors/auth.interceptor';
 
 export const fetchUserData = () => {
   const authService = inject(AuthService);

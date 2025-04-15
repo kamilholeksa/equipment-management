@@ -20,3 +20,47 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 }
 
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: #e3e3e3;
+}
+
+/* Status badges styling */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 28px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+// User statuses
+.status-active {
+  background-color: #269d41;
+}
+.status-inactive {
+  background-color: #d0271f;
+}
+
+// Equipment statuses
+.status-new {
+  background-color: #28A745;
+}
+.status-in-preparation {
+  background-color: #E57D23;
+}
+.status-in-use {
+  background-color: #2879B7;
+}
+.status-in-repair {
+  background-color: #D93A0C;
+}
+.status-reserve {
+  background-color: #8E8E8E;
+}
+.status-decommissioned {
+  background-color: #4A7379;
+}
