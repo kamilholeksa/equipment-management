@@ -6,6 +6,7 @@ import {equipmentTypeRoutes} from './components/equipment-type/equipment-type.ro
 import {addressRoutes} from './components/address/address.routes';
 import {transferRoutes} from './components/transfer/transfer.routes';
 import {serviceRequestRoutes} from './components/service-request/service-request.routes';
+import {UnauthorizedComponent} from './components/shared/unauthorized/unauthorized.component';
 
 export const routes: Routes = [
   ...authRoutes,
@@ -15,6 +16,7 @@ export const routes: Routes = [
   ...addressRoutes,
   ...transferRoutes,
   ...serviceRequestRoutes,
+  { path: 'unauthorized', component: UnauthorizedComponent },
   { path: '', redirectTo: '/my-equipment', pathMatch: 'full' },
   { path: '**', redirectTo: '/my-equipment' },
 ];
