@@ -71,4 +71,8 @@ export class UserDetailsComponent implements OnInit {
       },
     });
   }
+
+  getStatusClass(active: boolean) {
+    return active ? 'status-badge status-active' : 'status-badge status-inactive';
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ServiceRequestService } from '../../../core/services/service-request.service';
 import { ServiceRequestModel } from '../../../core/models/service-request/service-request.model';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -7,7 +7,7 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { DatePipe, Location, NgIf } from '@angular/common';
@@ -26,7 +26,6 @@ import { NotificationService } from '../../../core/services/shared/notification.
     MatPaginatorModule,
     MatButtonModule,
     NgIf,
-    RouterLink,
     DatePipe,
     TransferStatusDisplayPipe,
   ],

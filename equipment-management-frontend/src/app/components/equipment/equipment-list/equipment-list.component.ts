@@ -9,7 +9,7 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { EquipmentStatusDisplayPipe } from '../../../core/pipes/equipment-status-display.pipe';
 
@@ -24,6 +24,7 @@ import { EquipmentStatusDisplayPipe } from '../../../core/pipes/equipment-status
     NgIf,
     RouterLink,
     EquipmentStatusDisplayPipe,
+    NgClass,
   ],
   templateUrl: './equipment-list.component.html',
   styleUrl: './equipment-list.component.scss',
@@ -123,6 +124,25 @@ export class EquipmentListComponent implements OnInit {
         'purchaseDate',
         'warrantyUntil',
       ];
+    }
+  }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'NEW':
+        return 'status-badge status-new';
+      case 'IN_PREPARATION':
+        return 'status-badge status-in-preparation';
+      case 'IN_USE':
+        return 'status-badge status-in-use';
+      case 'IN_REPAIR':
+        return 'status-badge status-in-repair';
+      case 'RESERVE':
+        return 'status-badge status-reserve';
+      case 'DECOMMISSIONED':
+        return 'status-badge status-decommissioned';
+      default:
+        return 'status-badge';
     }
   }
 }

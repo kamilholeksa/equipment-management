@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { EquipmentStatusDisplayPipe } from '../../../core/pipes/equipment-status-display.pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { UserModel } from '../../../core/models/user/user.model';
@@ -11,20 +10,18 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { Router, RouterLink } from '@angular/router';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf } from '@angular/common';
 import { NotificationService } from '../../../core/services/shared/notification.service';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [
-    EquipmentStatusDisplayPipe,
     MatButtonModule,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
     NgForOf,
-    NgIf,
     NgClass,
     RouterLink,
   ],
@@ -101,5 +98,11 @@ export class UserListComponent implements OnInit {
 
   goToDetails(id: number): void {
     this.router.navigate([this.router.url, id]);
+  }
+
+  getStatusClass(active: boolean) {
+    return active
+      ? 'status-badge status-active'
+      : 'status-badge status-inactive';
   }
 }

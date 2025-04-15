@@ -1,6 +1,7 @@
 package com.example.equipmentmanagement.configuration;
 
 import com.example.equipmentmanagement.auth.JwtFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -40,8 +41,14 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getMessage()))
+                )
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login", "/refresh-token").permitAll()
                         // user
                         .requestMatchers("/api/user/active", "/api/user/account", "/api/user/active-technicians", "/api/user/change-password").authenticated()
                         .requestMatchers("/api/user/**").hasRole("ADMIN")

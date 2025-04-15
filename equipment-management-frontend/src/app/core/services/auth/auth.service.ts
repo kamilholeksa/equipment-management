@@ -1,4 +1,4 @@
-import {computed, Injectable, signal} from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { AccountModel } from '../../models/auth/account.model';
@@ -70,10 +70,10 @@ export class AuthService {
   }
 
   hasRole(role: string): boolean {
-    return this.account()?.roles.includes(role) ?? false;
+    return !!this.account()?.roles.includes(role);
   }
 
   hasAnyRole(roles: string[]): boolean {
-    return this.account()?.roles.some((role) => roles.includes(role)) ?? false;
+    return roles.some((role) => this.account()?.roles.includes(role));
   }
 }

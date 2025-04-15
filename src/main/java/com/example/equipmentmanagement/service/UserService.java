@@ -88,19 +88,6 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(username));
     }
 
-    public AccountDto getCurrentUserAccount() {
-        UserDto currentUser = this.getCurrentUser();
-        AccountDto account = new AccountDto();
-        account.setId(currentUser.getId());
-        account.setUsername(currentUser.getUsername());
-        account.setFirstName(currentUser.getFirstName());
-        account.setLastName(currentUser.getLastName());
-        account.setActive(currentUser.isActive());
-        account.setRoles(currentUser.getRoles());
-
-        return account;
-    }
-
     public UserDto getUser(Long id) {
         return toDto(findUserById(id));
     }

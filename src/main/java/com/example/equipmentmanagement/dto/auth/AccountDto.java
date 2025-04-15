@@ -1,4 +1,4 @@
-package com.example.equipmentmanagement.dto;
+package com.example.equipmentmanagement.dto.auth;
 
 import lombok.Data;
 

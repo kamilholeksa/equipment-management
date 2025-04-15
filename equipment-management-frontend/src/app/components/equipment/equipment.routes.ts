@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
 import { EquipmentListComponent } from './equipment-list/equipment-list.component';
-import { AuthGuard } from '../../core/guards/auth.guard';
+import { authGuard } from '../../core/guards/auth.guard';
 import { EquipmentDetailsComponent } from './equipment-details/equipment-details.component';
 import { EquipmentFormComponent } from './equipment-form/equipment-form.component';
 
 export const equipmentRoutes: Routes = [
   {
     path: 'my-equipment',
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -22,7 +22,7 @@ export const equipmentRoutes: Routes = [
   },
   {
     path: 'equipment',
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_MANAGER'] },
     children: [
       {
@@ -43,7 +43,7 @@ export const equipmentRoutes: Routes = [
   {
     path: 'equipment/:id',
     component: EquipmentDetailsComponent,
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_TECHNICIAN'] },
   },
 ];

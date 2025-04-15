@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import { DatePipe, NgForOf } from '@angular/common';
 import { EquipmentHistoryModel } from '../../../core/models/equipment-history/equipment-history.model';
 import { EquipmentHistoryService } from '../../../core/services/equipment-history.service';
 import { EquipmentStatusDisplayPipe } from '../../../core/pipes/equipment-status-display.pipe';
@@ -14,7 +14,6 @@ import { NotificationService } from '../../../core/services/shared/notification.
   imports: [
     MatDialogModule,
     MatButtonModule,
-    NgIf,
     DatePipe,
     EquipmentStatusDisplayPipe,
     MatCardModule,

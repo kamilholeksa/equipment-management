@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { DatePipe, NgIf } from '@angular/common';
-import { EquipmentStatusDisplayPipe } from '../../../core/pipes/equipment-status-display.pipe';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -18,7 +17,6 @@ import { NotificationService } from '../../../core/services/shared/notification.
   standalone: true,
   imports: [
     DatePipe,
-    EquipmentStatusDisplayPipe,
     MatDialogModule,
     MatButtonModule,
     TransferStatusDisplayPipe,

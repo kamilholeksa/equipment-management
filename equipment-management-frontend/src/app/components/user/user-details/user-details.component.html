@@ -30,7 +30,7 @@
     <tr>
       <td>Status:</td>
       <td>
-        <span class="text-white p-2" [ngClass]="user.active ? 'bg-success' : 'bg-danger'">{{ user.active ? "Aktywny" : "Nieaktywny" }}</span>
+        <div [ngClass]="getStatusClass(user.active)">{{ user.active ? "Aktywny" : "Nieaktywny" }}</div>
       </td>
     </tr>
     <tr>

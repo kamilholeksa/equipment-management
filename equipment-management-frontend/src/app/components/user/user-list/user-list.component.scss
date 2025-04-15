@@ -5,3 +5,19 @@
 .clickable-row:hover {
   background-color: #e3e3e3;
 }
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 28px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.status-active {
+  background-color: #28A745;
+}
+
+.status-inactive {
+  background-color: #d0271f;
+}

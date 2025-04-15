@@ -36,6 +36,11 @@ public class GlobalExceptionHandler {
         return buildResponseBodyWithStatus(e, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Map<String, Object>> handleUnauthorizedException(RuntimeException e) {
+        return buildResponseBodyWithStatus(e, HttpStatus.UNAUTHORIZED);
+    }
+
     private ResponseEntity<Map<String, Object>> buildResponseBodyWithStatus(Exception e, HttpStatus httpStatus) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());

@@ -3,19 +3,17 @@ package com.example.equipmentmanagement.auth;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.equipmentmanagement.dto.UserAuthDto;
+import com.example.equipmentmanagement.exception.UnauthorizedException;
+import com.example.equipmentmanagement.model.User;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Component
 public class UserAuthProvider {
@@ -48,6 +46,18 @@ public class UserAuthProvider {
                 .sign(algorithm);
     }
 
+    public String createToken(User user) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + 1000L * tokenValidity);
+
+        return JWT.create()
+                .withSubject(user.getUsername())
+                .withIssuedAt(now)
+                .withExpiresAt(validity)
+                .withClaim("auth", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                .sign(algorithm);
+    }
+
     public String createRefreshToken(Authentication authentication) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + 1000L * refreshTokenValidity);
@@ -59,31 +69,13 @@ public class UserAuthProvider {
                 .sign(algorithm);
     }
 
-    public Authentication validateToken(String token) {
-        JWTVerifier verifier = JWT.require(algorithm).build();
-        DecodedJWT decoded = verifier.verify(token);
-
-        UserAuthDto user = new UserAuthDto();
-        user.setUsername(decoded.getSubject());
-        user.setFirstName(decoded.getClaim("firstName").asString());
-        user.setLastName(decoded.getClaim("lastName").asString());
-        user.setEmail(decoded.getClaim("email").asString());
-        user.setRoles(decoded.getClaim("roles").asList(String.class));
-
-        Collection<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-
-        return new UsernamePasswordAuthenticationToken(user, null, authorities);
-    }
-
     public boolean isTokenValid(String token) {
         try {
             JWTVerifier verifier = JWT.require(algorithm).build();
             verifier.verify(token);
             return true;
-        } catch (Exception e) {
-            return false;
+        } catch (JWTVerificationException e) {
+            throw new UnauthorizedException("Token is invalid");
         }
     }
 

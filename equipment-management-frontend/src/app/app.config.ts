@@ -1,4 +1,9 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -8,25 +13,23 @@ import {
 } from '@angular/material/core';
 import { PolishPaginatorIntl } from './core/config/material/polish-paginator-intl';
 import { MatPaginatorIntl } from '@angular/material/paginator';
-import {
-  HTTP_INTERCEPTORS,
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { AuthService } from './core/services/auth/auth.service';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+
+export const fetchUserData = () => {
+  const authService = inject(AuthService);
+  return authService.fetchUserData();
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAppInitializer(fetchUserData),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptorsFromDi()),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
+    provideHttpClient(withInterceptors([authInterceptor])),
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
     { provide: MatPaginatorIntl, useClass: PolishPaginatorIntl },
     provideNativeDateAdapter(),

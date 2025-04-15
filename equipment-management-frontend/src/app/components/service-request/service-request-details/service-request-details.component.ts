@@ -12,7 +12,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { DatePipe, Location, NgForOf, NgIf } from '@angular/common';
+import { Location, NgIf } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { ServiceRequestNoteListComponent } from '../service-request-note-list/service-request-note-list.component';
 import { ServiceRequestNoteService } from '../../../core/services/service-request-note.service';
@@ -33,8 +33,6 @@ import { ServiceRequestStatusEnum } from '../../../core/enums/service-request-st
     ReactiveFormsModule,
     MatButtonModule,
     MatTableModule,
-    NgForOf,
-    DatePipe,
     ServiceRequestNoteListComponent,
     TransferStatusDisplayPipe,
     RouterLink,
@@ -106,7 +104,6 @@ export class ServiceRequestDetailsComponent implements OnInit {
 
       this.noteService.createServiceRequestNote(data).subscribe({
         next: () => {
-          this.notificationService.showSuccess('Dodano notatkę');
           this.noteListComponent.loadData();
           this.noteForm.reset();
         },

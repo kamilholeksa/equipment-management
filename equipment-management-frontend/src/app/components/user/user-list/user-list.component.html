@@ -45,7 +45,10 @@
     <ng-container matColumnDef="active">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
       <td mat-cell *matCellDef="let user">
-        <span class="text-white p-2" [ngClass]="user.active ? 'bg-success' : 'bg-danger'">{{ user.active ? "Aktywny" : "Nieaktywny" }}</span>
+        <div [ngClass]="getStatusClass(user.active)">
+          {{ user.active ? "Aktywny" : "Nieaktywny" }}
+        </div>
+<!--        <span class="text-white p-2" [ngClass]="user.active ? 'bg-success' : 'bg-danger'"></span>-->
       </td>
     </ng-container>
 

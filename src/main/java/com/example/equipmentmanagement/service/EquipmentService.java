@@ -2,7 +2,6 @@ package com.example.equipmentmanagement.service;
 
 import com.example.equipmentmanagement.dto.EquipmentDto;
 import com.example.equipmentmanagement.dto.EquipmentSaveDto;
-import com.example.equipmentmanagement.dto.UserAuthDto;
 import com.example.equipmentmanagement.dto.mapper.EquipmentMapper;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.model.Address;

@@ -1,14 +1,12 @@
 import { Routes } from '@angular/router';
-import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserListComponent } from './user-list/user-list.component';
-import { AuthGuard } from '../../core/guards/auth.guard';
-import { UserFormComponent } from './user-form/user-form.component';
-import { UserDetailsComponent } from './user-details/user-details.component';
+import { authGuard } from '../../core/guards/auth.guard';
 
+// TODO: Change component to lazy loading in other routes like this
 export const userRoutes: Routes = [
   {
     path: 'users',
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     data: { roles: ['ROLE_ADMIN'] },
     children: [
       {
@@ -17,21 +15,33 @@ export const userRoutes: Routes = [
       },
       {
         path: 'new',
-        component: UserFormComponent,
+        loadComponent: () =>
+          import('./user-form/user-form.component').then(
+            (m) => m.UserFormComponent,
+          ),
       },
       {
         path: ':id',
-        component: UserDetailsComponent,
+        loadComponent: () =>
+          import('./user-details/user-details.component').then(
+            (m) => m.UserDetailsComponent,
+          ),
       },
       {
         path: 'edit/:id',
-        component: UserFormComponent,
+        loadComponent: () =>
+          import('./user-form/user-form.component').then(
+            (m) => m.UserFormComponent,
+          ),
       },
     ],
   },
   {
     path: 'profile',
-    component: UserProfileComponent,
-    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./user-profile/user-profile.component').then(
+        (m) => m.UserProfileComponent,
+      ),
+    canActivate: [authGuard],
   },
 ];
