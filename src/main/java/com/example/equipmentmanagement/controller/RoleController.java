@@ -1,6 +1,6 @@
 package com.example.equipmentmanagement.controller;
 
-import com.example.equipmentmanagement.dto.RoleDto;
+import com.example.equipmentmanagement.dto.user.RoleDto;
 import com.example.equipmentmanagement.service.RoleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

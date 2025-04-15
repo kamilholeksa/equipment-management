@@ -1,10 +1,10 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.RoleDto;
-import com.example.equipmentmanagement.dto.mapper.RoleMapper;
+import com.example.equipmentmanagement.dto.user.RoleDto;
+import com.example.equipmentmanagement.mapper.RoleMapper;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.model.Role;
-import com.example.equipmentmanagement.model.enumeration.RoleName;
+import com.example.equipmentmanagement.enumeration.RoleName;
 import com.example.equipmentmanagement.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 

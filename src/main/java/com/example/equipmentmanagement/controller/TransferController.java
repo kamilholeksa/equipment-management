@@ -1,8 +1,8 @@
 package com.example.equipmentmanagement.controller;
 
-import com.example.equipmentmanagement.dto.TransferDto;
-import com.example.equipmentmanagement.dto.TransferSaveDto;
-import com.example.equipmentmanagement.dto.request.AcceptTransferRequest;
+import com.example.equipmentmanagement.dto.transfer.TransferDto;
+import com.example.equipmentmanagement.dto.transfer.TransferSaveDto;
+import com.example.equipmentmanagement.dto.transfer.AcceptTransferRequest;
 import com.example.equipmentmanagement.service.TransferService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

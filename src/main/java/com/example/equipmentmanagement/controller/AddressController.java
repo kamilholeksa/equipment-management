@@ -1,7 +1,7 @@
 package com.example.equipmentmanagement.controller;
 
-import com.example.equipmentmanagement.dto.AddressDto;
-import com.example.equipmentmanagement.dto.AddressSaveDto;
+import com.example.equipmentmanagement.dto.address.AddressDto;
+import com.example.equipmentmanagement.dto.address.AddressSaveDto;
 import com.example.equipmentmanagement.service.AddressService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

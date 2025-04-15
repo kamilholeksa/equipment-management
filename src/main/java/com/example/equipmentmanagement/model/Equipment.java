@@ -1,6 +1,6 @@
 package com.example.equipmentmanagement.model;
 
-import com.example.equipmentmanagement.model.enumeration.EquipmentStatus;
+import com.example.equipmentmanagement.enumeration.EquipmentStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;

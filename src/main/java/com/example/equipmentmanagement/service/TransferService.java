@@ -1,17 +1,17 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.TransferDto;
-import com.example.equipmentmanagement.dto.TransferSaveDto;
-import com.example.equipmentmanagement.dto.UserDto;
-import com.example.equipmentmanagement.dto.mapper.TransferMapper;
-import com.example.equipmentmanagement.dto.request.AcceptTransferRequest;
+import com.example.equipmentmanagement.dto.transfer.TransferDto;
+import com.example.equipmentmanagement.dto.transfer.TransferSaveDto;
+import com.example.equipmentmanagement.dto.user.UserDto;
+import com.example.equipmentmanagement.mapper.TransferMapper;
+import com.example.equipmentmanagement.dto.transfer.AcceptTransferRequest;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.model.Address;
 import com.example.equipmentmanagement.model.Equipment;
 import com.example.equipmentmanagement.model.Transfer;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.model.enumeration.EquipmentStatus;
-import com.example.equipmentmanagement.model.enumeration.TransferStatus;
+import com.example.equipmentmanagement.enumeration.EquipmentStatus;
+import com.example.equipmentmanagement.enumeration.TransferStatus;
 import com.example.equipmentmanagement.repository.AddressRepository;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
 import com.example.equipmentmanagement.repository.TransferRepository;
@@ -29,8 +29,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import static com.example.equipmentmanagement.dto.mapper.TransferMapper.toDto;
-import static com.example.equipmentmanagement.dto.mapper.TransferMapper.toEntity;
+import static com.example.equipmentmanagement.mapper.TransferMapper.toDto;
+import static com.example.equipmentmanagement.mapper.TransferMapper.toEntity;
 
 @Service
 public class TransferService {

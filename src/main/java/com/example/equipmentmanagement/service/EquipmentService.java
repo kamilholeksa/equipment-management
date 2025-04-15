@@ -1,14 +1,14 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.EquipmentDto;
-import com.example.equipmentmanagement.dto.EquipmentSaveDto;
-import com.example.equipmentmanagement.dto.mapper.EquipmentMapper;
+import com.example.equipmentmanagement.dto.equipment.EquipmentDto;
+import com.example.equipmentmanagement.dto.equipment.EquipmentSaveDto;
+import com.example.equipmentmanagement.mapper.EquipmentMapper;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.model.Address;
 import com.example.equipmentmanagement.model.Equipment;
 import com.example.equipmentmanagement.model.EquipmentType;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.model.enumeration.EquipmentStatus;
+import com.example.equipmentmanagement.enumeration.EquipmentStatus;
 import com.example.equipmentmanagement.repository.AddressRepository;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
 import com.example.equipmentmanagement.repository.EquipmentTypeRepository;
@@ -26,8 +26,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import static com.example.equipmentmanagement.dto.mapper.EquipmentMapper.toDto;
-import static com.example.equipmentmanagement.dto.mapper.EquipmentMapper.toEntity;
+import static com.example.equipmentmanagement.mapper.EquipmentMapper.toDto;
+import static com.example.equipmentmanagement.mapper.EquipmentMapper.toEntity;
 
 @Service
 public class EquipmentService {

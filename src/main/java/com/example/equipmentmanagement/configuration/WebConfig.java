@@ -3,6 +3,7 @@ package com.example.equipmentmanagement.configuration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
@@ -11,7 +12,10 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
+
 @Configuration
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public class WebConfig {
 
     @Bean

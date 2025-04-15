@@ -1,15 +1,18 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.*;
-import com.example.equipmentmanagement.dto.mapper.RoleMapper;
-import com.example.equipmentmanagement.dto.mapper.UserMapper;
+import com.example.equipmentmanagement.dto.user.AdminPasswordChangeDto;
+import com.example.equipmentmanagement.dto.user.UserDto;
+import com.example.equipmentmanagement.dto.user.UserPasswordChangeDto;
+import com.example.equipmentmanagement.dto.user.UserSaveDto;
+import com.example.equipmentmanagement.mapper.RoleMapper;
+import com.example.equipmentmanagement.mapper.UserMapper;
 import com.example.equipmentmanagement.exception.InvalidPasswordException;
 import com.example.equipmentmanagement.exception.PasswordMismatchException;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.exception.UserNotFoundException;
 import com.example.equipmentmanagement.model.Role;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.model.enumeration.RoleName;
+import com.example.equipmentmanagement.enumeration.RoleName;
 import com.example.equipmentmanagement.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
@@ -18,7 +21,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +28,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.example.equipmentmanagement.dto.mapper.UserMapper.toDto;
-import static com.example.equipmentmanagement.dto.mapper.UserMapper.toEntity;
+import static com.example.equipmentmanagement.mapper.UserMapper.toDto;
+import static com.example.equipmentmanagement.mapper.UserMapper.toEntity;
 
 @Service
 public class UserService {

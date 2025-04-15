@@ -1,8 +1,7 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.auth.UserAuthProvider;
+import com.example.equipmentmanagement.security.jwt.TokenProvider;
 import com.example.equipmentmanagement.dto.auth.AccountDto;
-import com.example.equipmentmanagement.dto.UserDto;
 import com.example.equipmentmanagement.dto.auth.AuthResponse;
 import com.example.equipmentmanagement.dto.auth.CredentialsRequest;
 import com.example.equipmentmanagement.exception.InvalidPasswordException;
@@ -25,13 +24,13 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final UserAuthProvider userAuthProvider;
+    private final TokenProvider tokenProvider;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, UserAuthProvider userAuthProvider) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
-        this.userAuthProvider = userAuthProvider;
+        this.tokenProvider = tokenProvider;
     }
 
     public AuthResponse login(CredentialsRequest credentialsRequest) {
@@ -51,22 +50,22 @@ public class AuthService {
                         credentialsRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String accessToken = userAuthProvider.createToken(authentication);
-        String refreshToken = userAuthProvider.createRefreshToken(authentication);
+        String accessToken = tokenProvider.createToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
 
         return new AuthResponse(accessToken, refreshToken);
     }
 
     public AuthResponse refreshToken(String refreshToken) {
-        if (!userAuthProvider.isTokenValid(refreshToken)) {
+        if (!tokenProvider.isTokenValid(refreshToken)) {
             throw new UnauthorizedException("Refresh token is invalid");
         }
 
-        String username = userAuthProvider.getUsernameFromToken(refreshToken);
+        String username = tokenProvider.getUsernameFromToken(refreshToken);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
 
-        String newAccessToken = userAuthProvider.createToken(user);
+        String newAccessToken = tokenProvider.createToken(user);
 
         return new AuthResponse(newAccessToken, refreshToken);
     }

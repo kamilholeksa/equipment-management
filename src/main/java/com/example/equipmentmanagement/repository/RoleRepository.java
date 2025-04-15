@@ -1,7 +1,7 @@
 package com.example.equipmentmanagement.repository;
 
 import com.example.equipmentmanagement.model.Role;
-import com.example.equipmentmanagement.model.enumeration.RoleName;
+import com.example.equipmentmanagement.enumeration.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

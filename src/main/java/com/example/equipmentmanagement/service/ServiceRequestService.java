@@ -1,15 +1,15 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.ServiceRequestDto;
-import com.example.equipmentmanagement.dto.ServiceRequestSaveDto;
-import com.example.equipmentmanagement.dto.ServiceRequestWithNotesDto;
-import com.example.equipmentmanagement.dto.mapper.ServiceRequestMapper;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestDto;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestSaveDto;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestWithNotesDto;
+import com.example.equipmentmanagement.mapper.ServiceRequestMapper;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.model.Equipment;
 import com.example.equipmentmanagement.model.ServiceRequest;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.model.enumeration.EquipmentStatus;
-import com.example.equipmentmanagement.model.enumeration.ServiceRequestStatus;
+import com.example.equipmentmanagement.enumeration.EquipmentStatus;
+import com.example.equipmentmanagement.enumeration.ServiceRequestStatus;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
 import com.example.equipmentmanagement.repository.ServiceRequestRepository;
 import com.example.equipmentmanagement.repository.UserRepository;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
-import static com.example.equipmentmanagement.dto.mapper.ServiceRequestMapper.*;
+import static com.example.equipmentmanagement.mapper.ServiceRequestMapper.*;
 
 @Service
 public class ServiceRequestService {

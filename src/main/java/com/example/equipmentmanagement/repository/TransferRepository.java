@@ -1,7 +1,7 @@
 package com.example.equipmentmanagement.repository;
 
 import com.example.equipmentmanagement.model.Transfer;
-import com.example.equipmentmanagement.model.enumeration.TransferStatus;
+import com.example.equipmentmanagement.enumeration.TransferStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

@@ -1,6 +1,6 @@
 package com.example.equipmentmanagement.model;
 
-import com.example.equipmentmanagement.model.enumeration.EquipmentStatus;
+import com.example.equipmentmanagement.enumeration.EquipmentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

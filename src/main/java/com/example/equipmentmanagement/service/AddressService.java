@@ -1,8 +1,8 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.AddressDto;
-import com.example.equipmentmanagement.dto.AddressSaveDto;
-import com.example.equipmentmanagement.dto.mapper.AddressMapper;
+import com.example.equipmentmanagement.dto.address.AddressDto;
+import com.example.equipmentmanagement.dto.address.AddressSaveDto;
+import com.example.equipmentmanagement.mapper.AddressMapper;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.model.Address;
 import com.example.equipmentmanagement.repository.AddressRepository;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.equipmentmanagement.dto.mapper.AddressMapper.toDto;
-import static com.example.equipmentmanagement.dto.mapper.AddressMapper.toEntity;
+import static com.example.equipmentmanagement.mapper.AddressMapper.toDto;
+import static com.example.equipmentmanagement.mapper.AddressMapper.toEntity;
 
 @Service
 public class AddressService {

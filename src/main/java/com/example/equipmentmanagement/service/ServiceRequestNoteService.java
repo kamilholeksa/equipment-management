@@ -1,8 +1,8 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.ServiceRequestNoteDto;
-import com.example.equipmentmanagement.dto.ServiceRequestNoteSaveDto;
-import com.example.equipmentmanagement.dto.mapper.ServiceRequestNoteMapper;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestNoteDto;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestNoteSaveDto;
+import com.example.equipmentmanagement.mapper.ServiceRequestNoteMapper;
 import com.example.equipmentmanagement.exception.AccessDeniedException;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.model.ServiceRequest;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.equipmentmanagement.dto.mapper.ServiceRequestNoteMapper.toDto;
-import static com.example.equipmentmanagement.dto.mapper.ServiceRequestNoteMapper.toEntity;
+import static com.example.equipmentmanagement.mapper.ServiceRequestNoteMapper.toDto;
+import static com.example.equipmentmanagement.mapper.ServiceRequestNoteMapper.toEntity;
 
 @Service
 public class ServiceRequestNoteService {

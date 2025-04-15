@@ -1,7 +1,7 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.EquipmentHistoryDto;
-import com.example.equipmentmanagement.dto.mapper.EquipmentHistoryMapper;
+import com.example.equipmentmanagement.dto.equipment.EquipmentHistoryDto;
+import com.example.equipmentmanagement.mapper.EquipmentHistoryMapper;
 import com.example.equipmentmanagement.model.Equipment;
 import com.example.equipmentmanagement.model.EquipmentHistory;
 import com.example.equipmentmanagement.repository.EquipmentHistoryRepository;

@@ -1,9 +1,9 @@
 package com.example.equipmentmanagement.controller;
 
-import com.example.equipmentmanagement.dto.AdminPasswordChangeDto;
-import com.example.equipmentmanagement.dto.UserDto;
-import com.example.equipmentmanagement.dto.UserPasswordChangeDto;
-import com.example.equipmentmanagement.dto.UserSaveDto;
+import com.example.equipmentmanagement.dto.user.AdminPasswordChangeDto;
+import com.example.equipmentmanagement.dto.user.UserDto;
+import com.example.equipmentmanagement.dto.user.UserPasswordChangeDto;
+import com.example.equipmentmanagement.dto.user.UserSaveDto;
 import com.example.equipmentmanagement.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

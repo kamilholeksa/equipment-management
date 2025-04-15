@@ -1,8 +1,8 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.EquipmentTypeDto;
-import com.example.equipmentmanagement.dto.EquipmentTypeSaveDto;
-import com.example.equipmentmanagement.dto.mapper.EquipmentTypeMapper;
+import com.example.equipmentmanagement.dto.equipment.EquipmentTypeDto;
+import com.example.equipmentmanagement.dto.equipment.EquipmentTypeSaveDto;
+import com.example.equipmentmanagement.mapper.EquipmentTypeMapper;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.model.EquipmentType;
 import com.example.equipmentmanagement.repository.EquipmentTypeRepository;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.equipmentmanagement.dto.mapper.EquipmentTypeMapper.toDto;
-import static com.example.equipmentmanagement.dto.mapper.EquipmentTypeMapper.toEntity;
+import static com.example.equipmentmanagement.mapper.EquipmentTypeMapper.toDto;
+import static com.example.equipmentmanagement.mapper.EquipmentTypeMapper.toEntity;
 
 @Service
 public class EquipmentTypeService {

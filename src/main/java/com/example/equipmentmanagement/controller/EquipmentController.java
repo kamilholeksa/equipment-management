@@ -1,7 +1,7 @@
 package com.example.equipmentmanagement.controller;
 
-import com.example.equipmentmanagement.dto.EquipmentDto;
-import com.example.equipmentmanagement.dto.EquipmentSaveDto;
+import com.example.equipmentmanagement.dto.equipment.EquipmentDto;
+import com.example.equipmentmanagement.dto.equipment.EquipmentSaveDto;
 import com.example.equipmentmanagement.service.EquipmentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

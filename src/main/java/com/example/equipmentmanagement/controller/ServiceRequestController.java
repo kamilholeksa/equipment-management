@@ -1,8 +1,8 @@
 package com.example.equipmentmanagement.controller;
 
-import com.example.equipmentmanagement.dto.ServiceRequestDto;
-import com.example.equipmentmanagement.dto.ServiceRequestSaveDto;
-import com.example.equipmentmanagement.dto.ServiceRequestWithNotesDto;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestDto;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestSaveDto;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestWithNotesDto;
 import com.example.equipmentmanagement.service.ServiceRequestService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

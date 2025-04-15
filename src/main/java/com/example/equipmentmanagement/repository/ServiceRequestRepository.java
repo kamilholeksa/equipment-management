@@ -1,7 +1,7 @@
 package com.example.equipmentmanagement.repository;
 
 import com.example.equipmentmanagement.model.ServiceRequest;
-import com.example.equipmentmanagement.model.enumeration.ServiceRequestStatus;
+import com.example.equipmentmanagement.enumeration.ServiceRequestStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

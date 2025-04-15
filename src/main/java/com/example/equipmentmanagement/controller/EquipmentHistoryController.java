@@ -1,6 +1,6 @@
 package com.example.equipmentmanagement.controller;
 
-import com.example.equipmentmanagement.dto.EquipmentHistoryDto;
+import com.example.equipmentmanagement.dto.equipment.EquipmentHistoryDto;
 import com.example.equipmentmanagement.service.EquipmentHistoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
