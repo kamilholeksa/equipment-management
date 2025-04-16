@@ -72,7 +72,7 @@ export class EquipmentListComponent implements OnInit {
     equipmentObservable.subscribe({
       next: (data) => {
         this.equipment = data.content;
-        this.length = data.totalElements;
+        this.length = data.page.totalElements;
       },
     });
   }
@@ -128,21 +128,6 @@ export class EquipmentListComponent implements OnInit {
   }
 
   getStatusClass(status: string): string {
-    switch (status) {
-      case 'NEW':
-        return 'status-badge status-new';
-      case 'IN_PREPARATION':
-        return 'status-badge status-in-preparation';
-      case 'IN_USE':
-        return 'status-badge status-in-use';
-      case 'IN_REPAIR':
-        return 'status-badge status-in-repair';
-      case 'RESERVE':
-        return 'status-badge status-reserve';
-      case 'DECOMMISSIONED':
-        return 'status-badge status-decommissioned';
-      default:
-        return 'status-badge';
-    }
+    return this.equipmentService.getStatusClass(status);
   }
 }

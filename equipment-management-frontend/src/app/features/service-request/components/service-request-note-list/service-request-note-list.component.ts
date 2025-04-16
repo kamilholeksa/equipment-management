@@ -43,7 +43,7 @@ export class ServiceRequestNoteListComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.notes = data.content;
-          this.length = data.totalElements;
+          this.length = data.page.totalElements;
         },
         error: () => this.notificationService.error('Wystąpił błąd'),
       });

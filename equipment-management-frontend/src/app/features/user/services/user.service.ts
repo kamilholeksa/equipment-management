@@ -70,4 +70,8 @@ export class UserService {
   toggleActive(id: number): Observable<any> {
     return this.http.patch(this.apiUrl + `/${id}/toggle-active`, {});
   }
+
+  getStatusClass(active: boolean) {
+    return active ? 'status-badge active' : 'status-badge inactive';
+  }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EquipmentService } from '../../services/equipment.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe, Location, NgIf } from '@angular/common';
+import {DatePipe, Location, NgClass, NgIf} from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { EquipmentStatusDisplayPipe } from '../../../../shared/pipes/equipment-status-display.pipe';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,6 +21,7 @@ import { Equipment } from '../../models/equipment.model';
     EquipmentStatusDisplayPipe,
     HasAnyRoleDirective,
     NgIf,
+    NgClass,
   ],
   templateUrl: './equipment-details.component.html',
   styleUrl: './equipment-details.component.scss',
@@ -98,5 +99,9 @@ export class EquipmentDetailsComponent implements OnInit {
       this.authService.hasAnyRole(['ROLE_ADMIN', 'ROLE_MANAGER']) ||
       this.equipment.user.username === this.authService.account()?.username
     );
+  }
+
+  getStatusClass(status: string): string {
+    return this.equipmentService.getStatusClass(status);
   }
 }

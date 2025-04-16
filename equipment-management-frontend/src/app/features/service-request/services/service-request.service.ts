@@ -98,4 +98,21 @@ export class ServiceRequestService {
   cancelServiceRequest(serviceRequestId: number) {
     return this.http.patch(this.apiUrl + `/${serviceRequestId}/cancel`, {});
   }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'NEW':
+        return 'status-badge new';
+      case 'ACCEPTED':
+        return 'status-badge accepted';
+      case 'IN_PROGRESS':
+        return 'status-badge in-progress';
+      case 'CANCELLED':
+        return 'status-badge cancelled';
+      case 'CLOSED':
+        return 'status-badge closed';
+      default:
+        return '';
+    }
+  }
 }

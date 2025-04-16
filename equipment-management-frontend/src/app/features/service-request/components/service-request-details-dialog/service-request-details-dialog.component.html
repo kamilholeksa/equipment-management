@@ -28,7 +28,7 @@
 
   <div class="mb-2">
     <span class="mb-0">Status: </span>
-    <span class="fw-medium mb-0">{{ serviceRequest.status | serviceRequestStatusDisplay }}</span>
+    <span [ngClass]="getStatusClass(serviceRequest.status)">{{ serviceRequest.status | serviceRequestStatusDisplay }}</span>
   </div>
 
   <div class="mb-2" *ngIf="serviceRequest.closeInfo">

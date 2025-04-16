@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { DatePipe, NgIf } from '@angular/common';
+import {DatePipe, NgClass, NgIf} from '@angular/common';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -21,6 +21,7 @@ import { NotificationService } from '../../../../core/notification/services/noti
     MatButtonModule,
     TransferStatusDisplayPipe,
     NgIf,
+    NgClass,
   ],
   templateUrl: './service-request-details-dialog.component.html',
   styleUrl: './service-request-details-dialog.component.scss',
@@ -54,5 +55,9 @@ export class ServiceRequestDetailsDialogComponent {
         },
         error: () => this.notificationService.error('Wystąpił błąd'),
       });
+  }
+
+  getStatusClass(status: string): string {
+    return this.serviceRequestService.getStatusClass(status);
   }
 }

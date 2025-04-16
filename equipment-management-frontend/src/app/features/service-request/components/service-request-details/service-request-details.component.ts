@@ -12,7 +12,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Location, NgIf } from '@angular/common';
+import {Location, NgClass, NgIf} from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { ServiceRequestNoteListComponent } from '../service-request-note-list/service-request-note-list.component';
 import { ServiceRequestNoteService } from '../../services/service-request-note.service';
@@ -37,6 +37,7 @@ import { ServiceRequestStatusEnum } from '../../../../shared/enums/service-reque
     TransferStatusDisplayPipe,
     RouterLink,
     NgIf,
+    NgClass,
   ],
   templateUrl: './service-request-details.component.html',
   styleUrl: './service-request-details.component.scss',
@@ -150,5 +151,9 @@ export class ServiceRequestDetailsComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+  getStatusClass(status: string): string {
+    return this.serviceRequestService.getStatusClass(status);
   }
 }

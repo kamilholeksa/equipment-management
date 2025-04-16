@@ -81,4 +81,17 @@ export class TransferService {
   rejectTransfer(id: number): Observable<any> {
     return this.http.post(this.apiUrl + `/${id}/reject`, {});
   }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'ACCEPTED':
+        return 'status-badge accepted';
+      case 'PENDING':
+        return 'status-badge pending';
+      case 'REJECTED':
+        return 'status-badge rejected';
+      default:
+        return '';
+    }
+  }
 }

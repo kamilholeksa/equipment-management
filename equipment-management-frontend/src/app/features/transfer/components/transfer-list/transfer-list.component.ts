@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import { NgIf } from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 import { TransferStatusDisplayPipe } from '../../../../shared/pipes/transfer-status-display.pipe';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -28,6 +28,7 @@ import { AuthService } from '../../../../core/auth/services/auth.service';
     NgIf,
     TransferStatusDisplayPipe,
     RouterLink,
+    NgClass,
   ],
   templateUrl: './transfer-list.component.html',
   styleUrl: './transfer-list.component.scss',
@@ -102,7 +103,7 @@ export class TransferListComponent implements OnInit {
     observable.subscribe({
       next: (data) => {
         this.transfers = data.content;
-        this.length = data.totalElements;
+        this.length = data.page.totalElements;
       },
     });
   }
@@ -169,5 +170,9 @@ export class TransferListComponent implements OnInit {
         error: () => this.notificationService.error('Wystąpił błąd'),
       });
     }
+  }
+
+  getStatusClass(status: string): string {
+    return this.transferService.getStatusClass(status);
   }
 }

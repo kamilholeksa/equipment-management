@@ -61,4 +61,23 @@ export class EquipmentService {
   decommission(id: number) {
     return this.http.patch(this.apiUrl + `/${id}/decommission`, {});
   }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'NEW':
+        return 'status-badge new';
+      case 'IN_PREPARATION':
+        return 'status-badge in-preparation';
+      case 'IN_USE':
+        return 'status-badge in-use';
+      case 'IN_REPAIR':
+        return 'status-badge in-repair';
+      case 'RESERVE':
+        return 'status-badge reserve';
+      case 'DECOMMISSIONED':
+        return 'status-badge decommissioned';
+      default:
+        return '';
+    }
+  }
 }

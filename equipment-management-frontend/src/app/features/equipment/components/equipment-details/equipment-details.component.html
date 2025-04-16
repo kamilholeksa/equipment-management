@@ -29,7 +29,11 @@
     </tr>
     <tr>
       <td>Status:</td>
-      <td>{{ equipment.status | equipmentStatusDisplay }}</td>
+      <td class="p-1">
+        <div [ngClass]="getStatusClass(equipment.status)">
+          {{ equipment.status | equipmentStatusDisplay }}
+        </div>
+      </td>
     </tr>
     <tr>
       <td>Użytkownik:</td>

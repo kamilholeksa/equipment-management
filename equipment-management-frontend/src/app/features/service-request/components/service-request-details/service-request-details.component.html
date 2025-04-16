@@ -10,23 +10,24 @@
         </div>
         <hr/>
 
-        <div class="mb-2">
+        <div>
           <p class="mb-0">Opis:</p>
           <p class="fw-medium mb-0">{{ serviceRequest.description }}</p>
         </div>
         <hr/>
 
-        <div class="mb-2">
-          <p class="mb-0">Status:</p>
-          <p class="fw-medium mb-0">{{ serviceRequest.status | serviceRequestStatusDisplay }}</p>
+        <div>
+          <p class="mb-0 me-2 d-inline-block">Status:</p>
+          <p class="mb-0" [ngClass]="getStatusClass(serviceRequest.status)">
+            {{ serviceRequest.status | serviceRequestStatusDisplay }}</p>
         </div>
         <div *ngIf="serviceRequest.status === ServiceRequestStatusEnum.CLOSED" class="mb-2">
-          <p class="mb-0">Informacja o zamknięciu:</p>
+          <p class="mb-0 mt-2">Informacja o zamknięciu:</p>
           <p class="fw-medium mb-0">{{ serviceRequest.closeInfo }}</p>
         </div>
         <hr/>
 
-        <div class="mb-2">
+        <div>
           <p class="mb-0">Sprzęt:</p>
           <p class="fw-medium mb-0">{{ serviceRequest.equipment.manufacturer + ' ' + serviceRequest.equipment.model + ' (' + serviceRequest.equipment.inventoryNumber + ')' }}
             <a routerLink="/equipment/{{ serviceRequest.equipment.id }}" class="p-1">
@@ -36,7 +37,7 @@
         </div>
         <hr/>
 
-        <div class="mb-2">
+        <div>
           <p class="mb-0">Zgłaszający:</p>
           <p class="fw-medium mb-0">{{ serviceRequest.user.firstName + ' ' + serviceRequest.user.lastName }}</p>
         </div>

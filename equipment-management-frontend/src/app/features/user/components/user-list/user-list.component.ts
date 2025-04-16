@@ -70,7 +70,7 @@ export class UserListComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.users = data.content;
-          this.length = data.totalElements;
+          this.length = data.page.totalElements;
         },
         error: () => this.notificationService.error('Wystąpił błąd'),
       });
@@ -101,8 +101,6 @@ export class UserListComponent implements OnInit {
   }
 
   getStatusClass(active: boolean) {
-    return active
-      ? 'status-badge status-active'
-      : 'status-badge status-inactive';
+    return this.userService.getStatusClass(active);
   }
 }

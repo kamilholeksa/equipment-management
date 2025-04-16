@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import { DatePipe, Location, NgIf } from '@angular/common';
+import {DatePipe, Location, NgClass, NgIf} from '@angular/common';
 import { TransferStatusDisplayPipe } from '../../../../shared/pipes/service-request-status-display.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceRequestDetailsDialogComponent } from '../service-request-details-dialog/service-request-details-dialog.component';
@@ -28,6 +28,7 @@ import { NotificationService } from '../../../../core/notification/services/noti
     NgIf,
     DatePipe,
     TransferStatusDisplayPipe,
+    NgClass,
   ],
   templateUrl: './service-request-list.component.html',
   styleUrl: './service-request-list.component.scss',
@@ -98,7 +99,7 @@ export class ServiceRequestListComponent implements OnInit {
     observable.subscribe({
       next: (data) => {
         this.serviceRequests = data.content;
-        this.length = data.totalElements;
+        this.length = data.page.totalElements;
       },
       error: () => this.notificationService.error('Wystąpił błąd'),
     });
@@ -171,5 +172,9 @@ export class ServiceRequestListComponent implements OnInit {
         'createdDate',
       ];
     }
+  }
+
+  getStatusClass(status: string): string {
+    return this.serviceRequestService.getStatusClass(status);
   }
 }
