@@ -1,6 +1,7 @@
 package com.example.equipmentmanagement.service;
 
 import com.example.equipmentmanagement.dto.equipment.EquipmentDto;
+import com.example.equipmentmanagement.dto.equipment.EquipmentFilter;
 import com.example.equipmentmanagement.dto.equipment.EquipmentSaveDto;
 import com.example.equipmentmanagement.mapper.EquipmentMapper;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
@@ -13,12 +14,15 @@ import com.example.equipmentmanagement.repository.AddressRepository;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
 import com.example.equipmentmanagement.repository.EquipmentTypeRepository;
 import com.example.equipmentmanagement.repository.UserRepository;
+import com.example.equipmentmanagement.specification.EquipmentSpecification;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -66,17 +70,22 @@ public class EquipmentService {
     }
 
     public Page<EquipmentDto> getCurrentUserEquipment(
+            EquipmentFilter filter,
             int pageNumber,
             int pageSize,
             String sortField,
             String sortOrder
     ) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        filter.setUserId(user.getId());
 
         Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
 
-        return equipmentRepository.findAllByUserUsername(username, pageRequest).map(EquipmentMapper::toDto);
+        Specification<Equipment> spec = EquipmentSpecification.prepareSpecification(filter);
+
+        return equipmentRepository.findAll(spec, pageRequest).map(EquipmentMapper::toDto);
     }
 
     public EquipmentDto getEquipment(Long id) {

@@ -1,6 +1,7 @@
 package com.example.equipmentmanagement.controller;
 
 import com.example.equipmentmanagement.dto.equipment.EquipmentDto;
+import com.example.equipmentmanagement.dto.equipment.EquipmentFilter;
 import com.example.equipmentmanagement.dto.equipment.EquipmentSaveDto;
 import com.example.equipmentmanagement.service.EquipmentService;
 import jakarta.validation.Valid;
@@ -34,6 +35,7 @@ public class EquipmentController {
 
     @GetMapping("/my-equipment")
     public ResponseEntity<Page<EquipmentDto>> getCurrentUserEquipment(
+            EquipmentFilter filter,
             @RequestParam(required = false) Integer pageNumber,
             @RequestParam(required = false) Integer pageSize,
             @RequestParam(required = false, defaultValue = "id") String sortField,
@@ -42,7 +44,7 @@ public class EquipmentController {
         int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
         int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
 
-        return ResponseEntity.ok(this.equipmentService.getCurrentUserEquipment(page, size, sortField, sortOrder));
+        return ResponseEntity.ok(this.equipmentService.getCurrentUserEquipment(filter, page, size, sortField, sortOrder));
     }
 
     @GetMapping("/{id}")
