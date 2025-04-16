@@ -1,8 +1,5 @@
 import { Routes } from '@angular/router';
-import { EquipmentListComponent } from './components/equipment-list/equipment-list.component';
 import { authGuard } from '../../core/auth/guards/auth.guard';
-import { EquipmentDetailsComponent } from './components/equipment-details/equipment-details.component';
-import { EquipmentFormComponent } from './components/equipment-form/equipment-form.component';
 
 export const equipmentRoutes: Routes = [
   {
@@ -11,12 +8,18 @@ export const equipmentRoutes: Routes = [
     children: [
       {
         path: '',
-        component: EquipmentListComponent,
+        loadComponent: () =>
+          import('./components/equipment-list/equipment-list.component').then(
+            (m) => m.EquipmentListComponent,
+          ),
         data: { showAllEquipment: false },
       },
       {
         path: ':id',
-        component: EquipmentDetailsComponent,
+        loadComponent: () =>
+          import(
+            './components/equipment-details/equipment-details.component'
+          ).then((m) => m.EquipmentDetailsComponent),
       },
     ],
   },
@@ -27,22 +30,34 @@ export const equipmentRoutes: Routes = [
     children: [
       {
         path: '',
-        component: EquipmentListComponent,
+        loadComponent: () =>
+          import('./components/equipment-list/equipment-list.component').then(
+            (m) => m.EquipmentListComponent,
+          ),
         data: { showAllEquipment: true },
       },
       {
         path: 'new',
-        component: EquipmentFormComponent,
+        loadComponent: () =>
+          import('./components/equipment-form/equipment-form.component').then(
+            (m) => m.EquipmentFormComponent,
+          ),
       },
       {
         path: 'edit/:id',
-        component: EquipmentFormComponent,
+        loadComponent: () =>
+          import('./components/equipment-form/equipment-form.component').then(
+            (m) => m.EquipmentFormComponent,
+          ),
       },
     ],
   },
   {
     path: 'equipment/:id',
-    component: EquipmentDetailsComponent,
+    loadComponent: () =>
+      import('./components/equipment-details/equipment-details.component').then(
+        (m) => m.EquipmentDetailsComponent,
+      ),
     canActivate: [authGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_TECHNICIAN'] },
   },

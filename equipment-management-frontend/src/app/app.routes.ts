@@ -5,8 +5,6 @@ import { equipmentTypeRoutes } from './features/equipment-type/equipment-type.ro
 import { addressRoutes } from './features/address/address.routes';
 import { transferRoutes } from './features/transfer/transfer.routes';
 import { serviceRequestRoutes } from './features/service-request/service-request.routes';
-import { AccessDeniedComponent } from './shared/components/access-denied/access-denied.component';
-import { LoginComponent } from './core/auth/components/login/login.component';
 
 export const routes: Routes = [
   ...userRoutes,
@@ -15,8 +13,20 @@ export const routes: Routes = [
   ...addressRoutes,
   ...transferRoutes,
   ...serviceRequestRoutes,
-  { path: 'login', component: LoginComponent },
-  { path: 'access-denied', component: AccessDeniedComponent },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./core/auth/components/login/login.component').then(
+        (m) => m.LoginComponent,
+      ),
+  },
+  {
+    path: 'access-denied',
+    loadComponent: () =>
+      import('./shared/components/access-denied/access-denied.component').then(
+        (m) => m.AccessDeniedComponent,
+      ),
+  },
   { path: '', redirectTo: '/my-equipment', pathMatch: 'full' },
   { path: '**', redirectTo: '/my-equipment' },
 ];

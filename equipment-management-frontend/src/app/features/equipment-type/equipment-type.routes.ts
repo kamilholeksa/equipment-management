@@ -1,11 +1,13 @@
 import { Routes } from '@angular/router';
-import { EquipmentTypeListComponent } from './components/equipment-type-list/equipment-type-list.component';
 import { authGuard } from '../../core/auth/guards/auth.guard';
 
 export const equipmentTypeRoutes: Routes = [
   {
     path: 'equipment-types',
-    component: EquipmentTypeListComponent,
+    loadComponent: () =>
+      import(
+        './components/equipment-type-list/equipment-type-list.component'
+      ).then((m) => m.EquipmentTypeListComponent),
     data: { roles: ['ROLE_ADMIN'] },
     canActivate: [authGuard],
   },

@@ -1,11 +1,13 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../../core/auth/guards/auth.guard';
-import { TransferListComponent } from './components/transfer-list/transfer-list.component';
 
 export const transferRoutes: Routes = [
   {
     path: 'transfers',
-    component: TransferListComponent,
+    loadComponent: () =>
+      import('./components/transfer-list/transfer-list.component').then(
+        (m) => m.TransferListComponent,
+      ),
     canActivate: [authGuard],
     data: {
       showAll: true,
@@ -19,12 +21,18 @@ export const transferRoutes: Routes = [
     children: [
       {
         path: '',
-        component: TransferListComponent,
+        loadComponent: () =>
+          import('./components/transfer-list/transfer-list.component').then(
+            (m) => m.TransferListComponent,
+          ),
         data: { showAll: false, showPending: true },
       },
       {
         path: 'all',
-        component: TransferListComponent,
+        loadComponent: () =>
+          import('./components/transfer-list/transfer-list.component').then(
+            (m) => m.TransferListComponent,
+          ),
         data: { showAll: false, showPending: false },
       },
     ],

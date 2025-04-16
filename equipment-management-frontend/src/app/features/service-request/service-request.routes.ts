@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../../core/auth/guards/auth.guard';
-import { ServiceRequestListComponent } from './components/service-request-list/service-request-list.component';
-import { ServiceRequestDetailsComponent } from './components/service-request-details/service-request-details.component';
 
 export const serviceRequestRoutes: Routes = [
   {
@@ -11,17 +9,26 @@ export const serviceRequestRoutes: Routes = [
     children: [
       {
         path: '',
-        component: ServiceRequestListComponent,
+        loadComponent: () =>
+          import(
+            './components/service-request-list/service-request-list.component'
+          ).then((m) => m.ServiceRequestListComponent),
       },
       {
         path: ':id',
-        component: ServiceRequestDetailsComponent,
+        loadComponent: () =>
+          import(
+            './components/service-request-details/service-request-details.component'
+          ).then((m) => m.ServiceRequestDetailsComponent),
       },
     ],
   },
   {
     path: 'service-requests/equipment/:equipmentId',
-    component: ServiceRequestListComponent,
+    loadComponent: () =>
+      import(
+        './components/service-request-list/service-request-list.component'
+      ).then((m) => m.ServiceRequestListComponent),
     canActivate: [authGuard],
   },
 ];

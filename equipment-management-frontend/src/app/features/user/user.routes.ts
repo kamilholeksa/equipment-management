@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { authGuard } from '../../core/auth/guards/auth.guard';
 
-// TODO: Change component to lazy loading in other routes like this
 export const userRoutes: Routes = [
   {
     path: 'users',
