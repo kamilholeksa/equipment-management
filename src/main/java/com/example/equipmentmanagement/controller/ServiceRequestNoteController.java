@@ -5,6 +5,7 @@ import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestNoteSave
 import com.example.equipmentmanagement.service.ServiceRequestNoteService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,15 +28,8 @@ public class ServiceRequestNoteController {
     }
 
     @GetMapping("/service-request/{service-request-id}")
-    public ResponseEntity<Page<ServiceRequestNoteDto>> getNotesByServiceRequest(
-            @PathVariable("service-request-id") Long serviceRequestId,
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.serviceRequestNoteService.getNotesByServiceRequest(serviceRequestId, page, size));
+    public ResponseEntity<Page<ServiceRequestNoteDto>> getNotesByServiceRequest(@PathVariable("service-request-id") Long serviceRequestId, Pageable pageable) {
+        return ResponseEntity.ok(this.serviceRequestNoteService.getNotesByServiceRequest(serviceRequestId, pageable));
     }
 
     @GetMapping("/{id}")

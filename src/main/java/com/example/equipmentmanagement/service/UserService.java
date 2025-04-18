@@ -16,10 +16,7 @@ import com.example.equipmentmanagement.enumeration.RoleName;
 import com.example.equipmentmanagement.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,23 +40,8 @@ public class UserService {
         this.roleService = roleService;
     }
 
-    public Page<UserDto> getAllUsers(
-            int pageNumber,
-            int pageSize,
-            String sortField,
-            String sortOrder
-    ) {
-        Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-
-        Page<Long> idsPage = userRepository.findAllIds(pageRequest);
-        Set<Long> ids = Set.copyOf(idsPage.getContent());
-
-        List<UserDto> users = userRepository.findAllByIdIn(ids, idsPage.getSort()).stream()
-                .map(UserMapper::toDto)
-                .toList();
-
-        return new PageImpl<>(users, pageRequest, idsPage.getTotalElements());
+    public Page<UserDto> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(UserMapper::toDto);
     }
 
     public List<UserDto> getActiveUsers() {

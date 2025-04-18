@@ -16,12 +16,8 @@ import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
-    @Query("SELECT u.id FROM User u")
-    Page<Long> findAllIds(Pageable pageable);
-
     @EntityGraph("user-entity-graph")
-    List<User> findAllByIdIn(Set<Long> ids, Sort sort);
+    Page<User> findAll(Pageable pageable);
 
     @EntityGraph("user-entity-graph")
     List<User> findAllByActiveTrue();

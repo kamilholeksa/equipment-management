@@ -33,8 +33,7 @@ export class UserListComponent implements OnInit {
   length = 0;
   pageSize = 10;
   pageIndex = 0;
-  sortField = 'id';
-  sortOrder = 'desc';
+  sort = 'id,desc';
   displayedColumns = [
     'id',
     'firstName',
@@ -46,8 +45,8 @@ export class UserListComponent implements OnInit {
     'active',
   ];
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) matSort!: MatSort;
+  @ViewChild(MatPaginator) matPaginator!: MatPaginator;
 
   constructor(
     private userService: UserService,
@@ -64,8 +63,7 @@ export class UserListComponent implements OnInit {
       .getAllUsers(
         this.pageIndex,
         this.pageSize,
-        this.sortField,
-        this.sortOrder,
+        this.sort,
       )
       .subscribe({
         next: (data) => {
@@ -83,15 +81,13 @@ export class UserListComponent implements OnInit {
   }
 
   onSortChange() {
-    const sortField = this.sort.active;
-    const sortOrder = this.sort.direction;
+    const sortField = this.matSort.active;
+    const sortOrder = this.matSort.direction;
 
     if (sortField && sortOrder) {
-      this.sortField = sortField;
-      this.sortOrder = sortOrder === 'asc' ? 'asc' : 'desc';
+      this.sort = `${sortField},${sortOrder}`;
     } else {
-      this.sortField = 'id';
-      this.sortOrder = 'desc';
+      this.sort = 'id,desc';
     }
     this.loadData();
   }

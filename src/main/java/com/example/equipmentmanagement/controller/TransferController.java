@@ -6,6 +6,7 @@ import com.example.equipmentmanagement.dto.transfer.AcceptTransferRequest;
 import com.example.equipmentmanagement.service.TransferService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,42 +22,18 @@ public class TransferController {
     }
 
     @GetMapping()
-    public ResponseEntity<Page<TransferDto>> getAllTransfers(
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") String sortField,
-            @RequestParam(required = false, defaultValue = "desc") String sortOrder
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.transferService.getAllTransfers(page, size, sortField, sortOrder));
+    public ResponseEntity<Page<TransferDto>> getAllTransfers(Pageable pageable) {
+        return ResponseEntity.ok(this.transferService.getAllTransfers(pageable));
     }
 
     @GetMapping("/to-accept")
-    public ResponseEntity<Page<TransferDto>> getTransfersToAccept(
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") String sortField,
-            @RequestParam(required = false, defaultValue = "desc") String sortOrder
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.transferService.getTransfersToAccept(page, size, sortField, sortOrder));
+    public ResponseEntity<Page<TransferDto>> getTransfersToAccept(Pageable pageable) {
+        return ResponseEntity.ok(this.transferService.getTransfersToAccept(pageable));
     }
 
     @GetMapping("/my-transfers")
-    public ResponseEntity<Page<TransferDto>> getMyTransfers(
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") String sortField,
-            @RequestParam(required = false, defaultValue = "desc") String sortOrder
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.transferService.getMyTransfers(page, size, sortField, sortOrder));
+    public ResponseEntity<Page<TransferDto>> getMyTransfers(Pageable pageable) {
+        return ResponseEntity.ok(this.transferService.getMyTransfers(pageable));
     }
 
     @GetMapping("/{id}")

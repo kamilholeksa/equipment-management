@@ -7,6 +7,7 @@ import com.example.equipmentmanagement.dto.user.UserSaveDto;
 import com.example.equipmentmanagement.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,16 +24,8 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<Page<UserDto>> getAllUsers(
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") String sortField,
-            @RequestParam(required = false, defaultValue = "desc") String sortOrder
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.userService.getAllUsers(page, size, sortField, sortOrder));
+    public ResponseEntity<Page<UserDto>> getAllUsers(Pageable pageable) {
+        return ResponseEntity.ok(this.userService.getAllUsers(pageable));
     }
 
     @GetMapping("/active")

@@ -20,14 +20,12 @@ export class TransferService {
   getAllTransfers(
     page: number,
     size: number,
-    sortField: string | null,
-    sortOrder: string | null,
+    sort?: string | null,
   ): Observable<Page<Transfer>> {
     const params = new HttpParams()
       .set('pageNumber', page)
       .set('pageSize', size)
-      .set('sortField', sortField ?? '')
-      .set('sortOrder', sortOrder ?? '');
+      .set('sort', sort ?? '');
 
     return this.http.get<Page<Transfer>>(this.apiUrl, {
       params,
@@ -37,14 +35,12 @@ export class TransferService {
   getMyTransfers(
     page: number,
     size: number,
-    sortField: string | null,
-    sortOrder: string | null,
+    sort?: string | null,
   ): Observable<Page<Transfer>> {
     const params = new HttpParams()
       .set('pageNumber', page)
       .set('pageSize', size)
-      .set('sortField', sortField ?? '')
-      .set('sortOrder', sortOrder ?? '');
+      .set('sort', sort ?? '');
 
     return this.http.get<Page<Transfer>>(
       this.apiUrl + '/my-transfers',
@@ -57,14 +53,12 @@ export class TransferService {
   getTransfersToAccept(
     page: number,
     size: number,
-    sortField: string | null,
-    sortOrder: string | null,
+    sort?: string | null,
   ): Observable<Page<Transfer>> {
     const params = new HttpParams()
       .set('pageNumber', page)
       .set('pageSize', size)
-      .set('sortField', sortField ?? '')
-      .set('sortOrder', sortOrder ?? '');
+      .set('sort', sort ?? '');
 
     return this.http.get<Page<Transfer>>(this.apiUrl + '/to-accept', {
       params,

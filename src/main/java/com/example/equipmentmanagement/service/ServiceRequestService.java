@@ -14,10 +14,7 @@ import com.example.equipmentmanagement.repository.EquipmentRepository;
 import com.example.equipmentmanagement.repository.ServiceRequestRepository;
 import com.example.equipmentmanagement.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,23 +37,8 @@ public class ServiceRequestService {
         this.userRepository = userRepository;
     }
 
-    public Page<ServiceRequestDto> getAllServiceRequests(
-            int pageNumber,
-            int pageSize,
-            String sortField,
-            String sortOrder
-    ) {
-        Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-
-        Page<Long> idsPage = serviceRequestRepository.findAllIds(pageRequest);
-        Set<Long> ids = Set.copyOf(idsPage.getContent());
-
-        List<ServiceRequestDto> serviceRequests = serviceRequestRepository.findAllByIdIn(ids, pageRequest.getSort()).stream()
-                .map(ServiceRequestMapper::toDto)
-                .toList();
-
-        return new PageImpl<>(serviceRequests, pageRequest, idsPage.getTotalElements());
+    public Page<ServiceRequestDto> getAllServiceRequests(Pageable pageable) {
+        return serviceRequestRepository.findAll(pageable).map(ServiceRequestMapper::toDto);
     }
 
     public ServiceRequestDto getServiceRequest(Long id) {
@@ -67,35 +49,18 @@ public class ServiceRequestService {
         return toDtoWithNotes(findServiceRequestById(id));
     }
 
-    public Page<ServiceRequestDto> getServiceRequestsByEquipment(
-            Long equipmentId,
-            int pageNumber,
-            int pageSize,
-            String sortField,
-            String sortOrder
-    ) {
-        Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-
-        return this.serviceRequestRepository.findAllByEquipmentId(equipmentId, pageRequest).map(ServiceRequestMapper::toDto);
+    public Page<ServiceRequestDto> getServiceRequestsByEquipment(Long equipmentId, Pageable pageable) {
+        return this.serviceRequestRepository.findAllByEquipmentId(equipmentId, pageable).map(ServiceRequestMapper::toDto);
     }
 
-    public Page<ServiceRequestDto> getOpenServiceRequests(
-            int pageNumber,
-            int pageSize,
-            String sortField,
-            String sortOrder
-    ) {
-        Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-
+    public Page<ServiceRequestDto> getOpenServiceRequests(Pageable pageable) {
         Set<ServiceRequestStatus> statuses = Set.of(
                 ServiceRequestStatus.NEW,
                 ServiceRequestStatus.ACCEPTED,
                 ServiceRequestStatus.IN_PROGRESS
         );
 
-        return this.serviceRequestRepository.findAllByStatusIn(statuses, pageRequest).map(ServiceRequestMapper::toDto);
+        return this.serviceRequestRepository.findAllByStatusIn(statuses, pageable).map(ServiceRequestMapper::toDto);
     }
 
     @Transactional

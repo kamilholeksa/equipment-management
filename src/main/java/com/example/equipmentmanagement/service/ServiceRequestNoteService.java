@@ -12,6 +12,7 @@ import com.example.equipmentmanagement.repository.ServiceRequestRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -39,13 +40,9 @@ public class ServiceRequestNoteService {
                 .toList();
     }
 
-    public Page<ServiceRequestNoteDto> getNotesByServiceRequest(
-            Long serviceRequestId,
-            int pageNumber,
-            int pageSize
-    ) {
+    public Page<ServiceRequestNoteDto> getNotesByServiceRequest(Long serviceRequestId, Pageable pageable) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         return this.serviceRequestNoteRepository.findByServiceRequestId(serviceRequestId, pageRequest).map(ServiceRequestNoteMapper::toDto);
     }
 

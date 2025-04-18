@@ -15,14 +15,12 @@ export class EquipmentService {
   getAllEquipment(
     page: number,
     size: number,
-    sortField: string | null,
-    sortOrder: string | null,
+    sort?: string | null,
   ): Observable<Page<Equipment>> {
     const params = new HttpParams()
       .set('pageNumber', page)
       .set('pageSize', size)
-      .set('sortField', sortField ?? '')
-      .set('sortOrder', sortOrder ?? '');
+      .set('sort', sort ?? '');
 
     return this.http.get<Page<Equipment>>(this.apiUrl, {
       params,
@@ -36,14 +34,12 @@ export class EquipmentService {
   getCurrentUserEquipment(
     page: number,
     size: number,
-    sortField?: string | null,
-    sortOrder?: string | null,
+    sort?: string | null,
   ): Observable<Page<Equipment>> {
     const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size)
-      .set('sortField', sortField ?? '')
-      .set('sortOrder', sortOrder ?? '');
+      .set('page', page)
+      .set('size', size)
+      .set('sort', sort ?? '');
 
     return this.http.get<Page<Equipment>>(this.apiUrl + '/my-equipment', {
       params,

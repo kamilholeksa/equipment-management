@@ -19,10 +19,7 @@ import com.example.equipmentmanagement.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -54,51 +51,18 @@ public class TransferService {
         this.equipmentHistoryService = equipmentHistoryService;
     }
 
-    public Page<TransferDto> getAllTransfers(
-            int pageNumber,
-            int pageSize,
-            String sortField,
-            String sortOrder
-    ) {
-        Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-
-        Page<Long> idsPage = transferRepository.findAllIds(pageRequest);
-        Set<Long> ids = Set.copyOf(idsPage.getContent());
-
-        List<TransferDto> transfers = transferRepository.findAllByIdIn(ids, pageRequest.getSort()).stream()
-                .map(TransferMapper::toDto)
-                .toList();
-
-        return new PageImpl<>(transfers, pageRequest, idsPage.getTotalElements());
+    public Page<TransferDto> getAllTransfers(Pageable pageable) {
+        return transferRepository.findAll(pageable).map(TransferMapper::toDto);
     }
 
-    public Page<TransferDto> getTransfersToAccept(
-            int pageNumber,
-            int pageSize,
-            String sortField,
-            String sortOrder
-    ) {
+    public Page<TransferDto> getTransfersToAccept(Pageable pageable) {
         UserDto user = userService.getCurrentUser();
-
-        Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-
-        return transferRepository.getTransfersByObtainerUsernameAndStatus(user.getUsername(), TransferStatus.PENDING, pageRequest).map(TransferMapper::toDto);
+        return transferRepository.getTransfersByObtainerUsernameAndStatus(user.getUsername(), TransferStatus.PENDING, pageable).map(TransferMapper::toDto);
     }
 
-    public Page<TransferDto> getMyTransfers(
-            int pageNumber,
-            int pageSize,
-            String sortField,
-            String sortOrder
-    ) {
+    public Page<TransferDto> getMyTransfers(Pageable pageable) {
         UserDto user = userService.getCurrentUser();
-
-        Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-
-        return transferRepository.getTransfersByTransferorUsernameOrObtainerUsername(user.getUsername(), user.getUsername(), pageRequest).map(TransferMapper::toDto);
+        return transferRepository.getTransfersByTransferorUsernameOrObtainerUsername(user.getUsername(), user.getUsername(), pageable).map(TransferMapper::toDto);
     }
 
     public TransferDto getTransfer(Long id) {

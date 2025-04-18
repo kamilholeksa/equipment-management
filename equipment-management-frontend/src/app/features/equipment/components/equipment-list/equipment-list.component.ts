@@ -35,12 +35,11 @@ export class EquipmentListComponent implements OnInit {
   length = 0;
   pageSize = 10;
   pageIndex = 0;
-  sortField = 'id';
-  sortOrder = 'desc';
+  sort = 'id,desc';
   displayedColumns: string[] = [];
 
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) matSort!: MatSort;
+  @ViewChild(MatPaginator) matPaginator!: MatPaginator;
 
   constructor(
     private equipmentService: EquipmentService,
@@ -59,14 +58,12 @@ export class EquipmentListComponent implements OnInit {
       ? this.equipmentService.getAllEquipment(
           this.pageIndex,
           this.pageSize,
-          this.sortField,
-          this.sortOrder,
+          this.sort
         )
       : this.equipmentService.getCurrentUserEquipment(
           this.pageIndex,
           this.pageSize,
-          this.sortField,
-          this.sortOrder,
+          this.sort
         );
 
     equipmentObservable.subscribe({
@@ -84,15 +81,13 @@ export class EquipmentListComponent implements OnInit {
   }
 
   onSortChange() {
-    const sortField = this.sort.active;
-    const sortOrder = this.sort.direction;
+    const sortField = this.matSort.active;
+    const sortOrder = this.matSort.direction;
 
     if (sortField && sortOrder) {
-      this.sortField = sortField;
-      this.sortOrder = sortOrder === 'asc' ? 'asc' : 'desc';
+      this.sort = `${sortField},${sortOrder}`;
     } else {
-      this.sortField = 'id';
-      this.sortOrder = 'desc';
+      this.sort = 'id,desc';
     }
     this.loadData();
   }

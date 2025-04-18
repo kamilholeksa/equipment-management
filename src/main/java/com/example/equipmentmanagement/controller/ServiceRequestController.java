@@ -6,6 +6,7 @@ import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestWithNote
 import com.example.equipmentmanagement.service.ServiceRequestService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,30 +22,13 @@ public class ServiceRequestController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<ServiceRequestDto>> getAllServiceRequests(
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") String sortField,
-            @RequestParam(required = false, defaultValue = "desc") String sortOrder
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.serviceRequestService.getAllServiceRequests(page, size, sortField, sortOrder));
+    public ResponseEntity<Page<ServiceRequestDto>> getAllServiceRequests(Pageable pageable) {
+        return ResponseEntity.ok(this.serviceRequestService.getAllServiceRequests(pageable));
     }
 
     @GetMapping("/equipment/{equipmentId}")
-    public ResponseEntity<Page<ServiceRequestDto>> getServiceRequestsByEquipment(
-            @PathVariable("equipmentId") Long equipmentId,
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") String sortField,
-            @RequestParam(required = false, defaultValue = "desc") String sortOrder
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.serviceRequestService.getServiceRequestsByEquipment(equipmentId, page, size, sortField, sortOrder));
+    public ResponseEntity<Page<ServiceRequestDto>> getServiceRequestsByEquipment(@PathVariable("equipmentId") Long equipmentId, Pageable pageable) {
+        return ResponseEntity.ok(this.serviceRequestService.getServiceRequestsByEquipment(equipmentId, pageable));
     }
 
     @GetMapping("/{id}")
@@ -58,16 +42,8 @@ public class ServiceRequestController {
     }
 
     @GetMapping("/open")
-    public ResponseEntity<Page<ServiceRequestDto>> getOpenServiceRequests(
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") String sortField,
-            @RequestParam(required = false, defaultValue = "desc") String sortOrder
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.serviceRequestService.getOpenServiceRequests(page, size, sortField, sortOrder));
+    public ResponseEntity<Page<ServiceRequestDto>> getOpenServiceRequests(Pageable pageable) {
+        return ResponseEntity.ok(this.serviceRequestService.getOpenServiceRequests(pageable));
     }
 
     @PostMapping

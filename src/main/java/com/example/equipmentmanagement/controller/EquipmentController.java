@@ -6,6 +6,7 @@ import com.example.equipmentmanagement.dto.equipment.EquipmentSaveDto;
 import com.example.equipmentmanagement.service.EquipmentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,30 +22,13 @@ public class EquipmentController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<EquipmentDto>> getAllEquipment(
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") String sortField,
-            @RequestParam(required = false, defaultValue = "desc") String sortOrder
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.equipmentService.getAllEquipment(page, size, sortField, sortOrder));
+    public ResponseEntity<Page<EquipmentDto>> getAllEquipment(EquipmentFilter filter, Pageable pageable) {
+        return ResponseEntity.ok(this.equipmentService.getAllEquipment(filter, pageable));
     }
 
     @GetMapping("/my-equipment")
-    public ResponseEntity<Page<EquipmentDto>> getCurrentUserEquipment(
-            EquipmentFilter filter,
-            @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestParam(required = false, defaultValue = "id") String sortField,
-            @RequestParam(required = false, defaultValue = "desc") String sortOrder
-    ) {
-        int page = pageNumber != null && pageNumber >= 0 ? pageNumber : 0;
-        int size = pageSize != null && pageSize >= 0 ? pageSize : 10;
-
-        return ResponseEntity.ok(this.equipmentService.getCurrentUserEquipment(filter, page, size, sortField, sortOrder));
+    public ResponseEntity<Page<EquipmentDto>> getCurrentUserEquipment(EquipmentFilter filter, Pageable pageable) {
+        return ResponseEntity.ok(this.equipmentService.getCurrentUserEquipment(filter, pageable));
     }
 
     @GetMapping("/{id}")

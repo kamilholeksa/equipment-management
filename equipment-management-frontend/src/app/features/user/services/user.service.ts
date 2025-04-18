@@ -19,14 +19,12 @@ export class UserService {
   getAllUsers(
     page: number,
     size: number,
-    sortField: string | null,
-    sortOrder: string | null,
+    sort?: string | null,
   ): Observable<Page<UserModel>> {
     const params = new HttpParams()
       .set('pageNumber', page)
       .set('pageSize', size)
-      .set('sortField', sortField ?? '')
-      .set('sortOrder', sortOrder ?? '');
+      .set('sort', sort ?? '');
 
     return this.http.get<Page<UserModel>>(this.apiUrl, {
       params,

@@ -3,13 +3,13 @@ package com.example.equipmentmanagement.service;
 import com.example.equipmentmanagement.dto.equipment.EquipmentDto;
 import com.example.equipmentmanagement.dto.equipment.EquipmentFilter;
 import com.example.equipmentmanagement.dto.equipment.EquipmentSaveDto;
-import com.example.equipmentmanagement.mapper.EquipmentMapper;
+import com.example.equipmentmanagement.enumeration.EquipmentStatus;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
+import com.example.equipmentmanagement.mapper.EquipmentMapper;
 import com.example.equipmentmanagement.model.Address;
 import com.example.equipmentmanagement.model.Equipment;
 import com.example.equipmentmanagement.model.EquipmentType;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.enumeration.EquipmentStatus;
 import com.example.equipmentmanagement.repository.AddressRepository;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
 import com.example.equipmentmanagement.repository.EquipmentTypeRepository;
@@ -18,17 +18,13 @@ import com.example.equipmentmanagement.specification.EquipmentSpecification;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 
 import static com.example.equipmentmanagement.mapper.EquipmentMapper.toDto;
 import static com.example.equipmentmanagement.mapper.EquipmentMapper.toEntity;
@@ -50,42 +46,19 @@ public class EquipmentService {
         this.equipmentHistoryService = equipmentHistoryService;
     }
 
-    public Page<EquipmentDto> getAllEquipment(
-            int pageNumber,
-            int pageSize,
-            String sortField,
-            String sortOrder
-    ) {
-        Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-
-        Page<Long> idsPage = equipmentRepository.findAllIds(pageRequest);
-        Set<Long> ids = Set.copyOf(idsPage.getContent());
-
-        List<EquipmentDto> equipment = equipmentRepository.findAllByIdIn(ids, pageRequest.getSort()).stream()
-                .map(EquipmentMapper::toDto)
-                .toList();
-
-        return new PageImpl<>(equipment, pageRequest, idsPage.getTotalElements());
+    public Page<EquipmentDto> getAllEquipment(EquipmentFilter filter, Pageable pageable) {
+        Specification<Equipment> spec = EquipmentSpecification.prepareSpecification(filter);
+        return equipmentRepository.findAll(spec, pageable).map(EquipmentMapper::toDto);
     }
 
-    public Page<EquipmentDto> getCurrentUserEquipment(
-            EquipmentFilter filter,
-            int pageNumber,
-            int pageSize,
-            String sortField,
-            String sortOrder
-    ) {
+    public Page<EquipmentDto> getCurrentUserEquipment(EquipmentFilter filter, Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
+
         filter.setUserId(user.getId());
-
-        Sort sort = Sort.by(sortOrder.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-
         Specification<Equipment> spec = EquipmentSpecification.prepareSpecification(filter);
 
-        return equipmentRepository.findAll(spec, pageRequest).map(EquipmentMapper::toDto);
+        return equipmentRepository.findAll(spec, pageable).map(EquipmentMapper::toDto);
     }
 
     public EquipmentDto getEquipment(Long id) {

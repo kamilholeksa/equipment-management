@@ -18,14 +18,12 @@ export class ServiceRequestService {
   getAllServiceRequests(
     page: number,
     size: number,
-    sortField: string | null,
-    sortOrder: string | null,
+    sort?: string | null,
   ): Observable<Page<ServiceRequest>> {
     const params = new HttpParams()
       .set('pageNumber', page)
       .set('pageSize', size)
-      .set('sortField', sortField ?? '')
-      .set('sortOrder', sortOrder ?? '');
+      .set('sort', sort ?? '');
 
     return this.http.get<Page<ServiceRequest>>(this.apiUrl, {
       params,
@@ -35,14 +33,12 @@ export class ServiceRequestService {
   getOpenServiceRequests(
     page: number,
     size: number,
-    sortField: string | null,
-    sortOrder: string | null,
+    sort?: string | null,
   ): Observable<Page<ServiceRequest>> {
     const params = new HttpParams()
       .set('pageNumber', page)
       .set('pageSize', size)
-      .set('sortField', sortField ?? '')
-      .set('sortOrder', sortOrder ?? '');
+      .set('sort', sort ?? '');
 
     return this.http.get<Page<ServiceRequest>>(
       this.apiUrl + '/open',
@@ -56,14 +52,12 @@ export class ServiceRequestService {
     equipmentId: number,
     page: number,
     size: number,
-    sortField: string | null,
-    sortOrder: string | null,
+    sort?: string | null,
   ) {
     const params = new HttpParams()
       .set('pageNumber', page)
       .set('pageSize', size)
-      .set('sortField', sortField ?? '')
-      .set('sortOrder', sortOrder ?? '');
+      .set('sort', sort ?? '');
 
     return this.http.get<Page<ServiceRequest>>(
       this.apiUrl + `/equipment/${equipmentId}`,
