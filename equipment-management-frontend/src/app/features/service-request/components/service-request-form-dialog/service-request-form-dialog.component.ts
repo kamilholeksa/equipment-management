@@ -53,7 +53,7 @@ export class ServiceRequestFormDialogComponent {
 
     this.equipmentService.getEquipment(this.data.equipmentId).subscribe({
       next: (data: Equipment) => (this.equipment = data),
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 
@@ -64,11 +64,11 @@ export class ServiceRequestFormDialogComponent {
 
       this.serviceRequestService.createServiceRequest(data).subscribe({
         next: () => {
-          this.notificationService.success('Utworzono nowe zgłoszenie');
+          this.notificationService.success('New service request has been created');
           this.dialogRef.close();
           window.location.reload();
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
   }

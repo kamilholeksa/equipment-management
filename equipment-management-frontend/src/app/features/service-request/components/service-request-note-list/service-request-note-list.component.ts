@@ -45,7 +45,7 @@ export class ServiceRequestNoteListComponent implements OnInit {
           this.notes = data.content;
           this.length = data.page.totalElements;
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
   }
 

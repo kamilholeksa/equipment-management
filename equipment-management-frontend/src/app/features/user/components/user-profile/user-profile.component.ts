@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { UserService } from '../../services/user.service';
-import { UserModel } from '../../models/user.model';
+import { User } from '../../models/user.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,7 +24,7 @@ import { NotificationService } from '../../../../core/notification/services/noti
   styleUrl: './user-profile.component.scss',
 })
 export class UserProfileComponent implements OnInit {
-  user!: UserModel;
+  user!: User;
 
   constructor(
     private userService: UserService,
@@ -37,7 +37,7 @@ export class UserProfileComponent implements OnInit {
       next: (user) => {
         this.user = user;
       },
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 

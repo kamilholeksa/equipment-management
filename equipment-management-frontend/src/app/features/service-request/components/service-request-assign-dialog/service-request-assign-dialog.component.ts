@@ -9,12 +9,12 @@ import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import { DialogRef } from '@angular/cdk/dialog';
 import { ServiceRequestService } from '../../services/service-request.service';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
 import { UserService } from '../../../user/services/user.service';
-import { UserModel } from '../../../user/models/user.model';
+import { User } from '../../../user/models/user.model';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
@@ -25,7 +25,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
@@ -35,7 +34,7 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './service-request-assign-dialog.component.scss',
 })
 export class ServiceRequestAssignDialogComponent implements OnInit {
-  userList!: UserModel[];
+  userList!: User[];
   user: FormControl;
 
   constructor(
@@ -52,7 +51,7 @@ export class ServiceRequestAssignDialogComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getActiveTechniciansUsers().subscribe({
       next: (data) => (this.userList = data),
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 
@@ -65,15 +64,12 @@ export class ServiceRequestAssignDialogComponent implements OnInit {
         .subscribe({
           next: () => {
             this.notificationService.success(
-              'Użytkownik został przypisany do zgłoszenia',
+              'User has been assigned to the service request',
             );
             this.dialogRef.close();
             window.location.reload();
           },
-          error: (err) =>
-            this.notificationService.error(
-              err.error.message ? err.error.message : 'Wystąpił błąd',
-            ),
+          error: (err) => this.notificationService.error(err.error.message),
         });
     }
   }

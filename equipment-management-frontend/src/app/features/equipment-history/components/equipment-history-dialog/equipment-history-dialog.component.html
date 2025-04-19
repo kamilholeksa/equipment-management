@@ -1,39 +1,45 @@
 <mat-dialog-content class="text-center">
-  <h2 mat-dialog-title class="mb-4">Historia zmian</h2>
+  <h2 mat-dialog-title class="mb-4">Changelog</h2>
 
-  <div *ngFor="let item of history" class="history-item">
-    <mat-card class="history-card">
-      <mat-card-content>
-        <div class="change">
-          <span class="label">Status:</span>
-          <span class="old-value">{{ item.oldStatus ? (item.oldStatus | equipmentStatusDisplay) : '-' }}</span>
-          <span class="arrow">→</span>
-          <span class="new-value">{{ item.newStatus ? (item.newStatus | equipmentStatusDisplay) : '-' }}</span>
-        </div>
+  @if (history.length === 0) {
+    <span>No changes yet</span>
+  }
 
-        <div class="change">
-          <span class="label">Lokalizacja:</span>
-          <span class="old-value">{{ item.oldLocation ? item.oldLocation : '-' }}</span>
-          <span class="arrow">→</span>
-          <span class="new-value">{{ item.newLocation ? item.newLocation : '-' }}</span>
-        </div>
+  @for (item of history; track item.id) {
+    <div class="history-item">
+      <mat-card class="history-card">
+        <mat-card-content>
+          <div class="change">
+            <span class="label">Status:</span>
+            <span class="old-value">{{ item.oldStatus ? (item.oldStatus | equipmentStatusDisplay) : '-' }}</span>
+            <span class="arrow">→</span>
+            <span class="new-value">{{ item.newStatus ? (item.newStatus | equipmentStatusDisplay) : '-' }}</span>
+          </div>
 
-        <div class="change">
-          <span class="label">Użytkownik:</span>
-          <span class="old-value">{{ item.oldUser ? item.oldUser.username : '-' }}</span>
-          <span class="arrow">→</span>
-          <span class="new-value">{{ item.newUser ? item.newUser.username : '-' }}</span>
-        </div>
+          <div class="change">
+            <span class="label">Location:</span>
+            <span class="old-value">{{ item.oldLocation ? item.oldLocation : '-' }}</span>
+            <span class="arrow">→</span>
+            <span class="new-value">{{ item.newLocation ? item.newLocation : '-' }}</span>
+          </div>
 
-        <div class="change-date">
-          <span class="label">Data:</span>
-          <span>{{ item.changeDate | date: 'dd-MM-yyyy HH:mm' }}</span>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+          <div class="change">
+            <span class="label">User:</span>
+            <span class="old-value">{{ item.oldUser ? item.oldUser.username : '-' }}</span>
+            <span class="arrow">→</span>
+            <span class="new-value">{{ item.newUser ? item.newUser.username : '-' }}</span>
+          </div>
+
+          <div class="change-date">
+            <span class="label">Date:</span>
+            <span>{{ item.changeDate | date: 'dd-MM-yyyy HH:mm' }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions class="mt-4" align="end">
-  <button mat-button mat-dialog-close>Zamknij</button>
+  <button mat-button mat-dialog-close>Close</button>
 </mat-dialog-actions>

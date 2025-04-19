@@ -10,8 +10,7 @@ export const transferRoutes: Routes = [
       ),
     canActivate: [authGuard],
     data: {
-      showAll: true,
-      showPending: false,
+      mode: 'all',
       roles: ['ROLE_ADMIN', 'ROLE_MANAGER'],
     },
   },
@@ -25,7 +24,9 @@ export const transferRoutes: Routes = [
           import('./components/transfer-list/transfer-list.component').then(
             (m) => m.TransferListComponent,
           ),
-        data: { showAll: false, showPending: true },
+        data: {
+          mode: 'myPending'
+        },
       },
       {
         path: 'all',
@@ -33,7 +34,9 @@ export const transferRoutes: Routes = [
           import('./components/transfer-list/transfer-list.component').then(
             (m) => m.TransferListComponent,
           ),
-        data: { showAll: false, showPending: false },
+        data: {
+          mode: 'myAll'
+        },
       },
     ],
   },

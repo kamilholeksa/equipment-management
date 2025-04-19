@@ -8,9 +8,9 @@ import { TransferStatusEnum } from '../enums/transfer-status.enum';
 export class TransferStatusDisplayPipe implements PipeTransform {
   transform(value: TransferStatusEnum): string {
     const statusMap = {
-      [TransferStatusEnum.PENDING]: 'Oczekujące',
-      [TransferStatusEnum.ACCEPTED]: 'Zaakceptowane',
-      [TransferStatusEnum.REJECTED]: 'Odrzcuone',
+      [TransferStatusEnum.PENDING]: 'Pending',
+      [TransferStatusEnum.ACCEPTED]: 'Accepted',
+      [TransferStatusEnum.REJECTED]: 'Rejected',
     };
     return statusMap[value] || value;
   }

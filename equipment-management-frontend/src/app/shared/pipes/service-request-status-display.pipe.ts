@@ -8,11 +8,11 @@ import { ServiceRequestStatusEnum } from '../enums/service-request-status.enum';
 export class TransferStatusDisplayPipe implements PipeTransform {
   transform(value: ServiceRequestStatusEnum): string {
     const statusMap = {
-      [ServiceRequestStatusEnum.NEW]: 'Nowe',
-      [ServiceRequestStatusEnum.ACCEPTED]: 'Zaakceptowane',
-      [ServiceRequestStatusEnum.IN_PROGRESS]: 'W trakcie realizacji',
-      [ServiceRequestStatusEnum.CANCELLED]: 'Anulowane',
-      [ServiceRequestStatusEnum.CLOSED]: 'Zakończone',
+      [ServiceRequestStatusEnum.NEW]: 'New',
+      [ServiceRequestStatusEnum.ACCEPTED]: 'Accepted',
+      [ServiceRequestStatusEnum.IN_PROGRESS]: 'In progress',
+      [ServiceRequestStatusEnum.CANCELLED]: 'Cancelled',
+      [ServiceRequestStatusEnum.CLOSED]: 'Closed',
     };
     return statusMap[value] || value;
   }

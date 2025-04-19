@@ -1,31 +1,35 @@
 <mat-dialog-content class="text-center">
-  <h2 mat-dialog-title class="mb-4">Wprowadź nową lokalizację</h2>
+  <h2 mat-dialog-title class="mb-4">Enter new location</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Adres</mat-label>
+      <mat-label>Address</mat-label>
       <mat-select formControlName="newAddressId">
         <mat-option *ngFor="let address of addressList" [value]="address.id">
           {{ address.description + ' (' + address.street + ' ' + address.number + ', ' + address.postalCode + ' ' + address.city + ')' }}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="form.controls['newAddressId'].hasError('required')">Pole wymagane</mat-error>
+      @if (form.controls['newAddressId'].hasError('required')) {
+        <mat-error>Address is required</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Lokalizacja szczegółowa</mat-label>
+      <mat-label>Detailed location</mat-label>
       <input matInput formControlName="newLocation" required />
-      <mat-error *ngIf="form.controls['newLocation'].hasError('required')">Pole wymagane</mat-error>
+      @if (form.controls['newLocation'].hasError('required')) {
+        <mat-error>Detailed location is required</mat-error>
+      }
     </mat-form-field>
 
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions class="mt-4" align="end">
-  <button mat-button mat-dialog-close>Anuluj</button>
+  <button mat-button mat-dialog-close>Cancel</button>
   <button mat-flat-button (click)="onSubmit()" [disabled]="form.invalid">
     <i class="bi bi-check-lg"></i>
-    Zapisz
+    Save
   </button>
 </mat-dialog-actions>

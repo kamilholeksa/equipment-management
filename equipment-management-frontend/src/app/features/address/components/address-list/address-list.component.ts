@@ -28,27 +28,43 @@ export class AddressListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData(): void {
     this.addressService.getAllAddresses().subscribe({
       next: (data) => {
         this.addresses.data = data;
         this.addresses.sort = this.sort;
       },
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 
   addAddress() {
-    this.dialog.open(AddressFormDialogComponent, {
+    const dialogRef = this.dialog.open(AddressFormDialogComponent, {
       width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadData();
+      }
     });
   }
 
   editAddress(address: Address) {
-    this.dialog.open(AddressFormDialogComponent, {
+    const dialogRef = this.dialog.open(AddressFormDialogComponent, {
       width: '600px',
       data: {
         address: address,
       },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadData();
+      }
     });
   }
 }

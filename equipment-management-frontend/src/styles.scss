@@ -40,74 +40,87 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   &.active {
     background-color: #198754;
     border: 1px solid #146c43;
+    color: #e5f4ed;
   }
   &.inactive {
     background-color: #dc3545;
     border: 1px solid #a71d2a;
+    color: #f6eded;
   }
 
   // Equipment statuses
-  &.new {
+  &.eq-new {
     background-color: #198754;
     border: 1px solid #146c43;
+    color: #e5f4ed;
   }
-  &.in-preparation {
+  &.eq-in-preparation {
+    background-color: #ffc107;
+    border: 1px solid #cc9a06;
+    color: #3e3003;
+  }
+  &.eq-in-use {
+    background-color: #17a2b8;
+    border: 1px solid #117a8b;
+    color: #edf7fa;
+  }
+  &.eq-in-repair {
     background-color: #fd7e14;
     border: 1px solid #cc650f;
-    color: #000;
+    color: #3a1e06;
   }
-  &.in-use {
-    background-color: #005cbb;
-    border: 1px solid #083d8f;
+  &.eq-reserve {
+    background-color: #20c997;
+    border: 1px solid #159c7e;
+    color: #06271d;
   }
-  &.in-repair {
-    background-color: #dc3545;
-    border: 1px solid #a71d2a;
-  }
-  &.reserve {
-    background-color: #adb5bd;
-    border: 1px solid #777f88;
-    color: #000;
-  }
-  &.decommissioned {
+  &.eq-decommissioned {
     background-color: #495057;
     border: 1px solid #343a40;
+    color: #f4f5f6;
   }
 
   // Transfer statuses
-  &.accepted {
+  &.tr-accepted {
     background-color: #198754;
     border: 1px solid #146c43;
+    color: #e5f4ed;
   }
-  &.pending {
+  &.tr-pending {
     background-color: #ffc107;
     border: 1px solid #cc9a06;
-    color: #000;
+    color: #3e3003;
   }
-  &.rejected {
+  &.tr-rejected {
     background-color: #dc3545;
     border: 1px solid #a71d2a;
+    color: #f6eded;
   }
 
   // Service request statuses
-  &.new {
+  &.sr-new {
     background-color: #005cbb;
     border: 1px solid #083d8f;
+    color: #eef1f8;
   }
-  &.accepted {
+  &.sr-accepted {
+    background-color: #20c997;
+    border: 1px solid #159c7e;
+    color: #06271d;
   }
-  &.in-progress {
+  &.sr-in-progress {
     background-color: #ffc107;
     border: 1px solid #cc9a06;
-    color: #000;
+    color: #3e3003;
   }
-  &.cancelled {
+  &.sr-cancelled {
     background-color: #adb5bd;
     border: 1px solid #777f88;
-    color: #000;
+    color: #191a1c;
   }
-  &.closed {
+  &.sr-closed {
     background-color: #198754;
     border: 1px solid #146c43;
+    color: #e5f4ed;
   }
 }

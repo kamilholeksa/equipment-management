@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EquipmentService } from '../../services/equipment.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import {DatePipe, Location, NgClass, NgIf} from '@angular/common';
+import { DatePipe, Location, NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { EquipmentStatusDisplayPipe } from '../../../../shared/pipes/equipment-status-display.pipe';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,7 +20,6 @@ import { Equipment } from '../../models/equipment.model';
     MatButtonModule,
     EquipmentStatusDisplayPipe,
     HasAnyRoleDirective,
-    NgIf,
     NgClass,
   ],
   templateUrl: './equipment-details.component.html',
@@ -40,12 +39,11 @@ export class EquipmentDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.equipmentService.getEquipment(id).subscribe({
-      next: (data) => {
-        this.equipment = data;
+    this.route.data.subscribe({
+      next: ({ equipment }) => {
+        this.equipment = equipment;
       },
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 
@@ -81,15 +79,19 @@ export class EquipmentDetailsComponent implements OnInit {
   }
 
   decommission() {
-    const confirmed = confirm('Czy na pewno chcesz wycofać sprzęt z użytku?');
+    const confirmed = confirm(
+      'Are you sure you want withdraw this equipment from use?',
+    );
 
     if (confirmed) {
       this.equipmentService.decommission(this.equipment.id).subscribe({
         next: () => {
-          this.notificationService.success('Sprzęt został wycofany z użytku');
+          this.notificationService.success(
+            'The equipment has been withdrawn from use',
+          );
           window.location.reload();
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
   }
@@ -97,7 +99,7 @@ export class EquipmentDetailsComponent implements OnInit {
   canTransfer(): boolean {
     return (
       this.authService.hasAnyRole(['ROLE_ADMIN', 'ROLE_MANAGER']) ||
-      this.equipment.user.username === this.authService.account()?.username
+      this.equipment.user.id === this.authService.account()?.id
     );
   }
 

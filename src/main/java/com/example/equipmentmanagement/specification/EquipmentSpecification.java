@@ -36,9 +36,9 @@ public class EquipmentSpecification {
                 criteriaBuilder.like(criteriaBuilder.lower(root.get("serialNumber")), "%" + serialNumber.toLowerCase() + "%");
     }
 
-    public static Specification<Equipment> withStatusIn(Set<String> status) {
+    public static Specification<Equipment> withStatusIn(Set<String> statuses) {
         return (root, query, criteriaBuilder) ->
-                root.get("status").in(status);
+                root.get("status").in(statuses);
     }
 
     public static Specification<Equipment> withLocation(String location) {
@@ -71,9 +71,9 @@ public class EquipmentSpecification {
                 criteriaBuilder.equal(root.get("address").get("id"), addressId);
     }
 
-    public static Specification<Equipment> withUserId(Long userId) {
+    public static Specification<Equipment> withUserIdIn(Set<Long> userIds) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("user").get("id"), userId);
+                root.get("user").get("id").in(userIds);
     }
 
     public static Specification<Equipment> prepareSpecification(EquipmentFilter filter) {
@@ -116,7 +116,7 @@ public class EquipmentSpecification {
             spec = spec.and(withAddressId(filter.getAddressId()));
         }
         if (filter.getUserId() != null) {
-            spec = spec.and(withUserId(filter.getUserId()));
+            spec = spec.and(withUserIdIn(filter.getUserId()));
         }
 
         return spec;

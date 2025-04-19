@@ -1,30 +1,32 @@
-<h5>Zgłoszenia serwisowe</h5>
+<h5>Service requests</h5>
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="serviceRequests" matSort (matSortChange)="onSortChange()" class="mat-table">
 
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
       <td mat-cell *matCellDef="let request"> {{ request.id }}</td>
     </ng-container>
 
     <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Temat zgłoszenia</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Topic</th>
       <td mat-cell *matCellDef="let request"> {{ request.title }}</td>
     </ng-container>
 
     <ng-container matColumnDef="user">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Zgłaszający</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Reported by</th>
       <td mat-cell *matCellDef="let request"> {{ request.user?.firstName + ' ' + request.user?.lastName }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="technician" *ngIf="!this.equipmentId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Przypisane do</th>
-      <td mat-cell *matCellDef="let request"> {{ request.technician ? request.technician.firstName + ' ' + request.technician.lastName : '' }}</td>
-    </ng-container>
+    @if (!this.equipmentId) {
+      <ng-container matColumnDef="technician">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Assigned to</th>
+        <td mat-cell *matCellDef="let request"> {{ request.technician ? request.technician.firstName + ' ' + request.technician.lastName : '' }}</td>
+      </ng-container>
+    }
 
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
       <td mat-cell *matCellDef="let request">
         <div [ngClass]="getStatusClass(request.status)">
           {{ request.status | serviceRequestStatusDisplay }}
@@ -33,7 +35,7 @@
     </ng-container>
 
     <ng-container matColumnDef="createdDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Data zgłoszenia</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Reported date</th>
       <td mat-cell *matCellDef="let request"> {{ request.createdDate | date: 'dd-MM-yyyy HH:mm' }}</td>
     </ng-container>
 
@@ -44,7 +46,7 @@
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell text-center p-4" [attr.colspan]="displayedColumns.length">
         <div class="alert alert-warning d-inline-block w-100 mb-0">
-          Brak danych do wyświetlenia
+          Not found
         </div>
       </td>
     </tr>
@@ -60,16 +62,21 @@
 </div>
 
 <div class="mt-4">
-  <button mat-stroked-button class="me-4" *ngIf="this.equipmentId" (click)="goBack()">
-    <i class="bi bi-arrow-left"></i>
-    Wróć
-  </button>
-  <button mat-flat-button *ngIf="!this.equipmentId" (click)="toggleShowAll()">
-    <i class="bi bi-list"></i>
-    {{ showAll ? 'Pokaż aktualne zgłoszenia' : 'Pokaż wszystkie zgłoszenia' }}
-  </button>
-  <button mat-flat-button class="me-4" *ngIf="this.equipmentId" (click)="openServiceRequestForm()">
-    <i class="bi bi-tools"></i>
-    Utwórz zgłoszenie serwisowe
-  </button>
+  @if (this.equipmentId) {
+    <button mat-stroked-button class="me-4" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i>
+      Back
+    </button>
+  }
+  @if (this.equipmentId) {
+    <button mat-flat-button class="me-4" (click)="openServiceRequestForm()">
+      <i class="bi bi-tools"></i>
+      Create service request
+    </button>
+  } @else {
+    <button mat-flat-button (click)="toggleShowAll()">
+      <i class="bi bi-list"></i>
+      {{ showAll ? 'Hide closed requests' : 'Show all requests' }}
+    </button>
+  }
 </div>

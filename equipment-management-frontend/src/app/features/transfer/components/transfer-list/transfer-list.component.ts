@@ -7,10 +7,10 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import {NgClass, NgIf} from '@angular/common';
+import { NgClass } from '@angular/common';
 import { TransferStatusDisplayPipe } from '../../../../shared/pipes/transfer-status-display.pipe';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,7 +25,6 @@ import { AuthService } from '../../../../core/auth/services/auth.service';
     MatSortModule,
     MatPaginatorModule,
     MatButtonModule,
-    NgIf,
     TransferStatusDisplayPipe,
     RouterLink,
     NgClass,
@@ -34,8 +33,7 @@ import { AuthService } from '../../../../core/auth/services/auth.service';
   styleUrl: './transfer-list.component.scss',
 })
 export class TransferListComponent implements OnInit {
-  showAll = false;
-  showPending = true;
+  mode: string = 'myAll';
   transfers: Transfer[] = [];
   length = 0;
   pageSize = 10;
@@ -48,7 +46,6 @@ export class TransferListComponent implements OnInit {
 
   constructor(
     private transferService: TransferService,
-    private router: Router,
     private route: ActivatedRoute,
     private notificationService: NotificationService,
     private dialog: MatDialog,
@@ -56,8 +53,7 @@ export class TransferListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.showAll = this.route.snapshot.data['showAll'];
-    this.showPending = this.route.snapshot.data['showPending'];
+    this.mode = this.route.snapshot.data['mode'];
     this.setDisplayedColumns();
     this.loadData();
   }
@@ -65,34 +61,30 @@ export class TransferListComponent implements OnInit {
   loadData() {
     let observable;
 
-    if (this.showAll) {
-      if (this.authService.hasAnyRole(['ROLE_ADMIN', 'ROLE_MANAGER'])) {
+    switch (this.mode) {
+      case 'all':
         observable = this.transferService.getAllTransfers(
-          this.pageIndex,
-          this.pageSize,
-          this.sort,
-        );
-      } else {
+            this.pageIndex,
+            this.pageSize,
+            this.sort,
+          );
+        break;
+
+      case 'myAll':
         observable = this.transferService.getMyTransfers(
           this.pageIndex,
           this.pageSize,
           this.sort,
         );
-      }
-    } else {
-      if (this.showPending) {
+        break;
+
+      case 'myPending':
+      default:
         observable = this.transferService.getTransfersToAccept(
           this.pageIndex,
           this.pageSize,
           this.sort,
         );
-      } else {
-        observable = this.transferService.getMyTransfers(
-          this.pageIndex,
-          this.pageSize,
-          this.sort,
-        );
-      }
     }
 
     observable.subscribe({
@@ -122,45 +114,56 @@ export class TransferListComponent implements OnInit {
   }
 
   private setDisplayedColumns() {
-    if (this.showAll || !this.showPending) {
-      this.displayedColumns = [
-        'requestDate',
-        'decisionDate',
-        'equipment',
-        'transferor',
-        'obtainer',
-        'status',
-      ];
-    } else {
-      this.displayedColumns = [
-        'requestDate',
-        'equipment',
-        'transferor',
-        'options',
-      ];
+    switch (this.mode) {
+      case 'all':
+      case 'myAll':
+        this.displayedColumns = [
+          'requestDate',
+          'decisionDate',
+          'equipment',
+          'transferor',
+          'obtainer',
+          'status',
+        ];
+        break;
+
+      case 'myPending':
+        this.displayedColumns = [
+          'requestDate',
+          'equipment',
+          'transferor',
+          'options',
+        ];
+        break;
     }
   }
 
   accept(id: number, equipmentId: number) {
-    this.dialog.open(TransferAcceptDialogComponent, {
+    const dialogRef = this.dialog.open(TransferAcceptDialogComponent, {
       width: '600px',
       data: {
         transferId: id,
         equipmentId: equipmentId,
       },
     });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadData();
+      }
+    });
   }
 
   reject(id: number) {
-    const confirmed = confirm('Czy na pewno chcesz odrzucić przekazanie?');
+    const confirmed = confirm('Are you sure you want to reject this transfer?');
 
     if (confirmed) {
       this.transferService.rejectTransfer(id).subscribe({
         next: (result) => {
           this.notificationService.success(result.message);
-          window.location.reload();
+          this.loadData();
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
   }

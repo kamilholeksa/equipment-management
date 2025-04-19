@@ -21,8 +21,8 @@ export class ServiceRequestService {
     sort?: string | null,
   ): Observable<Page<ServiceRequest>> {
     const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size)
+      .set('page', page)
+      .set('size', size)
       .set('sort', sort ?? '');
 
     return this.http.get<Page<ServiceRequest>>(this.apiUrl, {
@@ -36,8 +36,8 @@ export class ServiceRequestService {
     sort?: string | null,
   ): Observable<Page<ServiceRequest>> {
     const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size)
+      .set('page', page)
+      .set('size', size)
       .set('sort', sort ?? '');
 
     return this.http.get<Page<ServiceRequest>>(
@@ -55,8 +55,8 @@ export class ServiceRequestService {
     sort?: string | null,
   ) {
     const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size)
+      .set('page', page)
+      .set('size', size)
       .set('sort', sort ?? '');
 
     return this.http.get<Page<ServiceRequest>>(
@@ -96,15 +96,15 @@ export class ServiceRequestService {
   getStatusClass(status: string): string {
     switch (status) {
       case 'NEW':
-        return 'status-badge new';
+        return 'status-badge sr-new';
       case 'ACCEPTED':
-        return 'status-badge accepted';
+        return 'status-badge sr-accepted';
       case 'IN_PROGRESS':
-        return 'status-badge in-progress';
+        return 'status-badge sr-in-progress';
       case 'CANCELLED':
-        return 'status-badge cancelled';
+        return 'status-badge sr-cancelled';
       case 'CLOSED':
-        return 'status-badge closed';
+        return 'status-badge sr-closed';
       default:
         return '';
     }

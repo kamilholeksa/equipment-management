@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Page } from '../../../shared/models/page.model';
 import { Equipment } from '../models/equipment.model';
+import { EquipmentFilter } from '../models/equipment-filter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,12 +17,9 @@ export class EquipmentService {
     page: number,
     size: number,
     sort?: string | null,
+    filters?: EquipmentFilter,
   ): Observable<Page<Equipment>> {
-    const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size)
-      .set('sort', sort ?? '');
-
+    const params = this.prepareHttpParams(page, size, sort, filters);
     return this.http.get<Page<Equipment>>(this.apiUrl, {
       params,
     });
@@ -35,12 +33,9 @@ export class EquipmentService {
     page: number,
     size: number,
     sort?: string | null,
+    filters?: EquipmentFilter,
   ): Observable<Page<Equipment>> {
-    const params = new HttpParams()
-      .set('page', page)
-      .set('size', size)
-      .set('sort', sort ?? '');
-
+    const params = this.prepareHttpParams(page, size, sort, filters);
     return this.http.get<Page<Equipment>>(this.apiUrl + '/my-equipment', {
       params,
     });
@@ -61,19 +56,41 @@ export class EquipmentService {
   getStatusClass(status: string): string {
     switch (status) {
       case 'NEW':
-        return 'status-badge new';
+        return 'status-badge eq-new';
       case 'IN_PREPARATION':
-        return 'status-badge in-preparation';
+        return 'status-badge eq-in-preparation';
       case 'IN_USE':
-        return 'status-badge in-use';
+        return 'status-badge eq-in-use';
       case 'IN_REPAIR':
-        return 'status-badge in-repair';
+        return 'status-badge eq-in-repair';
       case 'RESERVE':
-        return 'status-badge reserve';
+        return 'status-badge eq-reserve';
       case 'DECOMMISSIONED':
-        return 'status-badge decommissioned';
+        return 'status-badge eq-decommissioned';
       default:
         return '';
     }
+  }
+
+  private prepareHttpParams(
+    page: number,
+    size: number,
+    sort?: string | null,
+    filters?: EquipmentFilter,
+  ): HttpParams {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', sort ?? '');
+
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== null && value !== '' && value.length > 0) {
+          params = params.set(key, value);
+        }
+      });
+    }
+
+    return params;
   }
 }

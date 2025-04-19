@@ -1,4 +1,4 @@
-import { UserModel } from '../../user/models/user.model';
+import { User } from '../../user/models/user.model';
 import { ServiceRequestNote } from './service-request-note.model';
 import { ServiceRequestStatusEnum } from '../../../shared/enums/service-request-status.enum';
 import { Equipment } from '../../equipment/models/equipment.model';
@@ -10,8 +10,8 @@ export interface ServiceRequest {
   status: ServiceRequestStatusEnum;
   closeInfo: string;
   equipment: Equipment;
-  user: UserModel;
-  technician: UserModel;
+  user: User;
+  technician: User;
   createdBy: string;
   createdDate: Date;
   lastModifiedBy: string;

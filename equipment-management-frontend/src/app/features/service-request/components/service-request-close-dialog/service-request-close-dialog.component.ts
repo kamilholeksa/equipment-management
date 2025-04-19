@@ -51,12 +51,12 @@ export class ServiceRequestCloseDialogComponent {
         .subscribe({
           next: () => {
             this.notificationService.success(
-              'Zgłoszenie zostało zamknięte',
+              'Service request has been closed',
             );
             this.dialogRef.close();
             window.location.reload();
           },
-          error: () => this.notificationService.error('Wystąpił błąd'),
+          error: () => this.notificationService.error(),
         });
     }
   }

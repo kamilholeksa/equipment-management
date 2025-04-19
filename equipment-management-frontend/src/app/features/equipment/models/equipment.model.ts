@@ -1,4 +1,4 @@
-import { UserModel } from '../../user/models/user.model';
+import { User } from '../../user/models/user.model';
 import { EquipmentStatusEnum } from '../../../shared/enums/equipment-status.enum';
 import { EquipmentType } from '../../equipment-type/models/equipment-type.model';
 import { Address } from '../../address/models/address.model';
@@ -17,7 +17,7 @@ export interface Equipment {
   withdrawalDate: Date;
   type: EquipmentType;
   address: Address;
-  user: UserModel;
+  user: User;
   createdBy: string;
   createdDate: Date;
   lastModifiedBy: string;

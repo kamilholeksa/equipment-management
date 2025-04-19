@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../../core/auth/guards/auth.guard';
+import { ServiceRequestResolver } from './resolvers/service-request.resolver';
 
 export const serviceRequestRoutes: Routes = [
   {
@@ -20,6 +21,9 @@ export const serviceRequestRoutes: Routes = [
           import(
             './components/service-request-details/service-request-details.component'
           ).then((m) => m.ServiceRequestDetailsComponent),
+        resolve: {
+          serviceRequest: ServiceRequestResolver,
+        },
       },
     ],
   },

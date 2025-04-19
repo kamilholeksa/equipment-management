@@ -27,7 +27,6 @@ import { Address } from '../../models/address.model';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    NgIf,
   ],
   templateUrl: './address-form-dialog.component.html',
   styleUrl: './address-form-dialog.component.scss',
@@ -68,25 +67,23 @@ export class AddressFormDialogComponent implements OnInit {
           .subscribe({
             next: () => {
               this.notificationService.success(
-                'Lokalizacja została zaktualizowana',
+                'Location has been updated',
               );
-              this.dialogRef.close();
-              window.location.reload();
+              this.dialogRef.close(true);
             },
             error: (err) =>
               this.notificationService.error(
-                err.error.message ? err.error.message : 'Wystąpił błąd',
+                err.error.message,
               ),
           });
       } else {
         this.addressService.createAddress(data).subscribe({
           next: () => {
-            this.notificationService.success('Lokalizacja została utworzona');
-            this.dialogRef.close();
-            window.location.reload();
+            this.notificationService.success('Location has been created');
+            this.dialogRef.close(true);
           },
           error: () =>
-            this.notificationService.error('Wystąpił błąd przy zapisie'),
+            this.notificationService.error(),
         });
       }
     }

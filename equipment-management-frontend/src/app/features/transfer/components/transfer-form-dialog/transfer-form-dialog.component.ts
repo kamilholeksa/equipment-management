@@ -16,7 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
-import { UserModel } from '../../../user/models/user.model';
+import { User } from '../../../user/models/user.model';
 import { UserService } from '../../../user/services/user.service';
 import { TransferService } from '../../services/transfer.service';
 import { NgForOf } from '@angular/common';
@@ -39,7 +39,7 @@ import { NgForOf } from '@angular/common';
 })
 export class TransferFormDialogComponent implements OnInit {
   transferForm: FormGroup;
-  userList!: UserModel[];
+  userList!: User[];
 
   constructor(
     private dialogRef: MatDialogRef<TransferFormDialogComponent>,
@@ -56,7 +56,7 @@ export class TransferFormDialogComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getActiveUsers().subscribe({
       next: (data) => (this.userList = data),
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 
@@ -67,10 +67,10 @@ export class TransferFormDialogComponent implements OnInit {
 
       this.transferService.createTransfer(data).subscribe({
         next: () => {
-          this.notificationService.success('Przekazanie zostało utworzone');
+          this.notificationService.success('Transfer has been created');
           this.dialogRef.close();
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
   }

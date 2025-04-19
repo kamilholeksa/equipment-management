@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DatePipe, Location, NgClass, NgForOf, NgIf } from '@angular/common';
+import { DatePipe, Location, NgClass, NgForOf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserModel } from '../../models/user.model';
+import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,12 +11,12 @@ import { NotificationService } from '../../../../core/notification/services/noti
 @Component({
   selector: 'app-user-details',
   standalone: true,
-  imports: [DatePipe, MatButton, NgClass, NgForOf, NgIf],
+  imports: [DatePipe, MatButton, NgClass, NgForOf],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss',
 })
 export class UserDetailsComponent implements OnInit {
-  user!: UserModel;
+  user!: User;
 
   constructor(
     private userService: UserService,
@@ -33,7 +33,7 @@ export class UserDetailsComponent implements OnInit {
       next: (data) => {
         this.user = data;
       },
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 
@@ -46,11 +46,11 @@ export class UserDetailsComponent implements OnInit {
   }
 
   toggleActive() {
-    const action = this.user.active ? 'deaktywować' : 'aktywować';
+    const action = this.user.active ? 'deactivate' : 'activate';
     const confirmed = confirm(
-      'Czy na pewno chcesz ' +
+      'Are you sure you want to ' +
         action +
-        ' konto użytkownika ' +
+        ' user ' +
         this.user.username +
         '?',
     );
@@ -58,7 +58,7 @@ export class UserDetailsComponent implements OnInit {
     if (confirmed) {
       this.userService.toggleActive(this.user.id).subscribe({
         next: () => window.location.reload(),
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
   }

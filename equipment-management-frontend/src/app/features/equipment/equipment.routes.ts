@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../../core/auth/guards/auth.guard';
+import { EquipmentResolver } from './resolvers/equipment.resolver';
 
 export const equipmentRoutes: Routes = [
   {
@@ -20,6 +21,9 @@ export const equipmentRoutes: Routes = [
           import(
             './components/equipment-details/equipment-details.component'
           ).then((m) => m.EquipmentDetailsComponent),
+        resolve: {
+          equipment: EquipmentResolver,
+        },
       },
     ],
   },
@@ -60,5 +64,8 @@ export const equipmentRoutes: Routes = [
       ),
     canActivate: [authGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_TECHNICIAN'] },
+    resolve: {
+      equipment: EquipmentResolver,
+    },
   },
 ];

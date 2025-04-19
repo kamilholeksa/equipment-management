@@ -15,7 +15,7 @@ export class NotificationService {
     });
   }
 
-  error(message: string, action = 'OK', duration = 5000): void {
+  error(message = 'An error occurred', action = 'OK', duration = 5000): void {
     this.snackBar.open(message, action, {
       verticalPosition: 'top',
       panelClass: ['app-notification-error'],

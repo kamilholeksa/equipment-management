@@ -1,10 +1,10 @@
 <div class="container mt-4">
-  <h5>Szczegóły sprzętu</h5>
+  <h5>Equipment details</h5>
 
   <table class="table table-bordered table-striped mat-elevation-z8">
     <tbody>
     <tr>
-      <td>Producent:</td>
+      <td>Manufacturer:</td>
       <td>{{ equipment.manufacturer }}</td>
     </tr>
     <tr>
@@ -12,19 +12,19 @@
       <td>{{ equipment.model }}</td>
     </tr>
     <tr>
-      <td>Opis:</td>
+      <td>Description:</td>
       <td>{{ equipment.description }}</td>
     </tr>
     <tr>
-      <td>Typ:</td>
-      <td>{{ equipment.type.name }}</td>
+      <td>Type:</td>
+      <td>{{ equipment.type?.name }}</td>
     </tr>
     <tr>
-      <td>Numer inwentarzowy:</td>
+      <td>Inventory number:</td>
       <td>{{ equipment.inventoryNumber }}</td>
     </tr>
     <tr>
-      <td>Numer seryjny:</td>
+      <td>Serial number:</td>
       <td>{{ equipment.serialNumber }}</td>
     </tr>
     <tr>
@@ -36,47 +36,47 @@
       </td>
     </tr>
     <tr>
-      <td>Użytkownik:</td>
+      <td>User:</td>
       <td>{{ equipment.user ? equipment.user.firstName + ' ' + equipment.user.lastName + ' (' + equipment.user.username + ')' : '' }}</td>
     </tr>
     <tr>
-      <td>Adres:</td>
+      <td>Address:</td>
       <td>
         {{ equipment.address ? equipment.address.street + ' ' + equipment.address.number + ', ' + equipment.address.postalCode + ' ' + equipment.address.city : '' }}
       </td>
     </tr>
     <tr>
-      <td>Lokalizacja:</td>
+      <td>Location:</td>
       <td>
         {{ equipment.location }}
       </td>
     </tr>
     <tr>
-      <td>Data zakupu:</td>
+      <td>Purchase date:</td>
       <td>{{ equipment.purchaseDate | date: 'dd.MM.yyyy' }}</td>
     </tr>
     <tr>
-      <td>Gwarancja do:</td>
+      <td>Warranty until:</td>
       <td>{{ equipment.warrantyUntil | date: 'dd.MM.yyyy' }}</td>
     </tr>
     <tr>
-      <td>Data wycofania:</td>
+      <td>Withdrawal date:</td>
       <td>{{ equipment.withdrawalDate }}</td>
     </tr>
     <tr>
-      <td>Utworzony przez:</td>
+      <td>Created by:</td>
       <td>{{ equipment.createdBy }}</td>
     </tr>
     <tr>
-      <td>Data utworzenia:</td>
+      <td>Created at:</td>
       <td>{{ equipment.createdDate | date: 'dd-MM-yyyy HH:mm' }}</td>
     </tr>
     <tr>
-      <td>Ostatnia modyfikacja przez:</td>
+      <td>Last modified by:</td>
       <td>{{ equipment.lastModifiedBy }}</td>
     </tr>
     <tr>
-      <td>Data ostatniej modyfikacji:</td>
+      <td>Last modified at:</td>
       <td>{{ equipment.lastModifiedDate | date: 'dd-MM-yyyy HH:mm' }}</td>
     </tr>
     </tbody>
@@ -85,30 +85,32 @@
   <div class="mt-4">
     <button mat-stroked-button (click)="openHistoryDialog()" class="me-2">
       <i class="bi bi-clock-history"></i>
-      Historia
+      History
     </button>
-    <button mat-stroked-button *ngIf="canTransfer()" (click)="transfer()" class="me-2">
-      <i class="bi bi-arrow-left-right"></i>
-      Przekaż
-    </button>
+    @if (canTransfer()) {
+      <button mat-stroked-button (click)="transfer()" class="me-2">
+        <i class="bi bi-arrow-left-right"></i>
+        Transfer
+      </button>
+    }
     <button mat-stroked-button (click)="goToServiceRequests()" class="me-2">
       <i class="bi bi-tools"></i>
-      Zgłoszenia serwisowe
+      Service requests
     </button>
     <button mat-stroked-button *appHasAnyRole="['ROLE_ADMIN', 'ROLE_MANAGER']" (click)="decommission()">
       <i class="bi bi-x-square"></i>
-      Wycofaj z użytku
+      Withdraw from use
     </button>
   </div>
 
   <div class="mt-4">
     <button mat-flat-button (click)="goBack()" class="me-4">
       <i class="bi bi-arrow-left"></i>
-      Wróć
+      Back
     </button>
     <button mat-flat-button *appHasAnyRole="['ROLE_ADMIN', 'ROLE_MANAGER']" (click)="edit()">
       <i class="bi bi-pencil-square"></i>
-      Edytuj
+      Edit
     </button>
   </div>
 </div>

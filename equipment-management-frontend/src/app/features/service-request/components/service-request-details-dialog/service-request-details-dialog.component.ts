@@ -43,18 +43,20 @@ export class ServiceRequestDetailsDialogComponent {
   }
 
   cancelServiceRequest() {
-    const confirmed = confirm('Czy na pewno chcesz anulować zgłoszenie?');
+    const confirmed = confirm('Are you sure you want to cancel this service request?');
 
-    this.serviceRequestService
-      .cancelServiceRequest(this.serviceRequest.id)
-      .subscribe({
-        next: () => {
-          this.notificationService.success('Anulowano zgłoszenie');
-          this.dialogRef.close();
-          window.location.reload();
-        },
-        error: () => this.notificationService.error('Wystąpił błąd'),
-      });
+    if (confirmed) {
+      this.serviceRequestService
+        .cancelServiceRequest(this.serviceRequest.id)
+        .subscribe({
+          next: () => {
+            this.notificationService.success('Service request has been cancelled');
+            this.dialogRef.close();
+            window.location.reload();
+          },
+          error: () => this.notificationService.error(),
+        });
+    }
   }
 
   getStatusClass(status: string): string {

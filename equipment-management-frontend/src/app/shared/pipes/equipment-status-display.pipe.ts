@@ -8,12 +8,12 @@ import { EquipmentStatusEnum } from '../enums/equipment-status.enum';
 export class EquipmentStatusDisplayPipe implements PipeTransform {
   transform(value: EquipmentStatusEnum): string {
     const statusMap = {
-      [EquipmentStatusEnum.NEW]: 'Nowy',
-      [EquipmentStatusEnum.IN_PREPARATION]: 'W przygotowaniu',
-      [EquipmentStatusEnum.IN_USE]: 'W użyciu',
-      [EquipmentStatusEnum.IN_REPAIR]: 'W naprawie',
-      [EquipmentStatusEnum.RESERVE]: 'Rezerwa',
-      [EquipmentStatusEnum.DECOMMISSIONED]: 'Zlikwidowany',
+      [EquipmentStatusEnum.NEW]: 'New',
+      [EquipmentStatusEnum.IN_PREPARATION]: 'In preparation',
+      [EquipmentStatusEnum.IN_USE]: 'In use',
+      [EquipmentStatusEnum.IN_REPAIR]: 'In repair',
+      [EquipmentStatusEnum.RESERVE]: 'Reserve',
+      [EquipmentStatusEnum.DECOMMISSIONED]: 'Decommissioned',
     };
     return statusMap[value] || value;
   }

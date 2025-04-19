@@ -18,8 +18,8 @@ export class ServiceRequestNoteService {
     size: number,
   ): Observable<Page<ServiceRequestNote>> {
     const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size);
+      .set('page', page)
+      .set('size', size);
 
     return this.http.get<Page<ServiceRequestNote>>(
       this.apiUrl + `/service-request/${id}`,

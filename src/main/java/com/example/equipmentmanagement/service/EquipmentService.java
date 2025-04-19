@@ -25,6 +25,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.example.equipmentmanagement.mapper.EquipmentMapper.toDto;
 import static com.example.equipmentmanagement.mapper.EquipmentMapper.toEntity;
@@ -55,7 +57,10 @@ public class EquipmentService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        filter.setUserId(user.getId());
+        Set<Long> users = new HashSet<>();
+        users.add(user.getId());
+
+        filter.setUserId(users);
         Specification<Equipment> spec = EquipmentSpecification.prepareSpecification(filter);
 
         return equipmentRepository.findAll(spec, pageable).map(EquipmentMapper::toDto);

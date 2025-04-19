@@ -12,6 +12,15 @@ import { NgClass, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { EquipmentStatusDisplayPipe } from '../../../../shared/pipes/equipment-status-display.pipe';
 import { Equipment } from '../../models/equipment.model';
+import { MatInputModule } from '@angular/material/input';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { EquipmentFilter } from '../../models/equipment-filter.model';
+import { UserService } from '../../../user/services/user.service';
+import { User } from '../../../user/models/user.model';
+import { EquipmentStatusEnum } from '../../../../shared/enums/equipment-status.enum';
 
 @Component({
   selector: 'app-equipment-list',
@@ -25,45 +34,80 @@ import { Equipment } from '../../models/equipment.model';
     RouterLink,
     EquipmentStatusDisplayPipe,
     NgClass,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatSelect,
+    MatOption,
   ],
   templateUrl: './equipment-list.component.html',
   styleUrl: './equipment-list.component.scss',
 })
 export class EquipmentListComponent implements OnInit {
   showAllEquipment = false;
+  statuses: EquipmentStatusEnum[] = Object.values(EquipmentStatusEnum);
+  users: User[] = [];
   equipment: Equipment[] = [];
   length = 0;
   pageSize = 10;
   pageIndex = 0;
   sort = 'id,desc';
   displayedColumns: string[] = [];
+  filterForm!: FormGroup;
 
   @ViewChild(MatSort) matSort!: MatSort;
   @ViewChild(MatPaginator) matPaginator!: MatPaginator;
 
   constructor(
     private equipmentService: EquipmentService,
+    private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.showAllEquipment = this.route.snapshot.data['showAllEquipment'];
+
+    if (this.showAllEquipment) {
+      this.userService.getActiveUsers().subscribe({
+        next: (data) => (this.users = data),
+      });
+    }
+
     this.setDisplayedColumns();
     this.loadData();
+
+    this.filterForm = new FormGroup<EquipmentFilter>({
+      manufacturer: new FormControl(''),
+      model: new FormControl(''),
+      inventoryNumber: new FormControl(''),
+      serialNumber: new FormControl(''),
+      status: new FormControl(null),
+      userId: new FormControl(null),
+    });
+
+    this.filterForm.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe({
+        next: (filters: EquipmentFilter) => {
+          this.pageIndex = 0;
+          this.loadData(filters);
+        },
+      });
   }
 
-  loadData() {
+  loadData(filters?: EquipmentFilter) {
     const equipmentObservable = this.showAllEquipment
       ? this.equipmentService.getAllEquipment(
           this.pageIndex,
           this.pageSize,
-          this.sort
+          this.sort,
+          filters,
         )
       : this.equipmentService.getCurrentUserEquipment(
           this.pageIndex,
           this.pageSize,
-          this.sort
+          this.sort,
+          filters,
         );
 
     equipmentObservable.subscribe({

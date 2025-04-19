@@ -48,7 +48,6 @@ export class LoginComponent {
     this.authService.login(formData.username, formData.password).subscribe({
       next: () => {
         this.router.navigate(['/']);
-        this.notificationService.success('Zalogowano pomyślnie');
       },
       error: (err) =>
         this.notificationService.error(

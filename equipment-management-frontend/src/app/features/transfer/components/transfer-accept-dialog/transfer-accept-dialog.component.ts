@@ -8,7 +8,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -34,7 +34,6 @@ import { Address } from '../../../address/models/address.model';
     MatOption,
     MatSelect,
     NgForOf,
-    NgIf,
   ],
   templateUrl: './transfer-accept-dialog.component.html',
   styleUrl: './transfer-accept-dialog.component.scss',
@@ -63,7 +62,7 @@ export class TransferAcceptDialogComponent implements OnInit {
   ngOnInit(): void {
     this.addressService.getAllAddresses().subscribe({
       next: (data) => (this.addressList = data),
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 
@@ -77,10 +76,9 @@ export class TransferAcceptDialogComponent implements OnInit {
         .subscribe({
           next: (result) => {
             this.notificationService.success(result.message);
-            this.dialogRef.close();
-            window.location.reload();
+            this.dialogRef.close(true);
           },
-          error: () => this.notificationService.error('Wystąpił błąd'),
+          error: () => this.notificationService.error(),
         });
     }
   }

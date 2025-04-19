@@ -1,45 +1,55 @@
 <div class="form-container">
   <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
-    <h5 class="text-center">{{ isEditMode ? 'Edytuj sprzęt' : 'Dodaj sprzęt' }}</h5>
+    <h5 class="text-center">{{ isEditMode ? 'Edit equipment' : 'Add new equipment' }}</h5>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Producent</mat-label>
+      <mat-label>Manufacturer</mat-label>
       <input matInput formControlName="manufacturer" required />
-      <mat-error *ngIf="equipmentForm.controls['manufacturer'].hasError('required')">Pole wymagane</mat-error>
+      @if (equipmentForm.controls['manufacturer'].hasError('required')) {
+        <mat-error>Manufacturer is required</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Model</mat-label>
       <input matInput formControlName="model" required />
-      <mat-error *ngIf="equipmentForm.controls['model'].hasError('required')">Pole wymagane</mat-error>
+      @if (equipmentForm.controls['model'].hasError('required')) {
+        <mat-error>Model is required</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Opis</mat-label>
+      <mat-label>Description</mat-label>
       <textarea matInput formControlName="description"></textarea>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Numer inwentarzowy</mat-label>
+      <mat-label>Inventory number</mat-label>
       <input matInput formControlName="inventoryNumber" required />
+      @if (equipmentForm.controls['inventoryNumber'].hasError('required')) {
+        <mat-error>Inventory number is required</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Numer seryjny</mat-label>
+      <mat-label>Serial number</mat-label>
       <input matInput formControlName="serialNumber" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Typ</mat-label>
+      <mat-label>Type</mat-label>
       <mat-select formControlName="typeId" required>
         <mat-option *ngFor="let type of equipmentTypeList" [value]="type.id">
           {{ type.name }}
         </mat-option>
       </mat-select>
+      @if (equipmentForm.controls['typeId'].hasError('required')) {
+        <mat-error>Equipment type is required</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Adres</mat-label>
+      <mat-label>Address</mat-label>
       <mat-select formControlName="addressId">
         <mat-option *ngFor="let address of addressList" [value]="address.id">
           {{ address.description + ' (' + address.street + ' ' + address.number + ', ' + address.postalCode + ' ' + address.city + ')' }}
@@ -48,7 +58,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Lokalizacja</mat-label>
+      <mat-label>Location</mat-label>
       <input matInput formControlName="location" />
     </mat-form-field>
 
@@ -62,14 +72,14 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Data zakupu</mat-label>
+      <mat-label>Purchase date</mat-label>
       <input matInput [matDatepicker]="purchaseDatePicker" formControlName="purchaseDate" />
       <mat-datepicker-toggle matSuffix [for]="purchaseDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #purchaseDatePicker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Gwarancja do</mat-label>
+      <mat-label>Warranty until</mat-label>
       <input matInput [matDatepicker]="warrantyDatePicker" formControlName="warrantyUntil" />
       <mat-datepicker-toggle matSuffix [for]="warrantyDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #warrantyDatePicker></mat-datepicker>
@@ -77,13 +87,13 @@
 
     <button mat-flat-button type="submit" class="w-100" [disabled]="equipmentForm.invalid">
       <i class="bi bi-floppy-fill"></i>
-      Zapisz
+      Save
     </button>
 
 
   </form>
   <button mat-stroked-button (click)="goBack()">
     <i class="bi bi-arrow-left"></i>
-    Wróć
+    Cancel
   </button>
 </div>

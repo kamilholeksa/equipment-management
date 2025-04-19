@@ -1,24 +1,27 @@
 <mat-dialog-content class="text-center">
-  <h2 mat-dialog-title class="mb-4">Przekaż sprzęt</h2>
+  <h2 mat-dialog-title class="mb-4">Create a transfer request</h2>
 
   <form [formGroup]="transferForm" (ngSubmit)="onSubmit()">
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Użytkownik docelowy</mat-label>
+      <mat-label>Target user</mat-label>
       <mat-select formControlName="obtainerId">
         <mat-option *ngFor="let user of userList" [value]="user.id">
           {{ user.firstName + ' ' + user.lastName + ' (' + user.username + ')' }}
         </mat-option>
       </mat-select>
+      @if (transferForm.controls['obtainerId'].hasError('required')) {
+        <mat-error>User is required</mat-error>
+      }
     </mat-form-field>
 
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions class="mt-4" align="end">
-  <button mat-button mat-dialog-close>Anuluj</button>
+  <button mat-button mat-dialog-close>Cancel</button>
   <button mat-flat-button (click)="onSubmit()" [disabled]="transferForm.invalid">
     <i class="bi bi-check-lg"></i>
-    Zapisz
+    Save
   </button>
 </mat-dialog-actions>

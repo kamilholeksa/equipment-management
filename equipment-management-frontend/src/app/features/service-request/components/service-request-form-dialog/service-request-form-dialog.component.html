@@ -1,29 +1,31 @@
 <mat-dialog-content class="text-center">
-  <h2 mat-dialog-title class="mb-4">Utwórz zgłoszenie serwisowe</h2>
+  <h2 mat-dialog-title class="mb-4">Create a service request</h2>
 
   <div class="mb-4">
-    <span class="mb-0">Sprzęt: </span>
+    <span class="mb-0">Equipment: </span>
     <span class="fw-medium mb-0">{{ equipment.manufacturer + ' ' + equipment.model + ' (' + equipment.inventoryNumber + ')' }}</span>
   </div>
 
   <form [formGroup]="serviceRequestForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Temat</mat-label>
+      <mat-label>Topic</mat-label>
       <input matInput formControlName="title" required>
-      <mat-error *ngIf="serviceRequestForm.controls['title'].hasError('required')">Pole wymagane</mat-error>
+      @if (serviceRequestForm.controls['title'].hasError('required')) {
+        <mat-error>Topic is required</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Opis</mat-label>
+      <mat-label>Description</mat-label>
       <textarea matInput formControlName="description" rows="5"></textarea>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions class="mt-4" align="end">
-  <button mat-button mat-dialog-close>Anuluj</button>
+  <button mat-button mat-dialog-close>Cancel</button>
   <button mat-flat-button (click)="onSubmit()" [disabled]="serviceRequestForm.invalid">
     <i class="bi bi-check-lg"></i>
-    Utwórz zgłoszenie
+    Create
   </button>
 </mat-dialog-actions>

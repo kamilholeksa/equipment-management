@@ -23,8 +23,8 @@ export class TransferService {
     sort?: string | null,
   ): Observable<Page<Transfer>> {
     const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size)
+      .set('page', page)
+      .set('size', size)
       .set('sort', sort ?? '');
 
     return this.http.get<Page<Transfer>>(this.apiUrl, {
@@ -38,8 +38,8 @@ export class TransferService {
     sort?: string | null,
   ): Observable<Page<Transfer>> {
     const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size)
+      .set('page', page)
+      .set('size', size)
       .set('sort', sort ?? '');
 
     return this.http.get<Page<Transfer>>(
@@ -56,8 +56,8 @@ export class TransferService {
     sort?: string | null,
   ): Observable<Page<Transfer>> {
     const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size)
+      .set('page', page)
+      .set('size', size)
       .set('sort', sort ?? '');
 
     return this.http.get<Page<Transfer>>(this.apiUrl + '/to-accept', {
@@ -79,11 +79,11 @@ export class TransferService {
   getStatusClass(status: string): string {
     switch (status) {
       case 'ACCEPTED':
-        return 'status-badge accepted';
+        return 'status-badge tr-accepted';
       case 'PENDING':
-        return 'status-badge pending';
+        return 'status-badge tr-pending';
       case 'REJECTED':
-        return 'status-badge rejected';
+        return 'status-badge tr-rejected';
       default:
         return '';
     }

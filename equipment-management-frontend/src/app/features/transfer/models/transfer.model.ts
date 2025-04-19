@@ -1,4 +1,4 @@
-import { UserModel } from '../../user/models/user.model';
+import { User } from '../../user/models/user.model';
 import { TransferStatusEnum } from '../../../shared/enums/transfer-status.enum';
 import { Equipment } from '../../equipment/models/equipment.model';
 
@@ -8,8 +8,8 @@ export interface Transfer {
   decisionDate: Date;
   status: TransferStatusEnum;
   equipment: Equipment;
-  transferor: UserModel;
-  obtainer: UserModel;
+  transferor: User;
+  obtainer: User;
   createdBy: string;
   createdDate: Date;
   lastModifiedBy: string;

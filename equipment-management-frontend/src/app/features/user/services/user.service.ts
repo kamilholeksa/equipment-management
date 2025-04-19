@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserModel, UserSaveModel } from '../models/user.model';
+import { User, UserSave } from '../models/user.model';
 import {
   ChangeCurrentUserPasswordModel,
   ChangePasswordModel,
@@ -20,39 +20,39 @@ export class UserService {
     page: number,
     size: number,
     sort?: string | null,
-  ): Observable<Page<UserModel>> {
+  ): Observable<Page<User>> {
     const params = new HttpParams()
-      .set('pageNumber', page)
-      .set('pageSize', size)
+      .set('page', page)
+      .set('size', size)
       .set('sort', sort ?? '');
 
-    return this.http.get<Page<UserModel>>(this.apiUrl, {
+    return this.http.get<Page<User>>(this.apiUrl, {
       params,
     });
   }
 
-  getActiveUsers(): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(this.apiUrl + '/active');
+  getActiveUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl + '/active');
   }
 
-  getActiveTechniciansUsers(): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(this.apiUrl + '/active-technicians');
+  getActiveTechniciansUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl + '/active-technicians');
   }
 
-  getCurrentUser(): Observable<UserModel> {
-    return this.http.get<UserModel>(this.apiUrl + '/account');
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(this.apiUrl + '/account');
   }
 
-  getUser(id: number): Observable<UserModel> {
-    return this.http.get<UserModel>(this.apiUrl + `/${id}`);
+  getUser(id: number): Observable<User> {
+    return this.http.get<User>(this.apiUrl + `/${id}`);
   }
 
-  createUser(user: UserSaveModel): Observable<UserModel> {
-    return this.http.post<UserModel>(this.apiUrl, user);
+  createUser(user: UserSave): Observable<User> {
+    return this.http.post<User>(this.apiUrl, user);
   }
 
-  updateUser(id: number, user: UserSaveModel): Observable<UserModel> {
-    return this.http.put<UserModel>(this.apiUrl + `/${id}`, user);
+  updateUser(id: number, user: UserSave): Observable<User> {
+    return this.http.put<User>(this.apiUrl + `/${id}`, user);
   }
 
   changePassword(id: number, data: ChangePasswordModel): Observable<any> {

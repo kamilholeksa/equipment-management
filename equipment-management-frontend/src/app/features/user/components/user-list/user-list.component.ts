@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import { UserModel } from '../../models/user.model';
+import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import {
@@ -29,7 +29,7 @@ import { NotificationService } from '../../../../core/notification/services/noti
   styleUrl: './user-list.component.scss',
 })
 export class UserListComponent implements OnInit {
-  users: UserModel[] = [];
+  users: User[] = [];
   length = 0;
   pageSize = 10;
   pageIndex = 0;
@@ -70,7 +70,7 @@ export class UserListComponent implements OnInit {
           this.users = data.content;
           this.length = data.page.totalElements;
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
   }
 

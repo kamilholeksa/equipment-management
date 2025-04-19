@@ -30,8 +30,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([authInterceptor])),
-    { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
-    { provide: MatPaginatorIntl, useClass: PolishPaginatorIntl },
+    // { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
+    // { provide: MatPaginatorIntl, useClass: PolishPaginatorIntl },
     provideNativeDateAdapter(),
   ],
 };

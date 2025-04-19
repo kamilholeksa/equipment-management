@@ -1,19 +1,21 @@
 <mat-dialog-content class="text-center">
-  <h2 mat-dialog-title class="mb-4">Zamknięcie zgłoszenia</h2>
+  <h2 mat-dialog-title class="mb-4">Closing the service request</h2>
 
   <form>
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Informacja do użytkownika</mat-label>
+      <mat-label>Closing information</mat-label>
       <textarea matInput [formControl]="closeInfo" rows="6" required></textarea>
-      <mat-error *ngIf="closeInfo.hasError('required')">Pole wymagane</mat-error>
+      @if (closeInfo.hasError('required')) {
+        <mat-error>Required field</mat-error>
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions class="mt-2" align="end">
-  <button mat-button mat-dialog-close>Anuluj</button>
+  <button mat-button mat-dialog-close>Cancel</button>
   <button mat-flat-button (click)="onSubmit()" [disabled]="closeInfo.invalid">
     <i class="bi bi-check-lg"></i>
-    Zapisz
+    Save
   </button>
 </mat-dialog-actions>

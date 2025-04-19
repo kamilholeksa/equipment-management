@@ -60,24 +60,22 @@ export class ServiceRequestNoteDialogComponent {
 
       this.noteService.updateServiceRequestNote(this.note.id, data).subscribe({
         next: () => {
-          this.notificationService.success('Notatka została zapisana');
           window.location.reload();
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
   }
 
   deleteNote() {
-    const confirmed = confirm('Czy na pewno chcesz usunąć notatkę?');
+    const confirmed = confirm('Are you sure you want to delete the note?');
 
     if (confirmed) {
       this.noteService.deleteNote(this.note.id).subscribe({
         next: () => {
-          this.notificationService.success('Notatka została usunięta');
           window.location.reload();
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
   }

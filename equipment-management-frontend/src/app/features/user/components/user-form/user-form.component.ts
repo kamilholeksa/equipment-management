@@ -17,9 +17,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Location, NgForOf, NgIf } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
-import { UserModel } from '../../models/user.model';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-user-form',
@@ -46,7 +46,6 @@ export class UserFormComponent implements OnInit {
   constructor(
     private userService: UserService,
     private roleService: RoleService,
-    private router: Router,
     private route: ActivatedRoute,
     private notificationService: NotificationService,
     private location: Location,
@@ -73,7 +72,7 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
     this.roleService.getAllRoles().subscribe({
       next: (data) => (this.roles = data),
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
 
     this.userId = +this.route.snapshot.paramMap.get('id')!;
@@ -81,7 +80,7 @@ export class UserFormComponent implements OnInit {
       this.isEditMode = true;
       this.userService.getUser(this.userId).subscribe({
         next: (user) => this.populateForm(user),
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
 
@@ -95,7 +94,7 @@ export class UserFormComponent implements OnInit {
     }
   }
 
-  populateForm(user: UserModel) {
+  populateForm(user: User) {
     this.userForm.patchValue({
       firstName: user.firstName,
       lastName: user.lastName,
@@ -132,10 +131,7 @@ export class UserFormComponent implements OnInit {
 
       observable.subscribe({
         next: () => this.goBack(),
-        error: (err) =>
-          this.notificationService.error(
-            err.error.message ? err.error.message : 'Wystąpił błąd',
-          ),
+        error: (err) => this.notificationService.error(err.error.message),
       });
     }
   }

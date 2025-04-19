@@ -19,5 +19,5 @@ public class EquipmentFilter {
     private LocalDate withdrawalDate;
     private Long typeId;
     private Long addressId;
-    private Long userId;
+    private Set<Long> userId;
 }

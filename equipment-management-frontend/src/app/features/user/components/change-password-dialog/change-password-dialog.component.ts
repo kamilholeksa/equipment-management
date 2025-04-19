@@ -18,7 +18,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { UserService } from '../../services/user.service';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-change-password-dialog',
@@ -29,7 +28,6 @@ import { NgIf } from '@angular/common';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    NgIf,
   ],
   templateUrl: './change-password-dialog.component.html',
   styleUrl: './change-password-dialog.component.scss',
@@ -84,10 +82,10 @@ export class ChangePasswordDialogComponent implements OnInit {
 
       observable.subscribe({
         next: () => {
-          this.notificationService.success('Hasło zostało zmienione');
+          this.notificationService.success('Password has been changed');
           this.dialogRef.close();
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
   }

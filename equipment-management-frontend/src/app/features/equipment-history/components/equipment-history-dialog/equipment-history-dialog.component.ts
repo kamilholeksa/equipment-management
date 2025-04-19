@@ -43,7 +43,7 @@ export class EquipmentHistoryDialogComponent implements OnInit {
           );
           this.history = data;
         },
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
   }
 }

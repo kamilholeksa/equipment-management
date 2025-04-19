@@ -1,4 +1,4 @@
-import { UserModel } from '../../user/models/user.model';
+import { User } from '../../user/models/user.model';
 import { EquipmentStatusEnum } from '../../../shared/enums/equipment-status.enum';
 import { Equipment } from '../../equipment/models/equipment.model';
 
@@ -9,7 +9,7 @@ export interface EquipmentHistory {
   newStatus: EquipmentStatusEnum;
   oldLocation: string;
   newLocation: string;
-  oldUser: UserModel;
-  newUser: UserModel;
+  oldUser: User;
+  newUser: User;
   changeDate: Date;
 }

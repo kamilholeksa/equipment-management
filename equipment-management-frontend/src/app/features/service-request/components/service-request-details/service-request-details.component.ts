@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ServiceRequestWithNotesModel } from '../../models/service-request.model';
 import { ServiceRequestService } from '../../services/service-request.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import {
   FormControl,
@@ -12,7 +12,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import {Location, NgClass, NgIf} from '@angular/common';
+import { DatePipe, Location, NgClass } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { ServiceRequestNoteListComponent } from '../service-request-note-list/service-request-note-list.component';
 import { ServiceRequestNoteService } from '../../services/service-request-note.service';
@@ -36,16 +36,15 @@ import { ServiceRequestStatusEnum } from '../../../../shared/enums/service-reque
     ServiceRequestNoteListComponent,
     TransferStatusDisplayPipe,
     RouterLink,
-    NgIf,
     NgClass,
+    DatePipe,
   ],
   templateUrl: './service-request-details.component.html',
   styleUrl: './service-request-details.component.scss',
 })
 export class ServiceRequestDetailsComponent implements OnInit {
   serviceRequest!: ServiceRequestWithNotesModel;
-  serviceRequestForm!: FormGroup;
-  noteForm!: FormGroup;
+  noteForm!: FormGroup; //TODO: Change to form control
 
   protected readonly ServiceRequestStatusEnum = ServiceRequestStatusEnum;
 
@@ -56,20 +55,10 @@ export class ServiceRequestDetailsComponent implements OnInit {
     private serviceRequestService: ServiceRequestService,
     private noteService: ServiceRequestNoteService,
     private notificationService: NotificationService,
-    private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private location: Location,
   ) {
-    this.serviceRequestForm = new FormGroup({
-      title: new FormControl('', Validators.required),
-      description: new FormControl(''),
-      equipmentId: new FormControl(null, Validators.required),
-      userId: new FormControl(null, Validators.required),
-      status: new FormControl(null, Validators.required),
-      technicianId: new FormControl(null),
-    });
-
     this.noteForm = new FormGroup({
       description: new FormControl('', Validators.required),
     });
@@ -81,20 +70,15 @@ export class ServiceRequestDetailsComponent implements OnInit {
     this.serviceRequestService.getServiceRequest(id).subscribe({
       next: (data) => {
         this.serviceRequest = data;
-        this.populateForm(data);
       },
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
-  }
 
-  populateForm(serviceRequest: ServiceRequestWithNotesModel): void {
-    this.serviceRequestForm.patchValue({
-      title: serviceRequest.title,
-      description: serviceRequest.description,
-      equipment: serviceRequest.equipment?.id,
-      user: serviceRequest.user?.id,
-      status: serviceRequest.status,
-      technician: serviceRequest.technician?.id,
+    this.route.data.subscribe({
+      next: ({ serviceRequest }) => {
+        this.serviceRequest = serviceRequest;
+      },
+      error: () => this.notificationService.error(),
     });
   }
 
@@ -108,10 +92,7 @@ export class ServiceRequestDetailsComponent implements OnInit {
           this.noteListComponent.loadData();
           this.noteForm.reset();
         },
-        error: (err) =>
-          this.notificationService.error(
-            err.error.message ? err.error.message : 'Wystąpił błąd',
-          ),
+        error: (err) => this.notificationService.error(err.error.message),
       });
     }
 
@@ -124,10 +105,7 @@ export class ServiceRequestDetailsComponent implements OnInit {
         this.notificationService.success(result.message);
         window.location.reload();
       },
-      error: (err) =>
-        this.notificationService.error(
-          err.error.message ? err.error.message : 'Wystąpił błąd',
-        ),
+      error: (err) => this.notificationService.error(err.error.message),
     });
   }
 

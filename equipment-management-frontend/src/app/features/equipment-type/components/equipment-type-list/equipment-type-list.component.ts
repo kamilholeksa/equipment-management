@@ -28,27 +28,43 @@ export class EquipmentTypeListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadData()
+  }
+
+  loadData(): void {
     this.equipmentTypeService.getAllEquipmentTypes().subscribe({
       next: (data) => {
         this.types.data = data;
         this.types.sort = this.sort;
       },
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 
   addEquipmentType() {
-    this.dialog.open(EquipmentTypeFormDialogComponent, {
+    const dialogRef = this.dialog.open(EquipmentTypeFormDialogComponent, {
       width: '600px',
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadData();
+      }
+    })
   }
 
   editEquipmentType(type: EquipmentType) {
-    this.dialog.open(EquipmentTypeFormDialogComponent, {
+    const dialogRef = this.dialog.open(EquipmentTypeFormDialogComponent, {
       width: '600px',
       data: {
         type: type,
       },
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadData();
+      }
+    })
   }
 }

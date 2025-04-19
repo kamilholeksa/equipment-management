@@ -1,17 +1,17 @@
 <div class="user-profile-container">
-  <h5 class="text-center mb-5">Mój profil</h5>
+  <h5 class="text-center mb-5">My profile</h5>
 
-  <p class="m-0">Imię:</p>
+  <p class="m-0">First name:</p>
   <mat-form-field appearance="fill">
     <input class="profile-field" matInput [value]="user.firstName" disabled>
   </mat-form-field>
 
-  <p class="m-0">Nazwisko:</p>
+  <p class="m-0">Last name:</p>
   <mat-form-field appearance="fill">
     <input class="profile-field" matInput [value]="user.lastName" disabled>
   </mat-form-field>
 
-  <p class="m-0">Nazwa użytkownika:</p>
+  <p class="m-0">Username:</p>
   <mat-form-field appearance="fill">
     <input class="profile-field" matInput [value]="user.username" disabled>
   </mat-form-field>
@@ -21,14 +21,14 @@
     <input class="profile-field" matInput [value]="user.email" disabled>
   </mat-form-field>
 
-  <p class="m-0">Telefon:</p>
+  <p class="m-0">Phone number:</p>
   <mat-form-field appearance="fill">
     <input class="profile-field" matInput [value]="user.phoneNumber" disabled>
   </mat-form-field>
 
   <div class="profile-actions">
     <button mat-stroked-button color="primary" (click)="changePassword()">
-      Zmień hasło
+      Change password
     </button>
   </div>
 </div>

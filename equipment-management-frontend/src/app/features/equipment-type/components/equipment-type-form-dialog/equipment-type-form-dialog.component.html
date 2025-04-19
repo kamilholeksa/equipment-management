@@ -1,24 +1,26 @@
 <mat-dialog-content class="text-center">
-  <h2 mat-dialog-title class="mb-4">{{ this.isEditMode ? 'Edytuj typ sprzętu' : 'Dodaj nowy typ' }}</h2>
+  <h2 mat-dialog-title class="mb-4">{{ this.isEditMode ? 'Edit type' : 'Add new type' }}</h2>
 
   <form [formGroup]="typeForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Nazwa</mat-label>
+      <mat-label>Name</mat-label>
       <input matInput formControlName="name" required>
-      <mat-error *ngIf="typeForm.controls['name'].hasError('required')">Pole wymagane</mat-error>
+      @if (typeForm.controls['name'].hasError('required')) {
+        <mat-error>Name is required</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Opis</mat-label>
+      <mat-label>Description</mat-label>
       <input matInput formControlName="description">
     </mat-form-field>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions class="mt-4" align="end">
-  <button mat-button mat-dialog-close>Anuluj</button>
+  <button mat-button mat-dialog-close>Cancel</button>
   <button mat-flat-button (click)="onSubmit()" [disabled]="typeForm.invalid">
     <i class="bi bi-check-lg"></i>
-    Zapisz
+    Save
   </button>
 </mat-dialog-actions>

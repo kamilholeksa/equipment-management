@@ -1,4 +1,4 @@
-export interface UserModel {
+export interface User {
   id: number;
   firstName: string;
   lastName: string;
@@ -13,7 +13,7 @@ export interface UserModel {
   lastModifiedDate: Date;
 }
 
-export interface UserSaveModel {
+export interface UserSave {
   firstName: string;
   lastName: string;
   username: string;

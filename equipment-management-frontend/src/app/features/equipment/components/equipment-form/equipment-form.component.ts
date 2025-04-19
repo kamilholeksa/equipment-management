@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { EquipmentService } from '../../services/equipment.service';
 import { EquipmentTypeService } from '../../../equipment-type/services/equipment-type.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -44,7 +44,7 @@ export class EquipmentFormComponent implements OnInit {
   equipmentForm: FormGroup;
   equipmentTypeList!: EquipmentType[];
   addressList!: Address[];
-  statuses = Object.values(EquipmentStatusEnum);
+  statuses: EquipmentStatusEnum[] = Object.values(EquipmentStatusEnum);
   equipmentId!: number;
   isEditMode = false;
 
@@ -52,7 +52,6 @@ export class EquipmentFormComponent implements OnInit {
     private equipmentService: EquipmentService,
     private equipmentTypeService: EquipmentTypeService,
     private addressService: AddressService,
-    private router: Router,
     private route: ActivatedRoute,
     private location: Location,
     private notificationService: NotificationService,
@@ -76,12 +75,12 @@ export class EquipmentFormComponent implements OnInit {
   ngOnInit(): void {
     this.equipmentTypeService.getAllEquipmentTypes().subscribe({
       next: (data) => (this.equipmentTypeList = data),
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
 
     this.addressService.getAllAddresses().subscribe({
       next: (data) => (this.addressList = data),
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
 
     this.equipmentId = +this.route.snapshot.paramMap.get('id')!;
@@ -89,7 +88,7 @@ export class EquipmentFormComponent implements OnInit {
       this.isEditMode = true;
       this.equipmentService.getEquipment(this.equipmentId).subscribe({
         next: (equipment) => this.populateForm(equipment),
-        error: () => this.notificationService.error('Wystąpił błąd'),
+        error: () => this.notificationService.error(),
       });
     }
   }
@@ -133,20 +132,14 @@ export class EquipmentFormComponent implements OnInit {
             next: () => {
               this.goBack();
             },
-            error: (err) =>
-              this.notificationService.error(
-                err.error.message ? err.error.message : 'Wystąpił błąd',
-              ),
+            error: (err) => this.notificationService.error(err.error.message),
           });
       } else {
         this.equipmentService.createEquipment(equipmentData).subscribe({
           next: () => {
             this.goBack();
           },
-          error: (err) =>
-            this.notificationService.error(
-              err.error.message ? err.error.message : 'Wystąpił błąd',
-            ),
+          error: (err) => this.notificationService.error(err.error.message),
         });
       }
     }

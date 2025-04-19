@@ -97,7 +97,7 @@ export class ServiceRequestListComponent implements OnInit {
         this.serviceRequests = data.content;
         this.length = data.page.totalElements;
       },
-      error: () => this.notificationService.error('Wystąpił błąd'),
+      error: () => this.notificationService.error(),
     });
   }
 

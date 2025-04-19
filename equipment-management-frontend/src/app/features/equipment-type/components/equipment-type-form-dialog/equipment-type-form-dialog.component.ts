@@ -15,7 +15,6 @@ import {
 } from '@angular/forms';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
 import { EquipmentTypeService } from '../../services/equipment-type.service';
-import { NgIf } from '@angular/common';
 import { EquipmentType } from '../../models/equipment-type.model';
 
 @Component({
@@ -27,7 +26,6 @@ import { EquipmentType } from '../../models/equipment-type.model';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    NgIf,
   ],
   templateUrl: './equipment-type-form-dialog.component.html',
   styleUrl: './equipment-type-form-dialog.component.scss',
@@ -64,12 +62,9 @@ export class EquipmentTypeFormDialogComponent implements OnInit {
 
       observable.subscribe({
         next: () => {
-          this.notificationService.success('Typ został zapisany');
-          this.dialogRef.close();
-          window.location.reload();
+          this.dialogRef.close(true);
         },
-        error: () =>
-          this.notificationService.error('Wystąpił błąd przy zapisie'),
+        error: () => this.notificationService.error(),
       });
     }
   }
