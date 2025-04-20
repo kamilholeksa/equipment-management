@@ -45,16 +45,17 @@
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Role</mat-label>
       <mat-select formControlName="roles" multiple required>
-        <mat-option *ngFor="let role of roles" [value]="role.name">
-          {{ role.name }}
-        </mat-option>
+        @for (role of roles; track role) {
+          <mat-option [value]="role.name">{{ role.name | roleDisplay }}</mat-option>
+        }
       </mat-select>
       @if (userForm.controls['roles'].hasError('required')) {
         <mat-error>Pole wymagane</mat-error>
       }
     </mat-form-field>
 
-    <mat-form-field *ngIf="!isEditMode" appearance="outline" class="form-field">
+    @if (!isEditMode) {
+      <mat-form-field appearance="outline" class="form-field">
       <mat-label>Hasło</mat-label>
       <input matInput type="password" formControlName="password" required>
       @if (userForm.controls['password'].hasError('required')) {
@@ -65,16 +66,18 @@
       }
     </mat-form-field>
 
-    <mat-form-field *ngIf="!isEditMode" appearance="outline" class="form-field">
-      <mat-label>Powtórz hasło</mat-label>
-      <input matInput type="password" formControlName="confirmPassword" required>
-      @if (userForm.controls['confirmPassword'].hasError('required')) {
-        <mat-error>Pole wymagane</mat-error>
-      }
-      @if (userForm.controls['confirmPassword'].hasError('passwordMismatch')) {
-        <mat-error>Hasła muszą być zgodne</mat-error>
-      }
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Powtórz hasło</mat-label>
+        <input matInput type="password" formControlName="confirmPassword" required>
+        @if (userForm.controls['confirmPassword'].hasError('required')) {
+          <mat-error>Pole wymagane</mat-error>
+        }
+        @if (userForm.controls['confirmPassword'].hasError('passwordMismatch')) {
+          <mat-error>Hasła muszą być zgodne</mat-error>
+        }
+      </mat-form-field>
+    }
+
 
     <button mat-flat-button type="submit" class="w-100" [disabled]="userForm.invalid">
       <i class="bi bi-floppy-fill"></i>

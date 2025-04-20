@@ -98,7 +98,7 @@
       <form [formGroup]="noteForm">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Add note</mat-label>
-          <textarea matInput formControlName="description"></textarea>
+          <textarea matInput formControlName="description" maxlength="255"></textarea>
         </mat-form-field>
         <div class="d-flex justify-content-end">
           <button mat-flat-button (click)="saveNote()" [disabled]="!this.noteForm.valid">Add</button>

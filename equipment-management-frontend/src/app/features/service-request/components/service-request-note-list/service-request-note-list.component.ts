@@ -56,12 +56,18 @@ export class ServiceRequestNoteListComponent implements OnInit {
   }
 
   openNoteDialog(note: ServiceRequestNote): void {
-    this.dialog.open(ServiceRequestNoteDialogComponent, {
+    const dialogRef = this.dialog.open(ServiceRequestNoteDialogComponent, {
       width: '800px',
       maxWidth: '100%',
       data: {
         note: note,
       },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadData();
+      }
     });
   }
 }

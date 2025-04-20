@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { authGuard } from '../../core/auth/guards/auth.guard';
+import { UserResolver } from './resolvers/user.resolver';
 
 export const userRoutes: Routes = [
   {
@@ -25,6 +26,9 @@ export const userRoutes: Routes = [
           import('./components/user-details/user-details.component').then(
             (m) => m.UserDetailsComponent,
           ),
+        resolve: {
+          user: UserResolver,
+        },
       },
       {
         path: 'edit/:id',

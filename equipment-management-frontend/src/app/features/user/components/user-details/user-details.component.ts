@@ -7,11 +7,12 @@ import { UserService } from '../../services/user.service';
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
+import {RoleListDisplayPipe} from '../../../../shared/pipes/role-list-display.pipe';
 
 @Component({
   selector: 'app-user-details',
   standalone: true,
-  imports: [DatePipe, MatButton, NgClass, NgForOf],
+  imports: [DatePipe, MatButton, NgClass, NgForOf, RoleListDisplayPipe],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss',
 })
@@ -28,11 +29,8 @@ export class UserDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.userService.getUser(id).subscribe({
-      next: (data) => {
-        this.user = data;
-      },
+    this.route.data.subscribe({
+      next: ({ user }) => (this.user = user),
       error: () => this.notificationService.error(),
     });
   }

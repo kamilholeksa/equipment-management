@@ -24,7 +24,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             InvalidPasswordException.class,
             UserAlreadyExistsException.class,
-            ValidationException.class
+            ValidationException.class,
+            BadRequestAlertException.class
     })
     public ResponseEntity<ExceptionResponse> handleBadRequestException(RuntimeException e) {
         return buildResponseBodyWithStatus(e, HttpStatus.BAD_REQUEST);

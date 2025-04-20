@@ -25,4 +25,8 @@ export class EquipmentTypeService {
   ): Observable<EquipmentType> {
     return this.http.put<EquipmentType>(this.apiUrl + `/${id}`, equipmentType);
   }
+
+  deleteEquipmentType(typeId: number): Observable<void> {
+    return this.http.delete<void>(this.apiUrl + `/${typeId}`);
+  }
 }

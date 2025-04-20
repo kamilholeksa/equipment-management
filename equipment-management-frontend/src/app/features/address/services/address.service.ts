@@ -22,4 +22,8 @@ export class AddressService {
   updateAddress(id: number, address: Address): Observable<Address> {
     return this.http.put<Address>(this.apiUrl + `/${id}`, address);
   }
+
+  deleteAddress(addressId: number): Observable<void> {
+    return this.http.delete<void>(this.apiUrl + `/${addressId}`);
+  }
 }

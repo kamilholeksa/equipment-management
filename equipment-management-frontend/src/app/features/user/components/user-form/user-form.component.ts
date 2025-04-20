@@ -16,10 +16,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Location, NgForOf, NgIf } from '@angular/common';
+import { Location, NgForOf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
 import { User } from '../../models/user.model';
+import {RoleDisplayPipe} from '../../../../shared/pipes/role-display.pipe';
 
 @Component({
   selector: 'app-user-form',
@@ -32,7 +33,7 @@ import { User } from '../../models/user.model';
     MatButtonModule,
     ReactiveFormsModule,
     NgForOf,
-    NgIf,
+    RoleDisplayPipe,
   ],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.scss',

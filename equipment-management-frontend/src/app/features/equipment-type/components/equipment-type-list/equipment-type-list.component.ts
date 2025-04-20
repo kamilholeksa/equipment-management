@@ -67,4 +67,18 @@ export class EquipmentTypeListComponent implements OnInit {
       }
     })
   }
+
+  deleteEquipmentType(typeId: number) {
+    const confirmed = confirm('Are you sure you want to delete this type?');
+
+    if (confirmed) {
+      this.equipmentTypeService.deleteEquipmentType(typeId).subscribe({
+        next: () => {
+          this.loadData();
+          this.notificationService.success('Type deleted successfully');
+        },
+        error: (err) => this.notificationService.error(err.error.message),
+      });
+    }
+  }
 }

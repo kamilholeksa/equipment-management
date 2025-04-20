@@ -17,4 +17,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     boolean existsByInventoryNumber(String inventoryNumber);
 
     boolean existsBySerialNumber(String serialNumber);
+
+    int countByAddressId(Long addressId);
+
+    int countByTypeId(Long typeId);
 }

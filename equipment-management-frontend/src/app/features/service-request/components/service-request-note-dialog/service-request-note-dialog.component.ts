@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import { ServiceRequestNote } from '../../models/service-request-note.model';
 import { MatButtonModule } from '@angular/material/button';
-import { DatePipe, NgIf } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import {
   FormControl,
@@ -22,7 +22,6 @@ import { NotificationService } from '../../../../core/notification/services/noti
     MatDialogModule,
     MatInputModule,
     DatePipe,
-    NgIf,
     ReactiveFormsModule,
   ],
   templateUrl: './service-request-note-dialog.component.html',
@@ -34,6 +33,7 @@ export class ServiceRequestNoteDialogComponent {
   noteForm: FormGroup;
 
   constructor(
+    private dialogRef: MatDialogRef<ServiceRequestNoteDialogComponent>,
     private noteService: ServiceRequestNoteService,
     private authService: AuthService,
     private notificationService: NotificationService,
@@ -47,7 +47,7 @@ export class ServiceRequestNoteDialogComponent {
     }
 
     this.noteForm = new FormGroup({
-      description: new FormControl('', Validators.required),
+      description: new FormControl('', [Validators.required, Validators.maxLength(255)]),
       serviceRequestId: new FormControl(null, Validators.required),
     });
 
@@ -60,7 +60,7 @@ export class ServiceRequestNoteDialogComponent {
 
       this.noteService.updateServiceRequestNote(this.note.id, data).subscribe({
         next: () => {
-          window.location.reload();
+          this.dialogRef.close(true);
         },
         error: () => this.notificationService.error(),
       });
@@ -73,7 +73,7 @@ export class ServiceRequestNoteDialogComponent {
     if (confirmed) {
       this.noteService.deleteNote(this.note.id).subscribe({
         next: () => {
-          window.location.reload();
+          this.dialogRef.close(true);
         },
         error: () => this.notificationService.error(),
       });

@@ -17,7 +17,7 @@ import { Address } from '../../models/address.model';
 })
 export class AddressListComponent implements OnInit {
   addresses = new MatTableDataSource<Address>();
-  displayedColumns = ['description', 'address', 'options'];
+  displayedColumns = ['description', 'postalCode', 'city', 'street', 'number', 'options'];
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -66,5 +66,19 @@ export class AddressListComponent implements OnInit {
         this.loadData();
       }
     });
+  }
+
+  deleteAddress(addressId: number) {
+    const confirmed = confirm('Are you sure you want to delete this address?');
+
+    if (confirmed) {
+      this.addressService.deleteAddress(addressId).subscribe({
+        next: () => {
+          this.loadData();
+          this.notificationService.success("Location deleted successfully");
+        },
+        error: (err) => this.notificationService.error(err.error.message),
+      });
+    }
   }
 }

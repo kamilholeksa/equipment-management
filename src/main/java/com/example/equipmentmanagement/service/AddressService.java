@@ -2,11 +2,14 @@ package com.example.equipmentmanagement.service;
 
 import com.example.equipmentmanagement.dto.address.AddressDto;
 import com.example.equipmentmanagement.dto.address.AddressSaveDto;
+import com.example.equipmentmanagement.exception.BadRequestAlertException;
 import com.example.equipmentmanagement.mapper.AddressMapper;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.model.Address;
 import com.example.equipmentmanagement.repository.AddressRepository;
+import com.example.equipmentmanagement.repository.EquipmentRepository;
 import jakarta.transaction.Transactional;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +20,11 @@ import static com.example.equipmentmanagement.mapper.AddressMapper.toEntity;
 @Service
 public class AddressService {
     private final AddressRepository addressRepository;
+    private final EquipmentRepository equipmentRepository;
 
-    public AddressService(AddressRepository addressRepository) {
+    public AddressService(AddressRepository addressRepository, EquipmentRepository equipmentRepository) {
         this.addressRepository = addressRepository;
+        this.equipmentRepository = equipmentRepository;
     }
 
     public List<AddressDto> getAllAddresses() {
@@ -50,6 +55,11 @@ public class AddressService {
     @Transactional
     public void deleteAddress(Long id) {
         Address existingAddress = findAddressById(id);
+        int count = equipmentRepository.countByAddressId(id);
+        if (count > 0) {
+            throw new BadRequestAlertException("Failed. There are equipment with this address: " + count);
+        }
+
         this.addressRepository.delete(existingAddress);
     }
 

@@ -1,10 +1,6 @@
 <mat-dialog-content class="text-center">
   <h2 mat-dialog-title class="mb-4">Changelog</h2>
 
-  @if (history.length === 0) {
-    <span>No changes yet</span>
-  }
-
   @for (item of history; track item.id) {
     <div class="history-item">
       <mat-card class="history-card">
@@ -37,6 +33,10 @@
         </mat-card-content>
       </mat-card>
     </div>
+  }
+
+  @if (history.length === 0) {
+    <span>No changes yet</span>
   }
 </mat-dialog-content>
 

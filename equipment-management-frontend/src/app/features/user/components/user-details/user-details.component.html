@@ -35,11 +35,7 @@
     </tr>
     <tr>
       <td>Role:</td>
-      <td>
-        <span *ngFor="let role of user.roles">
-          {{ role + ' ' }}
-        </span>
-      </td>
+      <td>{{ user.roles | roleListDisplay }}</td>
     </tr>
     <tr>
       <td>Created by:</td>

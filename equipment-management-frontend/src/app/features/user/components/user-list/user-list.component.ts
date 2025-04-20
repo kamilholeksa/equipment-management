@@ -10,8 +10,9 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { Router, RouterLink } from '@angular/router';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
+import {RoleListDisplayPipe} from '../../../../shared/pipes/role-list-display.pipe';
 
 @Component({
   selector: 'app-user-list',
@@ -21,9 +22,9 @@ import { NotificationService } from '../../../../core/notification/services/noti
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    NgForOf,
     NgClass,
     RouterLink,
+    RoleListDisplayPipe,
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
@@ -60,11 +61,7 @@ export class UserListComponent implements OnInit {
 
   loadData() {
     this.userService
-      .getAllUsers(
-        this.pageIndex,
-        this.pageSize,
-        this.sort,
-      )
+      .getAllUsers(this.pageIndex, this.pageSize, this.sort)
       .subscribe({
         next: (data) => {
           this.users = data.content;
