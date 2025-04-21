@@ -41,6 +41,11 @@ public class GlobalExceptionHandler {
         return buildResponseBodyWithStatus(e, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> handleGenericException(RuntimeException e) {
+        return buildResponseBodyWithStatus(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private ResponseEntity<ExceptionResponse> buildResponseBodyWithStatus(Exception e, HttpStatus httpStatus) {
         ExceptionResponse response = new ExceptionResponse();
         response.setStatus(httpStatus.value());

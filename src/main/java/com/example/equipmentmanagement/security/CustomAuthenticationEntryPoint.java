@@ -1,4 +1,4 @@
-package com.example.equipmentmanagement.security.handler;
+package com.example.equipmentmanagement.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,9 +1,8 @@
 package com.example.equipmentmanagement.configuration;
 
-import com.example.equipmentmanagement.security.handler.CustomAccessDeniedHandler;
-import com.example.equipmentmanagement.security.handler.CustomAuthenticationEntryPoint;
+import com.example.equipmentmanagement.security.CustomAccessDeniedHandler;
+import com.example.equipmentmanagement.security.CustomAuthenticationEntryPoint;
 import com.example.equipmentmanagement.security.jwt.JwtFilter;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
