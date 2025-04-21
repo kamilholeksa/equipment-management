@@ -12,6 +12,6 @@ public class TransferSaveDto {
     private String status;
     private Long equipmentId;
     private Long transferorId;
-    @NotNull(message = "Użytkownik docelowy jest wymagany")
+    @NotNull(message = "Target user is required")
     private Long obtainerId;
 }

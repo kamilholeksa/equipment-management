@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class CredentialsRequest {
 
-    @NotBlank(message = "Nazwa użytkownika jest wymagana")
+    @NotBlank(message = "Username is required")
     String username;
 
-    @NotBlank(message = "Hasło jest wymagane")
+    @NotBlank(message = "Password is required")
     String password;
 }

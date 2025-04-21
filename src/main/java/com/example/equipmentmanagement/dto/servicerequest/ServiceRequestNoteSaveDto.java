@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class ServiceRequestNoteSaveDto {
 
-    @NotBlank(message = "Treść notatki jest wymagana")
+    @NotBlank(message = "Note content is required")
     private String description;
 
     @NotNull

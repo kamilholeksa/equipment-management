@@ -9,9 +9,9 @@ public class AcceptTransferRequest {
 
     private Long equipmentId;
 
-    @NotBlank(message = "Lokalizacja jest wymagana")
+    @NotBlank(message = "Location is required")
     private String newLocation;
 
-    @NotNull(message = "Adres jest wymagany")
+    @NotNull(message = "Address is required")
     private Long newAddressId;
 }

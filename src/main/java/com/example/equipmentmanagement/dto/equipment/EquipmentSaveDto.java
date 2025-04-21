@@ -8,20 +8,20 @@ import java.time.LocalDate;
 @Data
 public class EquipmentSaveDto {
 
-    @NotBlank(message = "Producent jest wymagany")
+    @NotBlank(message = "Manufacturer is required")
     private String manufacturer;
 
-    @NotBlank(message = "Model jest wymagany")
+    @NotBlank(message = "Model is required")
     private String model;
 
     private String description;
 
-    @NotBlank(message = "Numer inwentarzowy jest wymagany")
+    @NotBlank(message = "Inventory number is required")
     private String inventoryNumber;
 
     private String serialNumber;
 
-    @NotBlank(message = "Status jest wymagany")
+    @NotBlank(message = "Status is required")
     private String status;
 
     private String location;

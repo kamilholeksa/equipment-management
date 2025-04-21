@@ -11,27 +11,27 @@ import java.util.Set;
 @Data
 public class UserSaveDto {
 
-    @NotBlank(message = "Imię jest wymagane")
+    @NotBlank(message = "First name is required")
     private String firstName;
 
-    @NotBlank(message = "Nazwisko jest wymagane")
+    @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @NotBlank(message = "Nazwa użytkownika jest wymagana")
+    @NotBlank(message = "Username is required")
     private String username;
 
-    @Size(min = 8, message = "Hasło musi mieć min. 8 znaków")
+    @Size(min = 8, message = "Password must contain at least 8 characters")
     private String password;
 
-    @NotBlank(message = "Adres e-mail jest wymagany")
-    @Email(message = "Adres e-mail jest niepoprawny")
+    @NotBlank(message = "Email address is required")
+    @Email(message = "Email address has incorrect format")
     private String email;
 
-    @Size(max = 20, message = "Numer telefonu może mieć maks. 20 znaków")
+    @Size(max = 20, message = "Phone number can have a maximum of 20 digits")
     private String phoneNumber;
 
     private boolean active;
 
-    @NotEmpty(message = "Przynajmniej jedna rola jest wymagana")
+    @NotEmpty(message = "At least one role is required")
     private Set<String> roles;
 }

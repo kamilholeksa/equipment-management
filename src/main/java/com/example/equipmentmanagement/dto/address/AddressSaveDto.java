@@ -6,16 +6,16 @@ import lombok.Data;
 @Data
 public class AddressSaveDto {
 
-    @NotBlank(message = "Kod pocztowy jest wymagany")
+    @NotBlank(message = "Postal code is required")
     private String postalCode;
 
-    @NotBlank(message = "Miasto jest wymagane")
+    @NotBlank(message = "City is required")
     private String city;
 
-    @NotBlank(message = "Ulica jest wymagana")
+    @NotBlank(message = "Street is required")
     private String street;
 
-    @NotBlank(message = "Numer jest wymagany")
+    @NotBlank(message = "Number is required")
     private String number;
 
     private String description;

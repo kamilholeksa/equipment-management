@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class ServiceRequestSaveDto {
-    @NotBlank(message = "Temat zgłoszenia jest wymagany")
+    @NotBlank(message = "Service request title is required")
     private String title;
     private String description;
     private String status;

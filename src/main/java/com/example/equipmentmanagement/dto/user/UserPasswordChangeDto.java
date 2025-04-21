@@ -7,13 +7,13 @@ import lombok.Data;
 @Data
 public class UserPasswordChangeDto {
 
-    @NotBlank(message = "Obecne hasło nie może być puste")
+    @NotBlank(message = "Current password cannot be blank")
     String currentPassword;
 
-    @Size(min = 8, message = "Nowe hasło musi mieć min. 8 znaków")
-    @NotBlank(message = "Nowe hasło nie może być puste")
+    @Size(min = 8, message = "New password must contain at least 8 characters")
+    @NotBlank(message = "New password cannot be blank")
     String newPassword;
 
-    @NotBlank(message = "Potwierdzenie hasła nie może być puste")
+    @NotBlank(message = "Password confirmation cannot be blank")
     String confirmPassword;
 }
