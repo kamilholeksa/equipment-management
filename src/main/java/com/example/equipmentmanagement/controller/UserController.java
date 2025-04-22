@@ -1,9 +1,6 @@
 package com.example.equipmentmanagement.controller;
 
-import com.example.equipmentmanagement.dto.user.AdminPasswordChangeDto;
-import com.example.equipmentmanagement.dto.user.UserDto;
-import com.example.equipmentmanagement.dto.user.UserPasswordChangeDto;
-import com.example.equipmentmanagement.dto.user.UserSaveDto;
+import com.example.equipmentmanagement.dto.user.*;
 import com.example.equipmentmanagement.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -24,8 +21,8 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<Page<UserDto>> getAllUsers(Pageable pageable) {
-        return ResponseEntity.ok(userService.getAllUsers(pageable));
+    public ResponseEntity<Page<UserDto>> getAllUsers(UserFilter filter, Pageable pageable) {
+        return ResponseEntity.ok(userService.getAllUsers(filter, pageable));
     }
 
     @GetMapping("/active")

@@ -1,6 +1,7 @@
 package com.example.equipmentmanagement.service;
 
 import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestDto;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestFilter;
 import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestSaveDto;
 import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestWithNotesDto;
 import com.example.equipmentmanagement.enumeration.EquipmentStatus;
@@ -13,9 +14,11 @@ import com.example.equipmentmanagement.model.User;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
 import com.example.equipmentmanagement.repository.ServiceRequestRepository;
 import com.example.equipmentmanagement.repository.UserRepository;
+import com.example.equipmentmanagement.specification.ServiceRequestSpecification;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -37,8 +40,9 @@ public class ServiceRequestService {
         this.userService = userService;
     }
 
-    public Page<ServiceRequestDto> getAllServiceRequests(Pageable pageable) {
-        return serviceRequestRepository.findAll(pageable).map(serviceRequestMapper::serviceRequestToServiceRequestDto);
+    public Page<ServiceRequestDto> getAllServiceRequests(ServiceRequestFilter filter, Pageable pageable) {
+        Specification<ServiceRequest> spec = ServiceRequestSpecification.prepareSpecification(filter);
+        return serviceRequestRepository.findAll(spec, pageable).map(serviceRequestMapper::serviceRequestToServiceRequestDto);
     }
 
     public ServiceRequestDto getServiceRequest(Long id) {

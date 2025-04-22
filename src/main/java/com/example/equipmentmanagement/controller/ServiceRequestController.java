@@ -1,6 +1,7 @@
 package com.example.equipmentmanagement.controller;
 
 import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestDto;
+import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestFilter;
 import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestSaveDto;
 import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestWithNotesDto;
 import com.example.equipmentmanagement.service.ServiceRequestService;
@@ -22,8 +23,8 @@ public class ServiceRequestController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<ServiceRequestDto>> getAllServiceRequests(Pageable pageable) {
-        return ResponseEntity.ok(this.serviceRequestService.getAllServiceRequests(pageable));
+    public ResponseEntity<Page<ServiceRequestDto>> getAllServiceRequests(ServiceRequestFilter filter, Pageable pageable) {
+        return ResponseEntity.ok(this.serviceRequestService.getAllServiceRequests(filter, pageable));
     }
 
     @GetMapping("/equipment/{equipmentId}")

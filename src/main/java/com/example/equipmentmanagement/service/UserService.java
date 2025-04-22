@@ -1,9 +1,6 @@
 package com.example.equipmentmanagement.service;
 
-import com.example.equipmentmanagement.dto.user.AdminPasswordChangeDto;
-import com.example.equipmentmanagement.dto.user.UserDto;
-import com.example.equipmentmanagement.dto.user.UserPasswordChangeDto;
-import com.example.equipmentmanagement.dto.user.UserSaveDto;
+import com.example.equipmentmanagement.dto.user.*;
 import com.example.equipmentmanagement.enumeration.RoleName;
 import com.example.equipmentmanagement.exception.InvalidPasswordException;
 import com.example.equipmentmanagement.exception.PasswordMismatchException;
@@ -13,10 +10,12 @@ import com.example.equipmentmanagement.mapper.UserMapper;
 import com.example.equipmentmanagement.model.Role;
 import com.example.equipmentmanagement.model.User;
 import com.example.equipmentmanagement.repository.UserRepository;
+import com.example.equipmentmanagement.specification.UserSpecification;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,8 +36,9 @@ public class UserService {
         this.roleService = roleService;
     }
 
-    public Page<UserDto> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(userMapper::userToUserDto);
+    public Page<UserDto> getAllUsers(UserFilter filter, Pageable pageable) {
+        Specification<User> spec = UserSpecification.prepareSpecification(filter);
+        return userRepository.findAll(spec, pageable).map(userMapper::userToUserDto);
     }
 
     public List<UserDto> getActiveUsers() {
