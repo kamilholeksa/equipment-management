@@ -1,28 +1,28 @@
 <div class="form-container">
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-    <h5 class="text-center">{{ isEditMode ? 'Edytuj użytkownika' : 'Dodaj użytkownika' }}</h5>
+    <h5 class="text-center">{{ isEditMode ? 'Edit user' : 'Add new user' }}</h5>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Imię</mat-label>
+      <mat-label>First name</mat-label>
       <input matInput formControlName="firstName" required />
       @if (userForm.controls['firstName'].hasError('required')) {
-        <mat-error>Pole wymagane</mat-error>
+        <mat-error>First name is required</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Nazwisko</mat-label>
+      <mat-label>Last name</mat-label>
       <input matInput formControlName="lastName" required />
       @if (userForm.controls['lastName'].hasError('required')) {
-        <mat-error>Pole wymagane</mat-error>
+        <mat-error>Last name is required</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Nazwa użytkownika</mat-label>
+      <mat-label>Username</mat-label>
       <input matInput formControlName="username" required />
       @if (userForm.controls['username'].hasError('required')) {
-        <mat-error>Pole wymagane</mat-error>
+        <mat-error>Username is required</mat-error>
       }
     </mat-form-field>
 
@@ -30,50 +30,50 @@
       <mat-label>Email</mat-label>
       <input matInput type="email" formControlName="email" required />
       @if (userForm.controls['email'].hasError('required')) {
-        <mat-error>Pole wymagane</mat-error>
+        <mat-error>Email is required</mat-error>
       }
       @if (userForm.controls['email'].hasError('email')) {
-        <mat-error>Niepoprawny format maila</mat-error>
+        <mat-error>Email address must be in correct format, ex. johndoe&#x40;mail.com</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Numer telefonu</mat-label>
+      <mat-label>Phone number</mat-label>
       <input matInput formControlName="phoneNumber" />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Role</mat-label>
+      <mat-label>Roles</mat-label>
       <mat-select formControlName="roles" multiple required>
         @for (role of roles; track role) {
           <mat-option [value]="role.name">{{ role.name | roleDisplay }}</mat-option>
         }
       </mat-select>
       @if (userForm.controls['roles'].hasError('required')) {
-        <mat-error>Pole wymagane</mat-error>
+        <mat-error>At least one role is required</mat-error>
       }
     </mat-form-field>
 
     @if (!isEditMode) {
       <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Hasło</mat-label>
+      <mat-label>Password</mat-label>
       <input matInput type="password" formControlName="password" required>
       @if (userForm.controls['password'].hasError('required')) {
-        <mat-error>Pole wymagane</mat-error>
+        <mat-error>Password is required</mat-error>
       }
       @if (userForm.controls['password'].hasError('minlength')) {
-        <mat-error>Hasło musi mieć min. 8 znaków</mat-error>
+        <mat-error>Password must contain at least 8 characters</mat-error>
       }
     </mat-form-field>
 
       <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Powtórz hasło</mat-label>
+        <mat-label>Repeat password</mat-label>
         <input matInput type="password" formControlName="confirmPassword" required>
         @if (userForm.controls['confirmPassword'].hasError('required')) {
-          <mat-error>Pole wymagane</mat-error>
+          <mat-error>Required field</mat-error>
         }
         @if (userForm.controls['confirmPassword'].hasError('passwordMismatch')) {
-          <mat-error>Hasła muszą być zgodne</mat-error>
+          <mat-error>Passwords must match</mat-error>
         }
       </mat-form-field>
     }
@@ -81,13 +81,13 @@
 
     <button mat-flat-button type="submit" class="w-100" [disabled]="userForm.invalid">
       <i class="bi bi-floppy-fill"></i>
-      Zapisz
+      Save
     </button>
 
 
   </form>
   <button mat-stroked-button (click)="goBack()">
     <i class="bi bi-arrow-left"></i>
-    Wróć
+    Back
   </button>
 </div>

@@ -4,19 +4,20 @@ import com.example.equipmentmanagement.dto.user.AdminPasswordChangeDto;
 import com.example.equipmentmanagement.dto.user.UserDto;
 import com.example.equipmentmanagement.dto.user.UserPasswordChangeDto;
 import com.example.equipmentmanagement.dto.user.UserSaveDto;
-import com.example.equipmentmanagement.mapper.RoleMapper;
-import com.example.equipmentmanagement.mapper.UserMapper;
+import com.example.equipmentmanagement.enumeration.RoleName;
 import com.example.equipmentmanagement.exception.InvalidPasswordException;
 import com.example.equipmentmanagement.exception.PasswordMismatchException;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.exception.UserNotFoundException;
+import com.example.equipmentmanagement.mapper.RoleMapper;
+import com.example.equipmentmanagement.mapper.UserMapper;
 import com.example.equipmentmanagement.model.Role;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.enumeration.RoleName;
 import com.example.equipmentmanagement.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -105,7 +106,7 @@ public class UserService {
         }
 
         if ((!dto.getEmail().equals(existingUser.getEmail())) && userRepository.existsByEmail(dto.getEmail())) {
-            throw new ValidationException(String.format("User with username \"%s\" already exists", dto.getEmail()));
+            throw new ValidationException(String.format("User with email \"%s\" already exists", dto.getEmail()));
         }
 
         Set<Role> roles = dto.getRoles().stream()
@@ -117,6 +118,11 @@ public class UserService {
         updatedUser.setPassword(existingUser.getPassword());
 
         return toDto(userRepository.save(updatedUser));
+    }
+
+    @Transactional
+    public void deleteUser(Long id) {
+        this.userRepository.delete(findUserById(id));
     }
 
     @Transactional

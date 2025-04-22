@@ -35,12 +35,33 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
+  getUser(): void {
+    this.userService.getUser(this.user.id).subscribe({
+      next: (user) => this.user = user,
+      error: () => this.notificationService.error(),
+    });
+  }
+
   goBack() {
-    this.location.back();
+    this.router.navigate(['users']);
   }
 
   editUser() {
     this.router.navigate(['users/edit', this.user.id]);
+  }
+
+  deleteUser() {
+    const confirmed = confirm('Are you sure you want to delete user: ' + this.user.username + '?');
+
+    if (confirmed) {
+      this.userService.deleteUser(this.user.id).subscribe({
+        next: () => {
+          this.notificationService.success('User deleted successfully');
+          this.goBack();
+        },
+        error: () => this.notificationService.error(),
+      });
+    }
   }
 
   toggleActive() {
@@ -55,7 +76,7 @@ export class UserDetailsComponent implements OnInit {
 
     if (confirmed) {
       this.userService.toggleActive(this.user.id).subscribe({
-        next: () => window.location.reload(),
+        next: () => this.getUser(),
         error: () => this.notificationService.error(),
       });
     }

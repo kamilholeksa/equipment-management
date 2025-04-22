@@ -9,7 +9,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { NgIf } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../../notification/services/notification.service';
 import { Router } from '@angular/router';
@@ -23,7 +22,6 @@ import { Router } from '@angular/router';
     MatInputModule,
     ReactiveFormsModule,
     MatButtonModule,
-    NgIf,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

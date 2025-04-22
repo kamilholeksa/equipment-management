@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import {DatePipe, NgClass, NgIf} from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -20,7 +20,6 @@ import { NotificationService } from '../../../../core/notification/services/noti
     MatDialogModule,
     MatButtonModule,
     TransferStatusDisplayPipe,
-    NgIf,
     NgClass,
   ],
   templateUrl: './service-request-details-dialog.component.html',
@@ -43,14 +42,18 @@ export class ServiceRequestDetailsDialogComponent {
   }
 
   cancelServiceRequest() {
-    const confirmed = confirm('Are you sure you want to cancel this service request?');
+    const confirmed = confirm(
+      'Are you sure you want to cancel this service request?',
+    );
 
     if (confirmed) {
       this.serviceRequestService
         .cancelServiceRequest(this.serviceRequest.id)
         .subscribe({
           next: () => {
-            this.notificationService.success('Service request has been cancelled');
+            this.notificationService.success(
+              'Service request has been cancelled',
+            );
             this.dialogRef.close();
             window.location.reload();
           },

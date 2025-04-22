@@ -6,9 +6,11 @@
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Address</mat-label>
       <mat-select formControlName="newAddressId">
-        <mat-option *ngFor="let address of addressList" [value]="address.id">
-          {{ address.description + ' (' + address.street + ' ' + address.number + ', ' + address.postalCode + ' ' + address.city + ')' }}
-        </mat-option>
+        @for (address of addressList; track address.id) {
+          <mat-option [value]="address.id">
+            {{ address.description + ' (' + address.street + ' ' + address.number + ', ' + address.postalCode + ' ' + address.city + ')' }}
+          </mat-option>
+        }
       </mat-select>
       @if (form.controls['newAddressId'].hasError('required')) {
         <mat-error>Address is required</mat-error>

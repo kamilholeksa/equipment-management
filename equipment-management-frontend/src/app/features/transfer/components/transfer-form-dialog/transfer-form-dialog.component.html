@@ -6,9 +6,11 @@
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Target user</mat-label>
       <mat-select formControlName="obtainerId">
-        <mat-option *ngFor="let user of userList" [value]="user.id">
-          {{ user.firstName + ' ' + user.lastName + ' (' + user.username + ')' }}
-        </mat-option>
+        @for (user of userList; track user.id) {
+          <mat-option [value]="user.id">
+            {{ user.firstName + ' ' + user.lastName + ' (' + user.username + ')' }}
+          </mat-option>
+        }
       </mat-select>
       @if (transferForm.controls['obtainerId'].hasError('required')) {
         <mat-error>User is required</mat-error>

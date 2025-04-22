@@ -9,7 +9,6 @@ import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { NgForOf } from '@angular/common';
 import { DialogRef } from '@angular/cdk/dialog';
 import { ServiceRequestService } from '../../services/service-request.service';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
@@ -28,7 +27,6 @@ import { MatSelectModule } from '@angular/material/select';
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
-    NgForOf,
   ],
   templateUrl: './service-request-assign-dialog.component.html',
   styleUrl: './service-request-assign-dialog.component.scss',

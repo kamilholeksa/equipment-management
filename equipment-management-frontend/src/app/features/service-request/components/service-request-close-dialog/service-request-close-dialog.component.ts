@@ -12,7 +12,6 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { MatButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-service-request-close-dialog',
@@ -22,7 +21,6 @@ import { NgIf } from '@angular/common';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
     FormsModule,
     ReactiveFormsModule,
   ],
@@ -50,9 +48,7 @@ export class ServiceRequestCloseDialogComponent {
         .closeServiceRequest(this.data.serviceRequestId, data)
         .subscribe({
           next: () => {
-            this.notificationService.success(
-              'Service request has been closed',
-            );
+            this.notificationService.success('Service request has been closed');
             this.dialogRef.close();
             window.location.reload();
           },

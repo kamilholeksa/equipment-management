@@ -31,13 +31,17 @@
     <span [ngClass]="getStatusClass(serviceRequest.status)">{{ serviceRequest.status | serviceRequestStatusDisplay }}</span>
   </div>
 
-  <div class="mb-2" *ngIf="serviceRequest.closeInfo">
-    <span class="mb-0">Closing information: </span>
-    <span class="fw-medium mb-0">{{ serviceRequest.closeInfo }}</span>
-  </div>
+  @if (serviceRequest.closeInfo) {
+    <div class="mb-2">
+      <span class="mb-0">Closing information: </span>
+      <span class="fw-medium mb-0">{{ serviceRequest.closeInfo }}</span>
+    </div>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions class="mt-4" align="end">
   <button mat-button mat-dialog-close>Close</button>
-  <button *ngIf="serviceRequest.status === ServiceRequestStatusEnum.NEW" mat-flat-button (click)="cancelServiceRequest()" class="delete-button">Cancel service request</button>
+  @if (serviceRequest.status === ServiceRequestStatusEnum.NEW) {
+    <button mat-flat-button (click)="cancelServiceRequest()" class="delete-button">Cancel service request</button>
+  }
 </mat-dialog-actions>

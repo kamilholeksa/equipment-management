@@ -15,7 +15,6 @@ import { NotificationService } from '../../../../core/notification/services/noti
 import { AddressService } from '../../services/address.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { NgIf } from '@angular/common';
 import { Address } from '../../models/address.model';
 
 @Component({
@@ -66,15 +65,10 @@ export class AddressFormDialogComponent implements OnInit {
           .updateAddress(this.data.address.id, data)
           .subscribe({
             next: () => {
-              this.notificationService.success(
-                'Location has been updated',
-              );
+              this.notificationService.success('Location has been updated');
               this.dialogRef.close(true);
             },
-            error: (err) =>
-              this.notificationService.error(
-                err.error.message,
-              ),
+            error: (err) => this.notificationService.error(err.error.message),
           });
       } else {
         this.addressService.createAddress(data).subscribe({
@@ -82,8 +76,7 @@ export class AddressFormDialogComponent implements OnInit {
             this.notificationService.success('Location has been created');
             this.dialogRef.close(true);
           },
-          error: () =>
-            this.notificationService.error(),
+          error: () => this.notificationService.error(),
         });
       }
     }

@@ -25,27 +25,27 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<Page<UserDto>> getAllUsers(Pageable pageable) {
-        return ResponseEntity.ok(this.userService.getAllUsers(pageable));
+        return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
     @GetMapping("/active")
     public ResponseEntity<List<UserDto>> getActiveUsers() {
-        return ResponseEntity.ok(this.userService.getActiveUsers());
+        return ResponseEntity.ok(userService.getActiveUsers());
     }
 
     @GetMapping("/active-technicians")
     public ResponseEntity<List<UserDto>> getActiveTechniciansUsers() {
-        return ResponseEntity.ok(this.userService.getActiveTechniciansUsers());
+        return ResponseEntity.ok(userService.getActiveTechniciansUsers());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(this.userService.getUser(id));
+        return ResponseEntity.ok(userService.getUser(id));
     }
 
     @GetMapping("/account")
     public ResponseEntity<UserDto> getCurrentUser() {
-        return ResponseEntity.ok(this.userService.getCurrentUser());
+        return ResponseEntity.ok(userService.getCurrentUser());
     }
 
     @PostMapping()
@@ -60,21 +60,27 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     @PatchMapping("/{id}/change-password")
     public ResponseEntity<ResponseMessage> changePassword(@PathVariable("id") Long id, @Valid @RequestBody AdminPasswordChangeDto dto) {
-        this.userService.changePassword(id, dto);
+        userService.changePassword(id, dto);
         return ResponseEntity.ok(new ResponseMessage("Password changed successfully"));
     }
 
     @PatchMapping("/change-password")
     public ResponseEntity<ResponseMessage> changeCurrentUserPassword(@Valid @RequestBody UserPasswordChangeDto dto) {
-        this.userService.changeCurrentUserPassword(dto);
+        userService.changeCurrentUserPassword(dto);
         return ResponseEntity.ok(new ResponseMessage("Password changed successfully"));
     }
 
     @PatchMapping("{id}/toggle-active")
     public ResponseEntity<ResponseMessage> toggleActive(@PathVariable("id") Long id) {
-        this.userService.toggleActive(id);
+        userService.toggleActive(id);
         return ResponseEntity.ok(new ResponseMessage("User status changed successfully"));
     }
 }

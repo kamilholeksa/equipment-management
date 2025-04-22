@@ -28,6 +28,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: #e3e3e3;
 }
 
+.delete-button {
+  color: #d0271f !important;
+}
+
 /* Status badges styling */
 .status-badge {
   display: inline-block;

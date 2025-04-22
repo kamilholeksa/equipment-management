@@ -89,10 +89,14 @@
       </td>
     </ng-container>
 
-    <ng-container *ngIf="showAllEquipment" matColumnDef="user">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>User</th>
-      <td mat-cell *matCellDef="let equipment"> {{ equipment.user ? equipment.user?.firstName + ' ' + equipment.user?.lastName : '' }}</td>
-    </ng-container>
+    @if (showAllEquipment) {
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>User</th>
+        <td mat-cell
+            *matCellDef="let equipment"> {{ equipment.user ? equipment.user?.firstName + ' ' + equipment.user?.lastName : '' }}
+        </td>
+      </ng-container>
+    }
 
     <ng-container matColumnDef="purchaseDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Purchase date</th>
@@ -104,10 +108,12 @@
       <td mat-cell *matCellDef="let equipment"> {{ equipment.warrantyUntil }}</td>
     </ng-container>
 
-    <ng-container *ngIf="showAllEquipment" matColumnDef="withdrawalDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Withdrawal date</th>
-      <td mat-cell *matCellDef="let equipment"> {{ equipment.withdrawalDate }}</td>
-    </ng-container>
+    @if (showAllEquipment) {
+      <ng-container matColumnDef="withdrawalDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Withdrawal date</th>
+        <td mat-cell *matCellDef="let equipment"> {{ equipment.withdrawalDate }}</td>
+      </ng-container>
+    }
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
@@ -136,9 +142,11 @@
   ></mat-paginator>
 </div>
 
-<div class="mt-4" *ngIf="showAllEquipment">
-  <button mat-flat-button routerLink="/equipment/new">
-    <i class="bi bi-plus-lg"></i>
-    Add equipment
-  </button>
-</div>
+@if (showAllEquipment) {
+  <div class="mt-4">
+    <button mat-flat-button routerLink="/equipment/new">
+      <i class="bi bi-plus-lg"></i>
+      Add equipment
+    </button>
+  </div>
+}

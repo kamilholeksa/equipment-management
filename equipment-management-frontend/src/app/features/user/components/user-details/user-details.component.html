@@ -66,8 +66,12 @@
         Activate
       }
     </button>
-    <button mat-stroked-button (click)="changePassword()">
+    <button mat-stroked-button (click)="changePassword()" class="me-2">
       Change password
+    </button>
+    <button mat-stroked-button (click)="deleteUser()" class="delete-button">
+      <i class="bi bi-trash"></i>
+      Delete
     </button>
   </div>
 

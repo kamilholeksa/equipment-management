@@ -15,7 +15,6 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
 import { MatInputModule } from '@angular/material/input';
-import { NgIf } from '@angular/common';
 import { EquipmentService } from '../../../equipment/services/equipment.service';
 import { ServiceRequestService } from '../../services/service-request.service';
 import { Equipment } from '../../../equipment/models/equipment.model';
@@ -30,7 +29,6 @@ import { Equipment } from '../../../equipment/models/equipment.model';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
-    NgIf,
   ],
   templateUrl: './service-request-form-dialog.component.html',
   styleUrl: './service-request-form-dialog.component.scss',
@@ -64,7 +62,9 @@ export class ServiceRequestFormDialogComponent {
 
       this.serviceRequestService.createServiceRequest(data).subscribe({
         next: () => {
-          this.notificationService.success('New service request has been created');
+          this.notificationService.success(
+            'New service request has been created',
+          );
           this.dialogRef.close();
           window.location.reload();
         },

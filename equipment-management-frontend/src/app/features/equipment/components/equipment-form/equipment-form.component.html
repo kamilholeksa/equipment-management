@@ -39,9 +39,11 @@
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Type</mat-label>
       <mat-select formControlName="typeId" required>
-        <mat-option *ngFor="let type of equipmentTypeList" [value]="type.id">
-          {{ type.name }}
-        </mat-option>
+        @for (type of equipmentTypeList; track type.id) {
+          <mat-option [value]="type.id">
+            {{ type.name }}
+          </mat-option>
+        }
       </mat-select>
       @if (equipmentForm.controls['typeId'].hasError('required')) {
         <mat-error>Equipment type is required</mat-error>
@@ -51,9 +53,11 @@
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Address</mat-label>
       <mat-select formControlName="addressId">
-        <mat-option *ngFor="let address of addressList" [value]="address.id">
-          {{ address.description + ' (' + address.street + ' ' + address.number + ', ' + address.postalCode + ' ' + address.city + ')' }}
-        </mat-option>
+        @for (address of addressList; track address.id) {
+          <mat-option [value]="address.id">
+            {{ address.description + ' (' + address.street + ' ' + address.number + ', ' + address.postalCode + ' ' + address.city + ')' }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
@@ -62,14 +66,16 @@
       <input matInput formControlName="location" />
     </mat-form-field>
 
-    <mat-form-field *ngIf="this.isEditMode" appearance="outline" class="form-field">
-      <mat-label>Status</mat-label>
-      <mat-select formControlName="status" required>
-        <mat-option *ngFor="let status of statuses" [value]="status">
-          {{ status | equipmentStatusDisplay }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    @if (isEditMode) {
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status" required>
+          @for (status of statuses; track status) {
+            <mat-option [value]="status">{{ status | equipmentStatusDisplay }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
 
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Purchase date</mat-label>

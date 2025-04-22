@@ -8,7 +8,7 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { EquipmentStatusDisplayPipe } from '../../../../shared/pipes/equipment-status-display.pipe';
 import { Equipment } from '../../models/equipment.model';
@@ -30,7 +30,6 @@ import { EquipmentStatusEnum } from '../../../../shared/enums/equipment-status.e
     MatSortModule,
     MatPaginatorModule,
     MatButtonModule,
-    NgIf,
     RouterLink,
     EquipmentStatusDisplayPipe,
     NgClass,

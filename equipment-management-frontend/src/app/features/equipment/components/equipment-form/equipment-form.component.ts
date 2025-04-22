@@ -13,7 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Location, NgForOf, NgIf } from '@angular/common';
+import { Location } from '@angular/common';
 import { EquipmentStatusEnum } from '../../../../shared/enums/equipment-status.enum';
 import { EquipmentStatusDisplayPipe } from '../../../../shared/pipes/equipment-status-display.pipe';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
@@ -33,8 +33,6 @@ import { Equipment } from '../../models/equipment.model';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    NgForOf,
-    NgIf,
     EquipmentStatusDisplayPipe,
   ],
   templateUrl: './equipment-form.component.html',

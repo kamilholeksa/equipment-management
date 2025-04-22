@@ -16,11 +16,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Location, NgForOf } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
 import { User } from '../../models/user.model';
-import {RoleDisplayPipe} from '../../../../shared/pipes/role-display.pipe';
+import { RoleDisplayPipe } from '../../../../shared/pipes/role-display.pipe';
 
 @Component({
   selector: 'app-user-form',
@@ -32,7 +32,6 @@ import {RoleDisplayPipe} from '../../../../shared/pipes/role-display.pipe';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    NgForOf,
     RoleDisplayPipe,
   ],
   templateUrl: './user-form.component.html',
@@ -50,6 +49,7 @@ export class UserFormComponent implements OnInit {
     private route: ActivatedRoute,
     private notificationService: NotificationService,
     private location: Location,
+    private router: Router,
   ) {
     this.userForm = new FormGroup({
       firstName: new FormControl('', Validators.required),
@@ -76,7 +76,7 @@ export class UserFormComponent implements OnInit {
       error: () => this.notificationService.error(),
     });
 
-    this.userId = +this.route.snapshot.paramMap.get('id')!;
+    this.userId = Number(this.route.snapshot.paramMap.get('id'));
     if (this.userId) {
       this.isEditMode = true;
       this.userService.getUser(this.userId).subscribe({
@@ -131,13 +131,23 @@ export class UserFormComponent implements OnInit {
         : this.userService.createUser(userData);
 
       observable.subscribe({
-        next: () => this.goBack(),
+        next: () => {
+          if (this.isEditMode) {
+            this.notificationService.success('User has been updated');
+            this.router.navigate(['users', this.userId]);
+          } else {
+            this.notificationService.success('User has been created');
+            this.router.navigate(['users']);
+          }
+        },
         error: (err) => this.notificationService.error(err.error.message),
       });
     }
   }
 
   goBack() {
-    this.location.back();
+    this.isEditMode
+      ? this.router.navigate(['users', this.userId])
+      : this.router.navigate(['users']);
   }
 }

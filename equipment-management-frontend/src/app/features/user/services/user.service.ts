@@ -55,6 +55,10 @@ export class UserService {
     return this.http.put<User>(this.apiUrl + `/${id}`, user);
   }
 
+  deleteUser(userId: number): Observable<void> {
+    return this.http.delete<void>(this.apiUrl + `/${userId}`);
+  }
+
   changePassword(id: number, data: ChangePasswordModel): Observable<any> {
     return this.http.patch<any>(this.apiUrl + `/${id}/change-password`, data);
   }

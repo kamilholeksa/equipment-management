@@ -8,7 +8,6 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
-import { NgForOf } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -33,7 +32,6 @@ import { Address } from '../../../address/models/address.model';
     ReactiveFormsModule,
     MatOption,
     MatSelect,
-    NgForOf,
   ],
   templateUrl: './transfer-accept-dialog.component.html',
   styleUrl: './transfer-accept-dialog.component.scss',

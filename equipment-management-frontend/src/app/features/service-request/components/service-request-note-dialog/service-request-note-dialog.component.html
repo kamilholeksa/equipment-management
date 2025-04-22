@@ -29,6 +29,6 @@
   <button mat-button mat-dialog-close>Close</button>
   @if (isOwner) {
     <button mat-flat-button (click)="updateNote()">Save</button>
-    <button mat-flat-button (click)="deleteNote()" class="delete-button">Delete</button>
+    <button mat-stroked-button (click)="deleteNote()" class="delete-button">Delete</button>
   }
 </mat-dialog-actions>

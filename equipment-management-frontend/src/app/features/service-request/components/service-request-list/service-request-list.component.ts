@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-import {DatePipe, Location, NgClass, NgIf} from '@angular/common';
+import { DatePipe, Location, NgClass } from '@angular/common';
 import { TransferStatusDisplayPipe } from '../../../../shared/pipes/service-request-status-display.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceRequestDetailsDialogComponent } from '../service-request-details-dialog/service-request-details-dialog.component';
@@ -25,7 +25,6 @@ import { NotificationService } from '../../../../core/notification/services/noti
     MatSortModule,
     MatPaginatorModule,
     MatButtonModule,
-    NgIf,
     DatePipe,
     TransferStatusDisplayPipe,
     NgClass,
