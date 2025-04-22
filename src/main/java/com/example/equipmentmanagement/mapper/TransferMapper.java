@@ -5,48 +5,35 @@ import com.example.equipmentmanagement.dto.transfer.TransferSaveDto;
 import com.example.equipmentmanagement.model.Equipment;
 import com.example.equipmentmanagement.model.Transfer;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.enumeration.TransferStatus;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class TransferMapper {
+@Mapper(componentModel = "spring", uses = {EquipmentMapper.class, UserMapper.class})
+public interface TransferMapper {
 
-    private TransferMapper() {
+    TransferDto transferToTransferDto(Transfer transfer);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "equipment", expression = "java(mapEquipment(dto.getEquipmentId()))")
+    @Mapping(target = "transferor", expression = "java(mapUser(dto.getTransferorId()))")
+    @Mapping(target = "obtainer", expression = "java(mapUser(dto.getObtainerId()))")
+    Transfer transferSaveDtoToTransfer(TransferSaveDto dto);
+
+    default Equipment mapEquipment(Long equipmentId) {
+        if (equipmentId == null) return null;
+        Equipment equipment = new Equipment();
+        equipment.setId(equipmentId);
+        return equipment;
     }
 
-    public static TransferDto toDto(Transfer transfer) {
-        TransferDto dto = new TransferDto();
-        dto.setId(transfer.getId());
-        dto.setRequestDate(transfer.getRequestDate());
-        dto.setDecisionDate(transfer.getDecisionDate());
-        dto.setStatus(transfer.getStatus().toString());
-        dto.setCreatedBy(transfer.getCreatedBy());
-        dto.setCreatedDate(transfer.getCreatedDate());
-        dto.setLastModifiedBy(transfer.getLastModifiedBy());
-        dto.setLastModifiedDate(transfer.getLastModifiedDate());
-
-        if (transfer.getEquipment() != null) {
-            dto.setEquipment(EquipmentMapper.toDto(transfer.getEquipment()));
-        }
-
-        if (transfer.getTransferor() != null) {
-            dto.setTransferor(UserMapper.toDto(transfer.getTransferor()));
-        }
-
-        if (transfer.getObtainer() != null) {
-            dto.setObtainer(UserMapper.toDto(transfer.getObtainer()));
-        }
-
-        return dto;
-    }
-
-    public static Transfer toEntity(TransferSaveDto dto, Equipment equipment, User transferor, User obtainer) {
-        Transfer transfer = new Transfer();
-        transfer.setRequestDate(dto.getRequestDate());
-        transfer.setDecisionDate(dto.getDecisionDate());
-        transfer.setStatus(TransferStatus.valueOf(dto.getStatus()));
-        transfer.setEquipment(equipment);
-        transfer.setTransferor(transferor);
-        transfer.setObtainer(obtainer);
-
-        return transfer;
+    default User mapUser(Long userId) {
+        if (userId == null) return null;
+        User user = new User();
+        user.setId(userId);
+        return user;
     }
 }

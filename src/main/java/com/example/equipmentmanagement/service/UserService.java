@@ -9,7 +9,6 @@ import com.example.equipmentmanagement.exception.InvalidPasswordException;
 import com.example.equipmentmanagement.exception.PasswordMismatchException;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.exception.UserNotFoundException;
-import com.example.equipmentmanagement.mapper.RoleMapper;
 import com.example.equipmentmanagement.mapper.UserMapper;
 import com.example.equipmentmanagement.model.Role;
 import com.example.equipmentmanagement.model.User;
@@ -23,39 +22,36 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static com.example.equipmentmanagement.mapper.UserMapper.toDto;
-import static com.example.equipmentmanagement.mapper.UserMapper.toEntity;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
     }
 
     public Page<UserDto> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(UserMapper::toDto);
+        return userRepository.findAll(pageable).map(userMapper::userToUserDto);
     }
 
     public List<UserDto> getActiveUsers() {
-        return this.userRepository.findAllByActiveTrue().stream()
-                .map(UserMapper::toDto)
+        return userRepository.findAllByActiveTrue().stream()
+                .map(userMapper::userToUserDto)
                 .toList();
     }
 
     public List<UserDto> getActiveTechniciansUsers() {
         Role technicianRole = roleService.getRoleByName(RoleName.ROLE_TECHNICIAN);
 
-        return this.userRepository.findAllByActiveTrueAndRolesContaining(technicianRole).stream()
-                .map(UserMapper::toDto)
+        return userRepository.findAllByActiveTrueAndRolesContaining(technicianRole).stream()
+                .map(userMapper::userToUserDto)
                 .toList();
     }
 
@@ -64,7 +60,7 @@ public class UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
 
-        return toDto(user);
+        return userMapper.userToUserDto(user);
     }
 
     public User getCurrentUserEntity() {
@@ -74,7 +70,7 @@ public class UserService {
     }
 
     public UserDto getUser(Long id) {
-        return toDto(findUserById(id));
+        return userMapper.userToUserDto(findUserById(id));
     }
 
     @Transactional
@@ -87,14 +83,10 @@ public class UserService {
             throw new ValidationException(String.format("User with email \"%s\" already exists", dto.getEmail()));
         }
 
-        Set<Role> roles = dto.getRoles().stream()
-                .map(RoleMapper::toEntity)
-                .collect(Collectors.toSet());
-
-        User newUser = toEntity(dto, roles);
+        User newUser = userMapper.userSaveDtoToUser(dto);
         newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        return toDto(userRepository.save(newUser));
+        return userMapper.userToUserDto(userRepository.save(newUser));
     }
 
     @Transactional
@@ -109,20 +101,16 @@ public class UserService {
             throw new ValidationException(String.format("User with email \"%s\" already exists", dto.getEmail()));
         }
 
-        Set<Role> roles = dto.getRoles().stream()
-                .map(RoleMapper::toEntity)
-                .collect(Collectors.toSet());
-
-        User updatedUser = toEntity(dto, roles);
+        User updatedUser = userMapper.userSaveDtoToUser(dto);
         updatedUser.setId(existingUser.getId());
         updatedUser.setPassword(existingUser.getPassword());
 
-        return toDto(userRepository.save(updatedUser));
+        return userMapper.userToUserDto(userRepository.save(updatedUser));
     }
 
     @Transactional
     public void deleteUser(Long id) {
-        this.userRepository.delete(findUserById(id));
+        userRepository.delete(findUserById(id));
     }
 
     @Transactional

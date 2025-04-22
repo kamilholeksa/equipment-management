@@ -12,41 +12,41 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.equipmentmanagement.mapper.EquipmentTypeMapper.toDto;
-import static com.example.equipmentmanagement.mapper.EquipmentTypeMapper.toEntity;
-
 @Service
 public class EquipmentTypeService {
 
     private final EquipmentTypeRepository equipmentTypeRepository;
     private final EquipmentRepository equipmentRepository;
+    private final EquipmentTypeMapper equipmentTypeMapper;
 
-    public EquipmentTypeService(EquipmentTypeRepository equipmentTypeRepository, EquipmentRepository equipmentRepository) {
+    public EquipmentTypeService(EquipmentTypeRepository equipmentTypeRepository, EquipmentRepository equipmentRepository, EquipmentTypeMapper equipmentTypeMapper) {
         this.equipmentTypeRepository = equipmentTypeRepository;
         this.equipmentRepository = equipmentRepository;
+        this.equipmentTypeMapper = equipmentTypeMapper;
     }
 
     public List<EquipmentTypeDto> getAllEquipmentTypes() {
         return this.equipmentTypeRepository.findAll().stream()
-                .map(EquipmentTypeMapper::toDto)
+                .map(equipmentTypeMapper::typeToTypeDto)
                 .toList();
     }
 
     public EquipmentTypeDto getEquipmentType(Long id) {
-        return toDto(findEquipmentTypeById(id));
+        return equipmentTypeMapper.typeToTypeDto(findEquipmentTypeById(id));
     }
 
     public EquipmentTypeDto createEquipmentType(EquipmentTypeSaveDto dto) {
-        return toDto(this.equipmentTypeRepository.save(toEntity(dto)));
+        EquipmentType type = equipmentTypeMapper.typeSaveDtoToType(dto);
+        return equipmentTypeMapper.typeToTypeDto(this.equipmentTypeRepository.save(type));
     }
 
     public EquipmentTypeDto updateEquipmentType(Long id, EquipmentTypeSaveDto dto) {
         EquipmentType existingEquipmentType = findEquipmentTypeById(id);
-        EquipmentType updatedEquipmentType = toEntity(dto);
+        EquipmentType updatedEquipmentType = equipmentTypeMapper.typeSaveDtoToType(dto);
 
         updatedEquipmentType.setId(existingEquipmentType.getId());
 
-        return toDto(equipmentTypeRepository.save(updatedEquipmentType));
+        return equipmentTypeMapper.typeToTypeDto(equipmentTypeRepository.save(updatedEquipmentType));
     }
 
     public void deleteEquipmentType(Long id) {

@@ -42,6 +42,6 @@
 <mat-dialog-actions class="mt-4" align="end">
   <button mat-button mat-dialog-close>Close</button>
   @if (serviceRequest.status === ServiceRequestStatusEnum.NEW) {
-    <button mat-flat-button (click)="cancelServiceRequest()" class="delete-button">Cancel service request</button>
+    <button mat-stroked-button (click)="cancelServiceRequest()" class="delete-button">Cancel service request</button>
   }
 </mat-dialog-actions>

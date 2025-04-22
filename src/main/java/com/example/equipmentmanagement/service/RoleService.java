@@ -14,19 +14,21 @@ import java.util.List;
 public class RoleService {
 
     private final RoleRepository roleRepository;
+    private final RoleMapper roleMapper;
 
-    public RoleService(RoleRepository roleRepository) {
+    public RoleService(RoleRepository roleRepository, RoleMapper roleMapper) {
         this.roleRepository = roleRepository;
+        this.roleMapper = roleMapper;
     }
 
     public List<RoleDto> getAllRoles() {
-        return this.roleRepository.findAll().stream()
-                .map(RoleMapper::toDto)
+        return roleRepository.findAll().stream()
+                .map(roleMapper::roleToRoleDto)
                 .toList();
     }
 
     public Role getRoleByName(RoleName name) {
-        return this.roleRepository.findByName(name).orElseThrow(
+        return roleRepository.findByName(name).orElseThrow(
                 () -> new ResourceNotFoundException("Role", name.toString())
         );
     }

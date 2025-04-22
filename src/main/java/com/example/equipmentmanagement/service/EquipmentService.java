@@ -6,14 +6,9 @@ import com.example.equipmentmanagement.dto.equipment.EquipmentSaveDto;
 import com.example.equipmentmanagement.enumeration.EquipmentStatus;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.mapper.EquipmentMapper;
-import com.example.equipmentmanagement.model.Address;
 import com.example.equipmentmanagement.model.Equipment;
-import com.example.equipmentmanagement.model.EquipmentType;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.repository.AddressRepository;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
-import com.example.equipmentmanagement.repository.EquipmentTypeRepository;
-import com.example.equipmentmanagement.repository.UserRepository;
 import com.example.equipmentmanagement.specification.EquipmentSpecification;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
@@ -28,29 +23,22 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.example.equipmentmanagement.mapper.EquipmentMapper.toDto;
-import static com.example.equipmentmanagement.mapper.EquipmentMapper.toEntity;
-
 @Service
 public class EquipmentService {
 
     private final EquipmentRepository equipmentRepository;
-    private final EquipmentTypeRepository equipmentTypeRepository;
-    private final AddressRepository addressRepository;
-    private final UserRepository userRepository;
+    private final EquipmentMapper equipmentMapper;
     private final EquipmentHistoryService equipmentHistoryService;
 
-    public EquipmentService(EquipmentRepository equipmentRepository, EquipmentTypeRepository equipmentTypeRepository, AddressRepository addressRepository, UserRepository userRepository, EquipmentHistoryService equipmentHistoryService) {
+    public EquipmentService(EquipmentRepository equipmentRepository, EquipmentMapper equipmentMapper, EquipmentHistoryService equipmentHistoryService) {
         this.equipmentRepository = equipmentRepository;
-        this.equipmentTypeRepository = equipmentTypeRepository;
-        this.addressRepository = addressRepository;
-        this.userRepository = userRepository;
+        this.equipmentMapper = equipmentMapper;
         this.equipmentHistoryService = equipmentHistoryService;
     }
 
     public Page<EquipmentDto> getAllEquipment(EquipmentFilter filter, Pageable pageable) {
         Specification<Equipment> spec = EquipmentSpecification.prepareSpecification(filter);
-        return equipmentRepository.findAll(spec, pageable).map(EquipmentMapper::toDto);
+        return equipmentRepository.findAll(spec, pageable).map(equipmentMapper::equipmentToEquipmentDto);
     }
 
     public Page<EquipmentDto> getCurrentUserEquipment(EquipmentFilter filter, Pageable pageable) {
@@ -63,17 +51,17 @@ public class EquipmentService {
         filter.setUserId(users);
         Specification<Equipment> spec = EquipmentSpecification.prepareSpecification(filter);
 
-        return equipmentRepository.findAll(spec, pageable).map(EquipmentMapper::toDto);
+        return equipmentRepository.findAll(spec, pageable).map(equipmentMapper::equipmentToEquipmentDto);
     }
 
     public EquipmentDto getEquipment(Long id) {
-        return toDto(findEquipmentById(id));
+        return equipmentMapper.equipmentToEquipmentDto(findEquipmentById(id));
     }
 
     @Transactional
     public EquipmentDto createEquipment(EquipmentSaveDto dto) {
         Equipment newEquipment = prepareAndValidateEquipment(dto, null);
-        return toDto(equipmentRepository.save(newEquipment));
+        return equipmentMapper.equipmentToEquipmentDto(equipmentRepository.save(newEquipment));
     }
 
     @Transactional
@@ -83,7 +71,7 @@ public class EquipmentService {
         Equipment updatedEquipment = prepareAndValidateEquipment(dto, existingEquipment);
         equipmentHistoryService.saveEquipmentHistory(existingEquipment, updatedEquipment);
 
-        return toDto(equipmentRepository.save(updatedEquipment));
+        return equipmentMapper.equipmentToEquipmentDto(equipmentRepository.save(updatedEquipment));
     }
 
     @Transactional
@@ -104,21 +92,6 @@ public class EquipmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Equipment", id));
     }
 
-    private EquipmentType findEquipmentTypeById(Long id) {
-        return equipmentTypeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Type", id));
-    }
-
-    private Address findAddressById(Long id) {
-        return addressRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Address", id));
-    }
-
-    private User findUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", id));
-    }
-
     private Equipment prepareAndValidateEquipment(EquipmentSaveDto dto, Equipment existingEquipment) {
         dto.setSerialNumber(dto.getSerialNumber() != null && dto.getSerialNumber().isEmpty() ? null : dto.getSerialNumber());
 
@@ -133,11 +106,7 @@ public class EquipmentService {
             throw new ValidationException(String.format("Equipment with inventory number \"%s\" already exists", dto.getInventoryNumber()));
         }
 
-        EquipmentType type = dto.getTypeId() != null ? findEquipmentTypeById(dto.getTypeId()) : null;
-        Address address = dto.getAddressId() != null ? findAddressById(dto.getAddressId()) : null;
-        User user = dto.getUserId() != null ? findUserById(dto.getUserId()) : null;
-
-        Equipment equipment = toEntity(dto, type, address, user);
+        Equipment equipment = equipmentMapper.equipmentSaveDtoToEquipment(dto);
 
         if (existingEquipment != null) {
             equipment.setId(existingEquipment.getId());

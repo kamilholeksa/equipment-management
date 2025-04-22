@@ -16,14 +16,16 @@ import java.util.Objects;
 public class EquipmentHistoryService {
 
     private final EquipmentHistoryRepository repository;
+    private final EquipmentHistoryMapper equipmentHistoryMapper;
 
-    public EquipmentHistoryService(EquipmentHistoryRepository repository) {
+    public EquipmentHistoryService(EquipmentHistoryRepository repository, EquipmentHistoryMapper equipmentHistoryMapper) {
         this.repository = repository;
+        this.equipmentHistoryMapper = equipmentHistoryMapper;
     }
 
     public List<EquipmentHistoryDto> getHistoryByEquipmentId(Long id) {
         return this.repository.findByEquipmentId(id).stream()
-                .map(EquipmentHistoryMapper::toDto)
+                .map(equipmentHistoryMapper::historyToHistoryDto)
                 .toList();
     }
 

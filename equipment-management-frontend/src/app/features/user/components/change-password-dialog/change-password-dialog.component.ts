@@ -85,7 +85,7 @@ export class ChangePasswordDialogComponent implements OnInit {
           this.notificationService.success('Password has been changed');
           this.dialogRef.close();
         },
-        error: () => this.notificationService.error(),
+        error: (err) => this.notificationService.error(err.error.message),
       });
     }
   }

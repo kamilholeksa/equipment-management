@@ -1,33 +1,28 @@
 package com.example.equipmentmanagement.service;
 
+import com.example.equipmentmanagement.dto.transfer.AcceptTransferRequest;
 import com.example.equipmentmanagement.dto.transfer.TransferDto;
 import com.example.equipmentmanagement.dto.transfer.TransferSaveDto;
 import com.example.equipmentmanagement.dto.user.UserDto;
-import com.example.equipmentmanagement.mapper.TransferMapper;
-import com.example.equipmentmanagement.dto.transfer.AcceptTransferRequest;
+import com.example.equipmentmanagement.enumeration.EquipmentStatus;
+import com.example.equipmentmanagement.enumeration.TransferStatus;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
+import com.example.equipmentmanagement.mapper.TransferMapper;
 import com.example.equipmentmanagement.model.Address;
 import com.example.equipmentmanagement.model.Equipment;
 import com.example.equipmentmanagement.model.Transfer;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.enumeration.EquipmentStatus;
-import com.example.equipmentmanagement.enumeration.TransferStatus;
 import com.example.equipmentmanagement.repository.AddressRepository;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
 import com.example.equipmentmanagement.repository.TransferRepository;
-import com.example.equipmentmanagement.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
-
-import static com.example.equipmentmanagement.mapper.TransferMapper.toDto;
-import static com.example.equipmentmanagement.mapper.TransferMapper.toEntity;
 
 @Service
 public class TransferService {
@@ -36,37 +31,37 @@ public class TransferService {
     private EntityManager entityManager;
 
     private final TransferRepository transferRepository;
+    private final TransferMapper transferMapper;
     private final EquipmentRepository equipmentRepository;
-    private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final UserService userService;
     private final EquipmentHistoryService equipmentHistoryService;
 
-    public TransferService(TransferRepository transferRepository, EquipmentRepository equipmentRepository, UserRepository userRepository, AddressRepository addressRepository, UserService userService, EquipmentHistoryService equipmentHistoryService) {
+    public TransferService(TransferRepository transferRepository, TransferMapper transferMapper, EquipmentRepository equipmentRepository, AddressRepository addressRepository, UserService userService, EquipmentHistoryService equipmentHistoryService) {
         this.transferRepository = transferRepository;
+        this.transferMapper = transferMapper;
         this.equipmentRepository = equipmentRepository;
-        this.userRepository = userRepository;
         this.addressRepository = addressRepository;
         this.userService = userService;
         this.equipmentHistoryService = equipmentHistoryService;
     }
 
     public Page<TransferDto> getAllTransfers(Pageable pageable) {
-        return transferRepository.findAll(pageable).map(TransferMapper::toDto);
+        return transferRepository.findAll(pageable).map(transferMapper::transferToTransferDto);
     }
 
     public Page<TransferDto> getTransfersToAccept(Pageable pageable) {
         UserDto user = userService.getCurrentUser();
-        return transferRepository.getTransfersByObtainerUsernameAndStatus(user.getUsername(), TransferStatus.PENDING, pageable).map(TransferMapper::toDto);
+        return transferRepository.getTransfersByObtainerUsernameAndStatus(user.getUsername(), TransferStatus.PENDING, pageable).map(transferMapper::transferToTransferDto);
     }
 
     public Page<TransferDto> getMyTransfers(Pageable pageable) {
         UserDto user = userService.getCurrentUser();
-        return transferRepository.getTransfersByTransferorUsernameOrObtainerUsername(user.getUsername(), user.getUsername(), pageable).map(TransferMapper::toDto);
+        return transferRepository.getTransfersByTransferorUsernameOrObtainerUsername(user.getUsername(), user.getUsername(), pageable).map(transferMapper::transferToTransferDto);
     }
 
     public TransferDto getTransfer(Long id) {
-        return toDto(findTransferById(id));
+        return transferMapper.transferToTransferDto(findTransferById(id));
     }
 
     @Transactional
@@ -77,24 +72,18 @@ public class TransferService {
         dto.setStatus(TransferStatus.PENDING.toString());
         dto.setTransferorId(user.getId());
 
-        Equipment equipment = findEquipmentById(dto.getEquipmentId());
-        User transferor = findUserById(dto.getTransferorId());
-        User obtainer = findUserById(dto.getObtainerId());
+        Transfer transfer = transferMapper.transferSaveDtoToTransfer(dto);
 
-        return toDto(transferRepository.save(toEntity(dto, equipment, transferor, obtainer)));
+        return transferMapper.transferToTransferDto(transferRepository.save(transfer));
     }
 
     @Transactional
     public TransferDto updateTransfer(Long id, TransferSaveDto dto) {
         Transfer existingTransfer = findTransferById(id);
-        Equipment equipment = findEquipmentById(dto.getEquipmentId());
-        User transferor = findUserById(dto.getTransferorId());
-        User obtainer = findUserById(dto.getObtainerId());
-
-        Transfer updatedTransfer = toEntity(dto, equipment, transferor, obtainer);
+        Transfer updatedTransfer = transferMapper.transferSaveDtoToTransfer(dto);
         updatedTransfer.setId(existingTransfer.getId());
 
-        return toDto(transferRepository.save(updatedTransfer));
+        return transferMapper.transferToTransferDto(transferRepository.save(updatedTransfer));
     }
 
     @Transactional
@@ -143,11 +132,6 @@ public class TransferService {
     private Equipment findEquipmentById(Long id) {
         return equipmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Equipment", id));
-    }
-
-    private User findUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", id));
     }
 
     private Address findAddressById(Long id) {

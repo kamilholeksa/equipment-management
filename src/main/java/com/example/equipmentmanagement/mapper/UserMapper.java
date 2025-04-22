@@ -2,53 +2,46 @@ package com.example.equipmentmanagement.mapper;
 
 import com.example.equipmentmanagement.dto.user.UserDto;
 import com.example.equipmentmanagement.dto.user.UserSaveDto;
+import com.example.equipmentmanagement.enumeration.RoleName;
 import com.example.equipmentmanagement.model.Role;
 import com.example.equipmentmanagement.model.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class UserMapper {
+@Mapper(componentModel = "spring", uses = RoleMapper.class)
+public interface UserMapper {
+    @Mapping(target = "roles", expression = "java(mapRolesToStrings(user.getRoles()))")
+    UserDto userToUserDto(User user);
 
-    private UserMapper() {
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
+    @Mapping(target = "roles", expression = "java(mapStringsToRoles(dto.getRoles()))")
+    User userSaveDtoToUser(UserSaveDto dto);
+
+    default Set<String> mapRolesToStrings(Set<Role> roles) {
+        if (roles.isEmpty()) return new HashSet<>();
+        return roles.stream()
+                .map(role ->
+                        role.getName().name())
+                .collect(Collectors.toSet());
     }
 
-    public static UserDto toDto(User user) {
-        UserDto dto = new UserDto();
-        dto.setId(user.getId());
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
-        dto.setUsername(user.getUsername());
-        dto.setEmail(user.getEmail());
-        dto.setPhoneNumber(user.getPhoneNumber());
-        dto.setActive(user.isActive());
-        dto.setCreatedBy(user.getCreatedBy());
-        dto.setCreatedDate(user.getCreatedDate());
-        dto.setLastModifiedBy(user.getLastModifiedBy());
-        dto.setLastModifiedDate(user.getLastModifiedDate());
-
-        if (!user.getRoles().isEmpty()) {
-            Set<String> roles = user.getRoles().stream()
-                    .map(role -> role.getName().name())
-                    .collect(Collectors.toSet());
-
-            dto.setRoles(roles);
-        }
-
-        return dto;
-    }
-
-    public static User toEntity(UserSaveDto dto, Set<Role> roles) {
-        User user = new User();
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
-        user.setEmail(dto.getEmail());
-        user.setPhoneNumber(dto.getPhoneNumber());
-        user.setActive(dto.isActive());
-        user.setRoles(roles);
-
-        return user;
+    default Set<Role> mapStringsToRoles(Set<String> roles) {
+        if (roles.isEmpty()) return new HashSet<>();
+        return roles.stream()
+                .map(roleName -> {
+                    Role role = new Role();
+                    role.setName(RoleName.valueOf(roleName));
+                    return role;
+                })
+                .collect(Collectors.toSet());
     }
 }

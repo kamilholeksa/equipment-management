@@ -6,62 +6,42 @@ import com.example.equipmentmanagement.model.Address;
 import com.example.equipmentmanagement.model.Equipment;
 import com.example.equipmentmanagement.model.EquipmentType;
 import com.example.equipmentmanagement.model.User;
-import com.example.equipmentmanagement.enumeration.EquipmentStatus;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class EquipmentMapper {
+@Mapper(componentModel = "spring", uses = {UserMapper.class, AddressMapper.class, EquipmentTypeMapper.class})
+public interface EquipmentMapper {
 
-    private EquipmentMapper() {
+    EquipmentDto equipmentToEquipmentDto(Equipment equipment);
+
+    @Mapping(target = "lastModifiedDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "address", expression = "java(mapAddress(dto.getAddressId()))")
+    @Mapping(target = "user", expression = "java(mapUser(dto.getUserId()))")
+    @Mapping(target = "type", expression = "java(mapEquipmentType(dto.getTypeId()))")
+    Equipment equipmentSaveDtoToEquipment(EquipmentSaveDto dto);
+
+    default User mapUser(Long userId) {
+        if (userId == null) return null;
+        User user = new User();
+        user.setId(userId);
+        return user;
     }
 
-    public static EquipmentDto toDto(Equipment equipment) {
-        EquipmentDto dto = new EquipmentDto();
-        dto.setId(equipment.getId());
-        dto.setManufacturer(equipment.getManufacturer());
-        dto.setModel(equipment.getModel());
-        dto.setDescription(equipment.getDescription());
-        dto.setInventoryNumber(equipment.getInventoryNumber());
-        dto.setSerialNumber(equipment.getSerialNumber());
-        dto.setStatus(equipment.getStatus().toString());
-        dto.setLocation(equipment.getLocation());
-        dto.setPurchaseDate(equipment.getPurchaseDate());
-        dto.setWarrantyUntil(equipment.getWarrantyUntil());
-        dto.setWithdrawalDate(equipment.getWithdrawalDate());
-        dto.setCreatedBy(equipment.getCreatedBy());
-        dto.setCreatedDate(equipment.getCreatedDate());
-        dto.setLastModifiedBy(equipment.getLastModifiedBy());
-        dto.setLastModifiedDate(equipment.getLastModifiedDate());
-
-        if (equipment.getType() != null) {
-            dto.setType(EquipmentTypeMapper.toDto(equipment.getType()));
-        }
-
-        if (equipment.getAddress() != null) {
-            dto.setAddress(AddressMapper.toDto(equipment.getAddress()));
-        }
-
-        if (equipment.getUser() != null) {
-            dto.setUser(UserMapper.toDto(equipment.getUser()));
-        }
-
-        return dto;
+    default Address mapAddress(Long addressId) {
+        if (addressId == null) return null;
+        Address address = new Address();
+        address.setId(addressId);
+        return address;
     }
 
-    public static Equipment toEntity(EquipmentSaveDto dto, EquipmentType type, Address address, User user) {
-        Equipment equipment = new Equipment();
-        equipment.setManufacturer(dto.getManufacturer());
-        equipment.setModel(dto.getModel());
-        equipment.setDescription(dto.getDescription());
-        equipment.setInventoryNumber(dto.getInventoryNumber());
-        equipment.setSerialNumber(dto.getSerialNumber());
-        equipment.setStatus(EquipmentStatus.valueOf(dto.getStatus()));
-        equipment.setLocation(dto.getLocation());
-        equipment.setPurchaseDate(dto.getPurchaseDate());
-        equipment.setWarrantyUntil(dto.getWarrantyUntil());
-        equipment.setWithdrawalDate(dto.getWithdrawalDate());
-        equipment.setType(type);
-        equipment.setAddress(address);
-        equipment.setUser(user);
-
-        return equipment;
+    default EquipmentType mapEquipmentType(Long typeId) {
+        if (typeId == null) return null;
+        EquipmentType type = new EquipmentType();
+        type.setId(typeId);
+        return type;
     }
 }

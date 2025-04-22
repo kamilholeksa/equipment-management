@@ -4,34 +4,26 @@ import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestNoteDto;
 import com.example.equipmentmanagement.dto.servicerequest.ServiceRequestNoteSaveDto;
 import com.example.equipmentmanagement.model.ServiceRequest;
 import com.example.equipmentmanagement.model.ServiceRequestNote;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class ServiceRequestNoteMapper {
+@Mapper(componentModel = "spring", uses = ServiceRequestMapper.class)
+public interface ServiceRequestNoteMapper {
 
-    private ServiceRequestNoteMapper() {
+    ServiceRequestNoteDto noteToNoteDto(ServiceRequestNote note);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "serviceRequest", expression = "java(mapServiceRequest(dto.getServiceRequestId()))")
+    ServiceRequestNote noteSaveDtoToNote(ServiceRequestNoteSaveDto dto);
+
+    default ServiceRequest mapServiceRequest(Long requestId) {
+        if (requestId == null) return null;
+        ServiceRequest serviceRequest = new ServiceRequest();
+        serviceRequest.setId(requestId);
+        return serviceRequest;
     }
-
-    public static ServiceRequestNoteDto toDto(ServiceRequestNote serviceRequestNote) {
-        ServiceRequestNoteDto dto = new ServiceRequestNoteDto();
-        dto.setId(serviceRequestNote.getId());
-        dto.setDescription(serviceRequestNote.getDescription());
-        dto.setCreatedBy(serviceRequestNote.getCreatedBy());
-        dto.setCreatedDate(serviceRequestNote.getCreatedDate());
-        dto.setLastModifiedBy(serviceRequestNote.getLastModifiedBy());
-        dto.setLastModifiedDate(serviceRequestNote.getLastModifiedDate());
-
-        if (serviceRequestNote.getServiceRequest() != null) {
-            dto.setServiceRequest(ServiceRequestMapper.toDto(serviceRequestNote.getServiceRequest()));
-        }
-
-        return dto;
-    }
-
-    public static ServiceRequestNote toEntity(ServiceRequestNoteSaveDto dto, ServiceRequest serviceRequest) {
-        ServiceRequestNote serviceRequestNote = new ServiceRequestNote();
-        serviceRequestNote.setDescription(dto.getDescription());
-        serviceRequestNote.setServiceRequest(serviceRequest);
-
-        return serviceRequestNote;
-    }
-
 }
