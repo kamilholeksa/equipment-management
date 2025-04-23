@@ -7,6 +7,7 @@ import {
   ChangePasswordModel,
 } from '../models/change-password.model';
 import { Page } from '../../../shared/models/page.model';
+import {UserFilter} from '../models/user-filter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,12 +21,9 @@ export class UserService {
     page: number,
     size: number,
     sort?: string | null,
+    filters?: UserFilter,
   ): Observable<Page<User>> {
-    const params = new HttpParams()
-      .set('page', page)
-      .set('size', size)
-      .set('sort', sort ?? '');
-
+    const params = this.prepareHttpParams(page, size, sort, filters);
     return this.http.get<Page<User>>(this.apiUrl, {
       params,
     });
@@ -75,5 +73,31 @@ export class UserService {
 
   getStatusClass(active: boolean) {
     return active ? 'status-badge active' : 'status-badge inactive';
+  }
+
+  private prepareHttpParams(
+    page: number,
+    size: number,
+    sort?: string | null,
+    filters?: UserFilter,
+  ): HttpParams {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', sort ?? '');
+
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (
+          value !== null &&
+          value !== '' &&
+          !(Array.isArray(value) && value.length === 0)
+        ) {
+          params = params.set(key, value);
+        }
+      });
+    }
+
+    return params;
   }
 }

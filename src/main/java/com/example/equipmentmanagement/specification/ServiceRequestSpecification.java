@@ -15,9 +15,9 @@ public class ServiceRequestSpecification {
                 criteriaBuilder.equal(root.get("id"), id);
     }
 
-    public static Specification<ServiceRequest> withTitle(String manufacturer) {
+    public static Specification<ServiceRequest> withTitle(String title) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.lower(root.get("manufacturer")), "%" + manufacturer.toLowerCase() + "%");
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), "%" + title.toLowerCase() + "%");
     }
 
     public static Specification<ServiceRequest> withStatusIn(Set<String> statuses) {
@@ -51,7 +51,7 @@ public class ServiceRequestSpecification {
             spec = spec.and(withUserId(filter.getUserId()));
         }
         if (filter.getTechnicianId() != null) {
-            spec = spec.and(withTechnicianId(filter.getUserId()));
+            spec = spec.and(withTechnicianId(filter.getTechnicianId()));
         }
 
         return spec;

@@ -6,11 +6,11 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { ServiceRequest } from '../../models/service-request.model';
-import { TransferStatusDisplayPipe } from '../../../../shared/pipes/service-request-status-display.pipe';
 import { ServiceRequestStatusEnum } from '../../../../shared/enums/service-request-status.enum';
 import { MatButtonModule } from '@angular/material/button';
 import { ServiceRequestService } from '../../services/service-request.service';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
+import {ServiceRequestStatusDisplayPipe} from '../../../../shared/pipes/service-request-status-display.pipe';
 
 @Component({
   selector: 'app-service-request-details-dialog',
@@ -19,8 +19,8 @@ import { NotificationService } from '../../../../core/notification/services/noti
     DatePipe,
     MatDialogModule,
     MatButtonModule,
-    TransferStatusDisplayPipe,
     NgClass,
+    ServiceRequestStatusDisplayPipe,
   ],
   templateUrl: './service-request-details-dialog.component.html',
   styleUrl: './service-request-details-dialog.component.scss',

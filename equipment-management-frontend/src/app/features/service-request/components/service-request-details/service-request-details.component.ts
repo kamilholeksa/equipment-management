@@ -17,11 +17,11 @@ import { MatTableModule } from '@angular/material/table';
 import { ServiceRequestNoteListComponent } from '../service-request-note-list/service-request-note-list.component';
 import { ServiceRequestNoteService } from '../../services/service-request-note.service';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
-import { TransferStatusDisplayPipe } from '../../../../shared/pipes/service-request-status-display.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceRequestAssignDialogComponent } from '../service-request-assign-dialog/service-request-assign-dialog.component';
 import { ServiceRequestCloseDialogComponent } from '../service-request-close-dialog/service-request-close-dialog.component';
 import { ServiceRequestStatusEnum } from '../../../../shared/enums/service-request-status.enum';
+import {ServiceRequestStatusDisplayPipe} from '../../../../shared/pipes/service-request-status-display.pipe';
 
 @Component({
   selector: 'app-service-request-details',
@@ -34,10 +34,10 @@ import { ServiceRequestStatusEnum } from '../../../../shared/enums/service-reque
     MatButtonModule,
     MatTableModule,
     ServiceRequestNoteListComponent,
-    TransferStatusDisplayPipe,
     RouterLink,
     NgClass,
     DatePipe,
+    ServiceRequestStatusDisplayPipe,
   ],
   templateUrl: './service-request-details.component.html',
   styleUrl: './service-request-details.component.scss',

@@ -5,7 +5,7 @@ import { ServiceRequestStatusEnum } from '../enums/service-request-status.enum';
   name: 'serviceRequestStatusDisplay',
   standalone: true,
 })
-export class TransferStatusDisplayPipe implements PipeTransform {
+export class ServiceRequestStatusDisplayPipe implements PipeTransform {
   transform(value: ServiceRequestStatusEnum): string {
     const statusMap = {
       [ServiceRequestStatusEnum.NEW]: 'New',

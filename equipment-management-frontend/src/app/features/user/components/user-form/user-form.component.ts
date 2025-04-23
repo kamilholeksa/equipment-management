@@ -16,7 +16,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
 import { User } from '../../models/user.model';
@@ -48,7 +47,6 @@ export class UserFormComponent implements OnInit {
     private roleService: RoleService,
     private route: ActivatedRoute,
     private notificationService: NotificationService,
-    private location: Location,
     private router: Router,
   ) {
     this.userForm = new FormGroup({

@@ -6,6 +6,7 @@ import {
   ServiceRequest,
   ServiceRequestWithNotesModel,
 } from '../models/service-request.model';
+import { ServiceRequestFilter } from '../models/service-request-filter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +20,9 @@ export class ServiceRequestService {
     page: number,
     size: number,
     sort?: string | null,
+    filters?: ServiceRequestFilter,
   ): Observable<Page<ServiceRequest>> {
-    const params = new HttpParams()
-      .set('page', page)
-      .set('size', size)
-      .set('sort', sort ?? '');
-
+    const params = this.prepareHttpParams(page, size, sort, filters);
     return this.http.get<Page<ServiceRequest>>(this.apiUrl, {
       params,
     });
@@ -34,18 +32,12 @@ export class ServiceRequestService {
     page: number,
     size: number,
     sort?: string | null,
+    filters?: ServiceRequestFilter,
   ): Observable<Page<ServiceRequest>> {
-    const params = new HttpParams()
-      .set('page', page)
-      .set('size', size)
-      .set('sort', sort ?? '');
-
-    return this.http.get<Page<ServiceRequest>>(
-      this.apiUrl + '/open',
-      {
-        params,
-      },
-    );
+    const params = this.prepareHttpParams(page, size, sort, filters);
+    return this.http.get<Page<ServiceRequest>>(this.apiUrl + '/open', {
+      params,
+    });
   }
 
   getServiceRequestsForEquipment(
@@ -54,11 +46,7 @@ export class ServiceRequestService {
     size: number,
     sort?: string | null,
   ) {
-    const params = new HttpParams()
-      .set('page', page)
-      .set('size', size)
-      .set('sort', sort ?? '');
-
+    const params = this.prepareHttpParams(page, size, sort);
     return this.http.get<Page<ServiceRequest>>(
       this.apiUrl + `/equipment/${equipmentId}`,
       {
@@ -108,5 +96,31 @@ export class ServiceRequestService {
       default:
         return '';
     }
+  }
+
+  private prepareHttpParams(
+    page: number,
+    size: number,
+    sort?: string | null,
+    filters?: ServiceRequestFilter,
+  ): HttpParams {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', sort ?? '');
+
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (
+          value !== null &&
+          value !== '' &&
+          !(Array.isArray(value) && value.length === 0)
+        ) {
+          params = params.set(key, value);
+        }
+      });
+    }
+
+    return params;
   }
 }

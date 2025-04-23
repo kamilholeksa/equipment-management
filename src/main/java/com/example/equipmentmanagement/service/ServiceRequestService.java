@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -57,14 +58,16 @@ public class ServiceRequestService {
         return this.serviceRequestRepository.findAllByEquipmentId(equipmentId, pageable).map(serviceRequestMapper::serviceRequestToServiceRequestDto);
     }
 
-    public Page<ServiceRequestDto> getOpenServiceRequests(Pageable pageable) {
-        Set<ServiceRequestStatus> statuses = Set.of(
-                ServiceRequestStatus.NEW,
-                ServiceRequestStatus.ACCEPTED,
-                ServiceRequestStatus.IN_PROGRESS
-        );
-
-        return this.serviceRequestRepository.findAllByStatusIn(statuses, pageable).map(serviceRequestMapper::serviceRequestToServiceRequestDto);
+    public Page<ServiceRequestDto> getOpenServiceRequests(ServiceRequestFilter filter, Pageable pageable) {
+        if (filter.getStatus() == null) {
+            Set<String> statuses = new HashSet<>();
+            statuses.add(ServiceRequestStatus.NEW.name());
+            statuses.add(ServiceRequestStatus.ACCEPTED.name());
+            statuses.add(ServiceRequestStatus.IN_PROGRESS.name());
+            filter.setStatus(statuses);
+        }
+        Specification<ServiceRequest> spec = ServiceRequestSpecification.prepareSpecification(filter);
+        return this.serviceRequestRepository.findAll(spec, pageable).map(serviceRequestMapper::serviceRequestToServiceRequestDto);
     }
 
     @Transactional

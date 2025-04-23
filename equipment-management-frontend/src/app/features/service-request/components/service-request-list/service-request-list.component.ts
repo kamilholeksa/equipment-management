@@ -11,11 +11,25 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { DatePipe, Location, NgClass } from '@angular/common';
-import { TransferStatusDisplayPipe } from '../../../../shared/pipes/service-request-status-display.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceRequestDetailsDialogComponent } from '../service-request-details-dialog/service-request-details-dialog.component';
 import { ServiceRequestFormDialogComponent } from '../service-request-form-dialog/service-request-form-dialog.component';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+import { User } from '../../../user/models/user.model';
+import { UserService } from '../../../user/services/user.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { ServiceRequestFilter } from '../../models/service-request-filter.model';
+import { ServiceRequestStatusDisplayPipe } from '../../../../shared/pipes/service-request-status-display.pipe';
+import { ServiceRequestStatusEnum } from '../../../../shared/enums/service-request-status.enum';
 
 @Component({
   selector: 'app-service-request-list',
@@ -26,14 +40,27 @@ import { NotificationService } from '../../../../core/notification/services/noti
     MatPaginatorModule,
     MatButtonModule,
     DatePipe,
-    TransferStatusDisplayPipe,
     NgClass,
+    FormsModule,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    ReactiveFormsModule,
+    MatFormField,
+    ServiceRequestStatusDisplayPipe,
   ],
   templateUrl: './service-request-list.component.html',
   styleUrl: './service-request-list.component.scss',
 })
 export class ServiceRequestListComponent implements OnInit {
   serviceRequests: ServiceRequest[] = [];
+  statuses: ServiceRequestStatusEnum[] = Object.values(
+    ServiceRequestStatusEnum,
+  );
+  users: User[] = [];
+  technicians: User[] = [];
   length = 0;
   pageSize = 10;
   pageIndex = 0;
@@ -41,12 +68,14 @@ export class ServiceRequestListComponent implements OnInit {
   showAll = false;
   equipmentId?: number;
   displayedColumns!: string[];
+  filterForm!: FormGroup;
 
   @ViewChild(MatSort) matSort!: MatSort;
   @ViewChild(MatPaginator) matPaginator!: MatPaginator;
 
   constructor(
     private serviceRequestService: ServiceRequestService,
+    private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
@@ -59,15 +88,43 @@ export class ServiceRequestListComponent implements OnInit {
       this.equipmentId = params['equipmentId']
         ? +params['equipmentId']
         : undefined;
-      this.pageIndex = 0;
+
       this.setDisplayedColumns();
       this.loadData();
+
+      if (!this.equipmentId) {
+        this.userService.getActiveUsers().subscribe({
+          next: (data) => {
+            this.users = data;
+            this.technicians = data.filter((user) =>
+              user.roles.includes('ROLE_TECHNICIAN'),
+            );
+          },
+        });
+
+        this.filterForm = new FormGroup<ServiceRequestFilter>({
+          id: new FormControl(null),
+          title: new FormControl(''),
+          status: new FormControl(null),
+          userId: new FormControl(null),
+          technicianId: new FormControl(null),
+        });
+
+        this.filterForm.valueChanges
+          .pipe(debounceTime(300), distinctUntilChanged())
+          .subscribe({
+            next: (filters: ServiceRequestFilter) => {
+              this.pageIndex = 0;
+              this.loadData(filters);
+            },
+          });
+      }
     });
   }
 
-  loadData() {
+  loadData(filters?: ServiceRequestFilter) {
     let observable;
-
+    console.log(filters);
     if (this.equipmentId) {
       observable = this.serviceRequestService.getServiceRequestsForEquipment(
         this.equipmentId,
@@ -81,12 +138,14 @@ export class ServiceRequestListComponent implements OnInit {
           this.pageIndex,
           this.pageSize,
           this.sort,
+          filters,
         );
       } else {
         observable = this.serviceRequestService.getOpenServiceRequests(
           this.pageIndex,
           this.pageSize,
           this.sort,
+          filters,
         );
       }
     }

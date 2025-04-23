@@ -1,5 +1,61 @@
 <h5>Service requests</h5>
 
+@if (!equipmentId) {
+  <form class="mt-4 p-2" [formGroup]="filterForm">
+    <h6>Filter by:</h6>
+    <div class="row g-1">
+      <div class="col-auto">
+        <mat-form-field appearance="outline">
+          <mat-label>ID</mat-label>
+          <input matInput type="number" formControlName="id">
+        </mat-form-field>
+      </div>
+
+      <div class="col-auto">
+        <mat-form-field appearance="outline">
+          <mat-label>Topic</mat-label>
+          <input matInput type="text" formControlName="title">
+        </mat-form-field>
+      </div>
+
+      <div class="col-auto">
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status" multiple>
+            @for (status of statuses; track status) {
+              <mat-option [value]="status">{{ status | serviceRequestStatusDisplay }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-auto">
+        <mat-form-field appearance="outline">
+          <mat-label>Reported by</mat-label>
+          <mat-select formControlName="userId">
+            <mat-option [value]="null"></mat-option>
+            @for (user of users; track user.id) {
+              <mat-option [value]="user.id">{{ user.firstName + ' ' + user.lastName }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-auto">
+        <mat-form-field appearance="outline">
+          <mat-label>Assigned to</mat-label>
+          <mat-select formControlName="technicianId">
+            <mat-option [value]="null"></mat-option>
+            @for (technician of technicians; track technician.id) {
+              <mat-option [value]="technician.id">{{ technician.firstName + ' ' + technician.lastName }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+}
+
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="serviceRequests" matSort (matSortChange)="onSortChange()" class="mat-table">
 
@@ -21,7 +77,9 @@
     @if (!this.equipmentId) {
       <ng-container matColumnDef="technician">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Assigned to</th>
-        <td mat-cell *matCellDef="let request"> {{ request.technician ? request.technician.firstName + ' ' + request.technician.lastName : '' }}</td>
+        <td mat-cell
+            *matCellDef="let request"> {{ request.technician ? request.technician.firstName + ' ' + request.technician.lastName : '' }}
+        </td>
       </ng-container>
     }
 

@@ -43,8 +43,8 @@ public class ServiceRequestController {
     }
 
     @GetMapping("/open")
-    public ResponseEntity<Page<ServiceRequestDto>> getOpenServiceRequests(Pageable pageable) {
-        return ResponseEntity.ok(this.serviceRequestService.getOpenServiceRequests(pageable));
+    public ResponseEntity<Page<ServiceRequestDto>> getOpenServiceRequests(ServiceRequestFilter filter, Pageable pageable) {
+        return ResponseEntity.ok(this.serviceRequestService.getOpenServiceRequests(filter, pageable));
     }
 
     @PostMapping

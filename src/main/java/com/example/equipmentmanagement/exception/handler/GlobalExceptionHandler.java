@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handleGenericException(RuntimeException e) {
+    public ResponseEntity<ExceptionResponse> handleGenericException(Exception e) {
         return buildResponseBodyWithStatus(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

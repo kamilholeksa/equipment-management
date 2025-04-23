@@ -85,7 +85,11 @@ export class EquipmentService {
 
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
-        if (value !== null && value !== '' && value.length > 0) {
+        if (
+          value !== null &&
+          value !== '' &&
+          !(Array.isArray(value) && value.length === 0)
+        ) {
           params = params.set(key, value);
         }
       });
