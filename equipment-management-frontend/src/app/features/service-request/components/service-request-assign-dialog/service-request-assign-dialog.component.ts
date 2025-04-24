@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DialogRef } from '@angular/cdk/dialog';
@@ -36,7 +36,7 @@ export class ServiceRequestAssignDialogComponent implements OnInit {
   user: FormControl;
 
   constructor(
-    private dialogRef: DialogRef<ServiceRequestAssignDialogComponent>,
+    private dialogRef: MatDialogRef<ServiceRequestAssignDialogComponent>,
     private serviceRequestService: ServiceRequestService,
     private userService: UserService,
     private notificationService: NotificationService,
@@ -64,8 +64,7 @@ export class ServiceRequestAssignDialogComponent implements OnInit {
             this.notificationService.success(
               'User has been assigned to the service request',
             );
-            this.dialogRef.close();
-            window.location.reload();
+            this.dialogRef.close(true);
           },
           error: (err) => this.notificationService.error(err.error.message),
         });

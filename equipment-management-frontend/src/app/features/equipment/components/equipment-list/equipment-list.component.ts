@@ -139,6 +139,10 @@ export class EquipmentListComponent implements OnInit {
     this.router.navigate([this.router.url, id]);
   }
 
+  clearFilters() {
+    this.filterForm.reset();
+  }
+
   private setDisplayedColumns() {
     if (this.showAllEquipment) {
       this.displayedColumns = [

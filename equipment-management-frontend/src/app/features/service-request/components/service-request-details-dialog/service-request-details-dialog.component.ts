@@ -54,8 +54,7 @@ export class ServiceRequestDetailsDialogComponent {
             this.notificationService.success(
               'Service request has been cancelled',
             );
-            this.dialogRef.close();
-            window.location.reload();
+            this.dialogRef.close(true);
           },
           error: () => this.notificationService.error(),
         });

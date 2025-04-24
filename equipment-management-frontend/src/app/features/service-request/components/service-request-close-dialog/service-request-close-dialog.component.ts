@@ -1,5 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { ServiceRequestService } from '../../services/service-request.service';
 import {
   FormControl,
@@ -8,7 +12,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
-import { DialogRef } from '@angular/cdk/dialog';
 import { MatButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -31,7 +34,7 @@ export class ServiceRequestCloseDialogComponent {
   closeInfo: FormControl;
 
   constructor(
-    private dialogRef: DialogRef<ServiceRequestCloseDialogComponent>,
+    private dialogRef: MatDialogRef<ServiceRequestCloseDialogComponent>,
     private serviceRequestService: ServiceRequestService,
     private notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA)
@@ -49,8 +52,7 @@ export class ServiceRequestCloseDialogComponent {
         .subscribe({
           next: () => {
             this.notificationService.success('Service request has been closed');
-            this.dialogRef.close();
-            window.location.reload();
+            this.dialogRef.close(true);
           },
           error: () => this.notificationService.error(),
         });

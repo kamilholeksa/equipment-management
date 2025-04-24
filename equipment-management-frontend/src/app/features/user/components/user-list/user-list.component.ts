@@ -139,6 +139,10 @@ export class UserListComponent implements OnInit {
     this.router.navigate([this.router.url, id]);
   }
 
+  clearFilters() {
+    this.filterForm.reset();
+  }
+
   getStatusClass(active: boolean) {
     return this.userService.getStatusClass(active);
   }

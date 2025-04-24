@@ -65,8 +65,7 @@ export class ServiceRequestFormDialogComponent {
           this.notificationService.success(
             'New service request has been created',
           );
-          this.dialogRef.close();
-          window.location.reload();
+          this.dialogRef.close(true);
         },
         error: () => this.notificationService.error(),
       });

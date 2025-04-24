@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Page } from '../../../shared/models/page.model';
 import { ServiceRequestNote } from '../models/service-request-note.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import {ServiceRequestNoteSave} from '../models/service-request-note-save.model';
 
 @Injectable({
   providedIn: 'root',
@@ -28,14 +29,14 @@ export class ServiceRequestNoteService {
   }
 
   createServiceRequestNote(
-    data: ServiceRequestNote,
+    data: ServiceRequestNoteSave,
   ): Observable<ServiceRequestNote> {
     return this.http.post<ServiceRequestNote>(this.apiUrl, data);
   }
 
   updateServiceRequestNote(
     id: number,
-    data: ServiceRequestNote,
+    data: ServiceRequestNoteSave,
   ): Observable<ServiceRequestNote> {
     return this.http.put<ServiceRequestNote>(this.apiUrl + `/${id}`, data);
   }

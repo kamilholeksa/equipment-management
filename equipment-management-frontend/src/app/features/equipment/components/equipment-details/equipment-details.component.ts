@@ -47,6 +47,15 @@ export class EquipmentDetailsComponent implements OnInit {
     });
   }
 
+  loadData() {
+    this.equipmentService.getEquipment(this.equipment.id).subscribe({
+      next: (equipment) => {
+        this.equipment = equipment;
+      },
+      error: () => this.notificationService.error(),
+    })
+  }
+
   goBack() {
     this.location.back();
   }
@@ -89,7 +98,7 @@ export class EquipmentDetailsComponent implements OnInit {
           this.notificationService.success(
             'The equipment has been withdrawn from use',
           );
-          window.location.reload();
+          this.loadData();
         },
         error: () => this.notificationService.error(),
       });

@@ -95,13 +95,13 @@
     </div>
 
     <div class="p-2 mt-1">
-      <form [formGroup]="noteForm">
+      <form>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Add note</mat-label>
-          <textarea matInput formControlName="description" maxlength="255"></textarea>
+          <textarea matInput [formControl]="note" maxlength="255"></textarea>
         </mat-form-field>
         <div class="d-flex justify-content-end">
-          <button mat-flat-button (click)="saveNote()" [disabled]="!this.noteForm.valid">Add</button>
+          <button mat-flat-button (click)="saveNote()" [disabled]="!this.note.valid">Add</button>
         </div>
       </form>
     </div>

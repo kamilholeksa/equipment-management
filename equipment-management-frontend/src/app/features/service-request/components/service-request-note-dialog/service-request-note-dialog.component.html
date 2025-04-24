@@ -1,14 +1,14 @@
 <mat-dialog-content xmlns="http://www.w3.org/1999/html">
   <h2 mat-dialog-title class="mb-4">Note details</h2>
 
-  <form [formGroup]="noteForm">
+  <form>
     <mat-form-field appearance="outline" class="form-field w-100">
       <mat-label>Content</mat-label>
-      <textarea matInput rows="8" formControlName="description" [readonly]="!isOwner" required maxlength="255"></textarea>
-      @if (noteForm.controls['description'].hasError('required')) {
+      <textarea matInput rows="8" [formControl]="noteControl" [readonly]="!isOwner" required maxlength="255"></textarea>
+      @if (noteControl.hasError('required')) {
         <mat-error>Required field</mat-error>
       }
-      @if (noteForm.controls['description'].hasError('maxlength')) {
+      @if (noteControl.hasError('maxlength')) {
         <mat-error>Max 255 characters</mat-error>
       }
     </mat-form-field>

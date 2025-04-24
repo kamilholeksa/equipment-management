@@ -124,7 +124,7 @@ export class ServiceRequestListComponent implements OnInit {
 
   loadData(filters?: ServiceRequestFilter) {
     let observable;
-    console.log(filters);
+
     if (this.equipmentId) {
       observable = this.serviceRequestService.getServiceRequestsForEquipment(
         this.equipmentId,
@@ -181,23 +181,35 @@ export class ServiceRequestListComponent implements OnInit {
     if (!this.equipmentId) {
       this.router.navigate([this.router.url, id]);
     } else {
-      this.dialog.open(ServiceRequestDetailsDialogComponent, {
+      const dialogRef = this.dialog.open(ServiceRequestDetailsDialogComponent, {
         width: '800px',
         maxWidth: '100%',
         data: {
           serviceRequest: this.serviceRequests.find((item) => item.id === id),
         },
       });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.loadData();
+        }
+      })
     }
   }
 
   openServiceRequestForm() {
-    this.dialog.open(ServiceRequestFormDialogComponent, {
+    const dialogRef = this.dialog.open(ServiceRequestFormDialogComponent, {
       width: '800px',
       maxWidth: '100%',
       data: {
         equipmentId: this.equipmentId,
       },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadData();
+      }
     });
   }
 
@@ -205,6 +217,10 @@ export class ServiceRequestListComponent implements OnInit {
     this.showAll = !this.showAll;
     this.pageIndex = 0;
     this.loadData();
+  }
+
+  clearFilters() {
+    this.filterForm.reset();
   }
 
   goBack() {
