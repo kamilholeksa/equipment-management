@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangePasswordDialogComponent } from '../change-password-dialog/change-password-dialog.component';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile',
@@ -27,16 +27,14 @@ export class UserProfileComponent implements OnInit {
   user!: User;
 
   constructor(
-    private userService: UserService,
+    private route: ActivatedRoute,
     private dialog: MatDialog,
     private notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
-    this.userService.getCurrentUser().subscribe({
-      next: (user) => {
-        this.user = user;
-      },
+    this.route.data.subscribe({
+      next: ({ account }) => (this.user = account),
       error: () => this.notificationService.error(),
     });
   }

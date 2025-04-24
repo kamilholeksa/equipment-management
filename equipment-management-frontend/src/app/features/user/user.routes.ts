@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { authGuard } from '../../core/auth/guards/auth.guard';
 import { UserResolver } from './resolvers/user.resolver';
+import {UserProfileResolver} from './resolvers/user-profile.resolver';
 
 export const userRoutes: Routes = [
   {
@@ -46,5 +47,8 @@ export const userRoutes: Routes = [
         (m) => m.UserProfileComponent,
       ),
     canActivate: [authGuard],
+    resolve: {
+      account: UserProfileResolver,
+    },
   },
 ];

@@ -6,10 +6,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { DialogRef } from '@angular/cdk/dialog';
 import { ServiceRequestService } from '../../services/service-request.service';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
 import { UserService } from '../../../user/services/user.service';

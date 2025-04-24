@@ -12,17 +12,20 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { NotificationService } from '../../../../core/notification/services/notification.service';
-import {RoleListDisplayPipe} from '../../../../shared/pipes/role-list-display.pipe';
-import {EquipmentStatusDisplayPipe} from "../../../../shared/pipes/equipment-status-display.pipe";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {RoleDisplayPipe} from '../../../../shared/pipes/role-display.pipe';
-import {Role} from '../../models/role.model';
-import {RoleService} from '../../services/role.service';
-import {EquipmentFilter} from '../../../equipment/models/equipment-filter.model';
-import {debounceTime, distinctUntilChanged} from 'rxjs';
-import {UserFilter} from '../../models/user-filter.model';
+import { RoleListDisplayPipe } from '../../../../shared/pipes/role-list-display.pipe';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { RoleDisplayPipe } from '../../../../shared/pipes/role-display.pipe';
+import { Role } from '../../models/role.model';
+import { RoleService } from '../../services/role.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { UserFilter } from '../../models/user-filter.model';
 
 @Component({
   selector: 'app-user-list',
