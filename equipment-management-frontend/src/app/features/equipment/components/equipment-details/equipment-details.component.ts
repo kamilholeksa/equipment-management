@@ -108,7 +108,7 @@ export class EquipmentDetailsComponent implements OnInit {
   canTransfer(): boolean {
     return (
       this.authService.hasAnyRole(['ROLE_ADMIN', 'ROLE_MANAGER']) ||
-      this.equipment.user.id === this.authService.account()?.id
+      this.equipment.user.username === this.authService.account()?.username
     );
   }
 
