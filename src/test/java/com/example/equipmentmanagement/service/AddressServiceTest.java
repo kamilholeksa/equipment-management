@@ -8,18 +8,19 @@ import com.example.equipmentmanagement.mapper.AddressMapper;
 import com.example.equipmentmanagement.model.Address;
 import com.example.equipmentmanagement.repository.AddressRepository;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,8 +36,20 @@ class AddressServiceTest {
     @Mock
     AddressMapper addressMapper;
 
-    @DisplayName("List of AddressDto objects returned")
+    private AddressSaveDto addressSaveDto;
+
+    @BeforeEach
+    void setUp() {
+        addressSaveDto = new AddressSaveDto();
+        addressSaveDto.setPostalCode("11-111");
+        addressSaveDto.setCity("City");
+        addressSaveDto.setStreet("Street");
+        addressSaveDto.setNumber("11");
+        addressSaveDto.setDescription("Description");
+    }
+
     @Test
+    @DisplayName("List of AddressDto objects returned")
     void testGetAllAddresses_shouldReturnListOfAddressDto() {
         // Given
         Address address = new Address();
@@ -54,8 +67,8 @@ class AddressServiceTest {
         verify(addressRepository).findAll();
     }
 
-    @DisplayName("AddressDto object returned")
     @Test
+    @DisplayName("AddressDto object returned")
     void testGetAddress_whenAddressExists_shouldReturnAddressDto() {
         // Given
         Long addressId = 1L;
@@ -73,8 +86,8 @@ class AddressServiceTest {
         verify(addressRepository).findById(addressId);
     }
 
-    @DisplayName("ResourceNotFoundException thrown")
     @Test
+    @DisplayName("ResourceNotFoundException thrown")
     void testGetAddress_whenAddressNotFound_shouldThrowResourceNotFoundException() {
         // Given
         Long addressId = 1L;
@@ -82,118 +95,87 @@ class AddressServiceTest {
         when(addressRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // When & Then
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> addressService.getAddress(addressId));
-        assertEquals(expectedMessage, exception.getMessage());
+        ResourceNotFoundException thrown = assertThrows(ResourceNotFoundException.class, () -> addressService.getAddress(addressId));
+        assertEquals(expectedMessage, thrown.getMessage());
         verify(addressRepository, never()).save(any(Address.class));
     }
 
-    @DisplayName("Address object created")
     @Test
+    @DisplayName("Address object created")
     void testCreateAddress_whenAddressSaveDtoProvided_shouldReturnAddressDto() {
         // Given
-        Long addressId = 1L;
-
-        Address address = new Address();
-        address.setId(addressId);
-        address.setPostalCode("12-345");
-        address.setCity("City");
-        address.setStreet("Street");
-        address.setNumber("21");
-        address.setDescription("Description");
-
-        AddressDto addressDto = new AddressDto();
-        addressDto.setId(addressId);
-        addressDto.setPostalCode("12-345");
-        addressDto.setCity("City");
-        addressDto.setStreet("Street");
-        addressDto.setNumber("21");
-        addressDto.setDescription("Description");
+        Address address = new ModelMapper().map(addressSaveDto, Address.class);
+        AddressDto addressDto = new ModelMapper().map(address, AddressDto.class);
+        addressDto.setId(1L);
 
         when(addressRepository.save(any(Address.class))).thenReturn(address);
         when(addressMapper.addressSaveDtoToAddress(any(AddressSaveDto.class))).thenReturn(address);
         when(addressMapper.addressToAddressDto(any(Address.class))).thenReturn(addressDto);
 
         // When
-        AddressDto result = addressService.createAddress(new AddressSaveDto());
+        AddressDto result = addressService.createAddress(addressSaveDto);
 
         // Then
-        assertEquals(addressDto, result);
+        assertNotNull(result.getId());
+        assertEquals(addressSaveDto.getPostalCode(), result.getPostalCode());
+        assertEquals(addressSaveDto.getCity(), result.getCity());
+        assertEquals(addressSaveDto.getStreet(), result.getStreet());
+        assertEquals(addressSaveDto.getNumber(), result.getNumber());
+        assertEquals(addressSaveDto.getDescription(), result.getDescription());
         verify(addressRepository).save(any(Address.class));
     }
 
-    @DisplayName("Address object updated")
     @Test
+    @DisplayName("Address object updated")
     void testUpdateAddress_whenExists_shouldUpdateAndReturnAddressDto() {
         // Given
         Long addressId = 1L;
-
         Address existingAddress = new Address();
-        existingAddress.setId(addressId);
-        existingAddress.setPostalCode("12-345");
-        existingAddress.setCity("City");
-        existingAddress.setStreet("Street");
-        existingAddress.setNumber("21");
-        existingAddress.setDescription("Description");
 
-        AddressSaveDto requestDto = new AddressSaveDto();
-        requestDto.setPostalCode("11-111");
-        requestDto.setCity("City1");
-        requestDto.setStreet("Street1");
-        requestDto.setNumber("22");
-        requestDto.setDescription("Description1");
+        Address address = new ModelMapper().map(addressSaveDto, Address.class);
+        address.setId(addressId);
 
-        Address savedAddress = new Address();
-        savedAddress.setId(addressId);
-        savedAddress.setPostalCode("11-111");
-        savedAddress.setCity("City1");
-        savedAddress.setStreet("Street1");
-        savedAddress.setNumber("22");
-        savedAddress.setDescription("Description1");
-
-        AddressDto addressDto = new AddressDto();
+        AddressDto addressDto = new ModelMapper().map(address, AddressDto.class);
         addressDto.setId(addressId);
-        addressDto.setPostalCode("11-111");
-        addressDto.setCity("City1");
-        addressDto.setStreet("Street1");
-        addressDto.setNumber("22");
-        addressDto.setDescription("Description1");
 
         when(addressRepository.findById(anyLong())).thenReturn(Optional.of(existingAddress));
-        when(addressRepository.save(any(Address.class))).thenReturn(savedAddress);
-        when(addressMapper.addressSaveDtoToAddress(any(AddressSaveDto.class))).thenReturn(savedAddress);
+        when(addressMapper.addressSaveDtoToAddress(any(AddressSaveDto.class))).thenReturn(address);
+        when(addressRepository.save(any(Address.class))).thenReturn(address);
         when(addressMapper.addressToAddressDto(any(Address.class))).thenReturn(addressDto);
 
         // When
-        AddressDto result = addressService.updateAddress(addressId, requestDto);
+        AddressDto result = addressService.updateAddress(addressId, addressSaveDto);
 
         // Then
-        assertEquals(addressDto, result);
-        verify(addressRepository).save(any(Address.class));
+        assertEquals(addressId, result.getId());
+        assertEquals(addressSaveDto.getPostalCode(), result.getPostalCode());
+        assertEquals(addressSaveDto.getCity(), result.getCity());
+        assertEquals(addressSaveDto.getStreet(), result.getStreet());
+        assertEquals(addressSaveDto.getNumber(), result.getNumber());
+        assertEquals(addressSaveDto.getDescription(), result.getDescription());
+        verify(addressRepository).save(address);
     }
 
-    @DisplayName("ResourceNotFoundException thrown")
     @Test
+    @DisplayName("ResourceNotFoundException thrown")
     void testUpdateAddress_whenNotFound_shouldThrowResourceNotFoundException() {
         // Given
         Long addressId = 1L;
-
-        AddressSaveDto requestDto = new AddressSaveDto();
         String expectedMessage = "Address with id 1 not found";
 
         when(addressRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // When & Then
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> addressService.updateAddress(addressId, requestDto));
-        assertEquals(expectedMessage, exception.getMessage());
+        ResourceNotFoundException thrown = assertThrows(ResourceNotFoundException.class, () -> addressService.updateAddress(addressId, addressSaveDto));
+        assertEquals(expectedMessage, thrown.getMessage());
         verify(addressRepository, never()).save(any(Address.class));
     }
 
-    @DisplayName("Address deleted")
     @Test
+    @DisplayName("Address deleted")
     void testDeleteAddress_whenNoEquipmentLinked_shouldDeleteAddress() {
         // Given
         Long addressId = 1L;
-
         Address existingAddress = new Address();
         existingAddress.setId(addressId);
 
@@ -207,12 +189,11 @@ class AddressServiceTest {
         verify(addressRepository).delete(existingAddress);
     }
 
-    @DisplayName("BadRequestAlertException thrown when there is Equipment linked to it")
     @Test
+    @DisplayName("BadRequestAlertException thrown when there is Equipment linked to it")
     void testDeleteAddress_whenEquipmentLinked_shouldThrowBadRequestAlertException() {
         // Given
         Long addressId = 1L;
-
         Address existingAddress = new Address();
         existingAddress.setId(addressId);
         String expectedMessage = "Failed. There are equipment with this address: 1";
@@ -221,8 +202,8 @@ class AddressServiceTest {
         when(equipmentRepository.countByAddressId(anyLong())).thenReturn(1);
 
         // When & Then
-        BadRequestAlertException exception = assertThrows(BadRequestAlertException.class, () -> addressService.deleteAddress(addressId));
-        assertEquals(expectedMessage, exception.getMessage());
+        BadRequestAlertException thrown = assertThrows(BadRequestAlertException.class, () -> addressService.deleteAddress(addressId));
+        assertEquals(expectedMessage, thrown.getMessage());
         verify(addressRepository, never()).delete(existingAddress);
     }
 }
