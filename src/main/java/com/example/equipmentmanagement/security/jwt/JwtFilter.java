@@ -38,6 +38,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 User user = userRepository.findByUsername(username)
                         .orElseThrow(() -> new UserNotFoundException(username));
 
+                if (!user.isActive()) {
+                    throw new UserNotFoundException(username);
+                }
+
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }

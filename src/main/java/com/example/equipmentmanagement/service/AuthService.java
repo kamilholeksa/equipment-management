@@ -65,8 +65,11 @@ public class AuthService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
 
-        String newAccessToken = tokenProvider.createToken(user);
+        if (!user.isActive()) {
+            throw new UserNotFoundException(username);
+        }
 
+        String newAccessToken = tokenProvider.createToken(user);
         return new AuthResponse(newAccessToken, refreshToken);
     }
 
