@@ -9,7 +9,6 @@ Fullstack application for managing equipment, service requests and user assignme
 - **Database:** PostgreSQL
 - **Security:** Spring Security, JWT
 - **Testing:** JUnit 5, Mockito
-- **API Documentation:** Springdoc OpenAPI (Swagger UI)
 
 ## Main features
 
