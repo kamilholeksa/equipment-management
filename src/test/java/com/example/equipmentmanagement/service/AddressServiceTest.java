@@ -50,7 +50,7 @@ class AddressServiceTest {
 
     @Test
     @DisplayName("List of AddressDto objects returned")
-    void testGetAllAddresses_shouldReturnListOfAddressDto() {
+    void testGetAllAddresses_returnsListOfAddressDto() {
         // Given
         Address address = new Address();
         AddressDto dto = new AddressDto();
@@ -69,7 +69,7 @@ class AddressServiceTest {
 
     @Test
     @DisplayName("AddressDto object returned")
-    void testGetAddress_whenAddressExists_shouldReturnAddressDto() {
+    void testGetAddress_whenAddressExists_returnsAddressDto() {
         // Given
         Long addressId = 1L;
         Address address = new Address();
@@ -88,7 +88,7 @@ class AddressServiceTest {
 
     @Test
     @DisplayName("ResourceNotFoundException thrown")
-    void testGetAddress_whenAddressNotFound_shouldThrowResourceNotFoundException() {
+    void testGetAddress_whenAddressNotFound_throwsResourceNotFoundException() {
         // Given
         Long addressId = 1L;
         String expectedMessage = "Address with id 1 not found";
@@ -102,11 +102,11 @@ class AddressServiceTest {
 
     @Test
     @DisplayName("Address object created")
-    void testCreateAddress_whenAddressSaveDtoProvided_shouldReturnAddressDto() {
+    void testCreateAddress_whenAddressSaveDtoProvided_returnsAddressDto() {
         // Given
         Address address = new ModelMapper().map(addressSaveDto, Address.class);
+        address.setId(1L);
         AddressDto addressDto = new ModelMapper().map(address, AddressDto.class);
-        addressDto.setId(1L);
 
         when(addressRepository.save(any(Address.class))).thenReturn(address);
         when(addressMapper.addressSaveDtoToAddress(any(AddressSaveDto.class))).thenReturn(address);
@@ -127,7 +127,7 @@ class AddressServiceTest {
 
     @Test
     @DisplayName("Address object updated")
-    void testUpdateAddress_whenExists_shouldUpdateAndReturnAddressDto() {
+    void testUpdateAddress_whenExists_updatesAndReturnsAddressDto() {
         // Given
         Long addressId = 1L;
         Address existingAddress = new Address();
@@ -158,7 +158,7 @@ class AddressServiceTest {
 
     @Test
     @DisplayName("ResourceNotFoundException thrown")
-    void testUpdateAddress_whenNotFound_shouldThrowResourceNotFoundException() {
+    void testUpdateAddress_whenNotFound_throwsResourceNotFoundException() {
         // Given
         Long addressId = 1L;
         String expectedMessage = "Address with id 1 not found";
@@ -173,17 +173,15 @@ class AddressServiceTest {
 
     @Test
     @DisplayName("Address deleted")
-    void testDeleteAddress_whenNoEquipmentLinked_shouldDeleteAddress() {
+    void testDeleteAddress_whenNoEquipmentLinked_deletesAddress() {
         // Given
-        Long addressId = 1L;
         Address existingAddress = new Address();
-        existingAddress.setId(addressId);
 
         when(addressRepository.findById(anyLong())).thenReturn(Optional.of(existingAddress));
         when(equipmentRepository.countByAddressId(anyLong())).thenReturn(0);
 
         // When
-        addressService.deleteAddress(addressId);
+        addressService.deleteAddress(1L);
 
         // Then
         verify(addressRepository).delete(existingAddress);
@@ -191,18 +189,16 @@ class AddressServiceTest {
 
     @Test
     @DisplayName("BadRequestAlertException thrown when there is Equipment linked to it")
-    void testDeleteAddress_whenEquipmentLinked_shouldThrowBadRequestAlertException() {
+    void testDeleteAddress_whenEquipmentLinked_throwsBadRequestAlertException() {
         // Given
-        Long addressId = 1L;
         Address existingAddress = new Address();
-        existingAddress.setId(addressId);
         String expectedMessage = "Failed. There are equipment with this address: 1";
 
         when(addressRepository.findById(anyLong())).thenReturn(Optional.of(existingAddress));
         when(equipmentRepository.countByAddressId(anyLong())).thenReturn(1);
 
         // When & Then
-        BadRequestAlertException thrown = assertThrows(BadRequestAlertException.class, () -> addressService.deleteAddress(addressId));
+        BadRequestAlertException thrown = assertThrows(BadRequestAlertException.class, () -> addressService.deleteAddress(1L));
         assertEquals(expectedMessage, thrown.getMessage());
         verify(addressRepository, never()).delete(existingAddress);
     }

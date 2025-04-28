@@ -2,17 +2,13 @@ package com.example.equipmentmanagement.service;
 
 import com.example.equipmentmanagement.dto.user.*;
 import com.example.equipmentmanagement.enumeration.RoleName;
-import com.example.equipmentmanagement.exception.InvalidPasswordException;
-import com.example.equipmentmanagement.exception.PasswordMismatchException;
-import com.example.equipmentmanagement.exception.ResourceNotFoundException;
-import com.example.equipmentmanagement.exception.UserNotFoundException;
+import com.example.equipmentmanagement.exception.*;
 import com.example.equipmentmanagement.mapper.UserMapper;
 import com.example.equipmentmanagement.model.Role;
 import com.example.equipmentmanagement.model.User;
 import com.example.equipmentmanagement.repository.UserRepository;
 import com.example.equipmentmanagement.specification.UserSpecification;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -76,11 +72,11 @@ public class UserService {
     @Transactional
     public UserDto createUser(UserSaveDto dto) {
         if (userRepository.existsByUsername(dto.getUsername())) {
-            throw new ValidationException(String.format("User with username \"%s\" already exists", dto.getUsername()));
+            throw new BadRequestAlertException(String.format("User with username \"%s\" already exists", dto.getUsername()));
         }
 
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new ValidationException(String.format("User with email \"%s\" already exists", dto.getEmail()));
+            throw new BadRequestAlertException(String.format("User with email \"%s\" already exists", dto.getEmail()));
         }
 
         User newUser = userMapper.userSaveDtoToUser(dto);
@@ -93,12 +89,11 @@ public class UserService {
     public UserDto updateUser(Long id, UserSaveDto dto) {
         User existingUser = findUserById(id);
 
-        if ((!dto.getUsername().equals(existingUser.getUsername())) && userRepository.existsByUsername(dto.getUsername())) {
-            throw new ValidationException(String.format("User with username \"%s\" already exists", dto.getUsername()));
+        if (userWithUsernameExists(dto, existingUser)) {
+            throw new BadRequestAlertException(String.format("User with username \"%s\" already exists", dto.getUsername()));
         }
-
-        if ((!dto.getEmail().equals(existingUser.getEmail())) && userRepository.existsByEmail(dto.getEmail())) {
-            throw new ValidationException(String.format("User with email \"%s\" already exists", dto.getEmail()));
+        if (userWithEmailExists(dto, existingUser)) {
+            throw new BadRequestAlertException(String.format("User with email \"%s\" already exists", dto.getEmail()));
         }
 
         User updatedUser = userMapper.userSaveDtoToUser(dto);
@@ -119,9 +114,7 @@ public class UserService {
             throw new PasswordMismatchException();
         }
 
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", id));
-
+        User user = findUserById(id);
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
     }
@@ -152,5 +145,17 @@ public class UserService {
     private User findUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", id));
+    }
+
+    // Method checks if username already exists and provided username is not matching updated user username.
+    private boolean userWithUsernameExists(UserSaveDto dto, User existingUser) {
+        return !dto.getUsername().equals(existingUser.getUsername())
+                && userRepository.existsByUsername(dto.getUsername());
+    }
+
+    // Method checks if email already exists and provided email is not matching updated user email.
+    private boolean userWithEmailExists(UserSaveDto dto, User existingUser) {
+        return !dto.getEmail().equals(existingUser.getEmail())
+                && userRepository.existsByEmail(dto.getEmail());
     }
 }

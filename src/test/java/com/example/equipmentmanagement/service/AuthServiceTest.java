@@ -47,7 +47,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("UserNotFoundException thrown when user does not exist")
-    void testLogin_whenUserNotFound_shouldThrowUserNotFoundException() {
+    void testLogin_whenUserNotFound_throwsUserNotFoundException() {
         // Given
         CredentialsRequest credentialsRequest = new CredentialsRequest();
         credentialsRequest.setUsername("username");
@@ -62,7 +62,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("UserNotFoundException thrown when user is inactive")
-    void testLogin_whenUserInactive_shouldThrowUserNotFoundException() {
+    void testLogin_whenUserInactive_throwsUserNotFoundException() {
         // Given
         CredentialsRequest credentialsRequest = new CredentialsRequest();
         credentialsRequest.setUsername("username");
@@ -82,7 +82,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("InvalidPasswordException thrown when wrong password provided")
-    void testLogin_whenPasswordInvalid_shouldThrowInvalidPasswordException() {
+    void testLogin_whenPasswordInvalid_throwsInvalidPasswordException() {
         // Given
         CredentialsRequest credentialsRequest = new CredentialsRequest();
         credentialsRequest.setUsername("username");
@@ -103,7 +103,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("AuthResponse returned when valid credentials provided")
-    void testLogin_whenValidCredentialsProvided_shouldReturnAuthResponse() {
+    void testLogin_whenValidCredentialsProvided_returnsAuthResponse() {
         // Given
         User user = new User();
         user.setId(1L);
@@ -135,7 +135,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("UnauthorizedException thrown when wrong refresh token is invalid")
-    void testRefreshToken_whenRefreshTokenIsInvalid_shouldThrowUnauthorizedException() {
+    void testRefreshToken_whenRefreshTokenIsInvalid_throwsUnauthorizedException() {
         // Given
         String expectedMessage = "Refresh token is invalid";
         when(tokenProvider.isTokenValid(anyString())).thenReturn(false);
@@ -148,7 +148,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("UserNotFoundException thrown when user does not exist")
-    void testRefreshToken_whenUserNotFound_shouldThrowUserNotFoundException() {
+    void testRefreshToken_whenUserNotFound_throwsUserNotFoundException() {
         // Given
         String username = "username";
         String expectedMessage = "User username not found";
@@ -165,7 +165,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("UserNotFoundException thrown when user does not exist")
-    void testRefreshToken_whenUserIsInactive_shouldThrowUserNotFoundException() {
+    void testRefreshToken_whenUserIsInactive_throwsUserNotFoundException() {
         // Given
         String username = "username";
         User user = new User();
@@ -184,7 +184,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("UserNotFoundException thrown when user does not exist")
-    void testRefreshToken_whenTokenValidAndUserActive_shouldReturnAuthResponse() {
+    void testRefreshToken_whenTokenValidAndUserActive_returnsAuthResponse() {
         // Given
         String username = "username";
         User user = new User();
@@ -205,7 +205,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("UserNotFoundException thrown when user does not exist")
-    void testGetAccount_whenUserNotFound_shouldThrowUserNotFoundException() {
+    void testGetAccount_whenUserNotFound_throwsUserNotFoundException() {
         // Given
         String expectedMessage = "User username not found";
         Authentication authentication = mock(Authentication.class);
@@ -221,7 +221,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("AccountDto returned when user found")
-    void testGetAccount_whenUserFound_shouldReturnAccountDto() {
+    void testGetAccount_whenUserFound_returnsAccountDto() {
         // Given
         User user = new User();
         user.setId(1L);

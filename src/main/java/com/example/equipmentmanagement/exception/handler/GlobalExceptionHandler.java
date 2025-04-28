@@ -2,7 +2,6 @@ package com.example.equipmentmanagement.exception.handler;
 
 import com.example.equipmentmanagement.dto.exception.ExceptionResponse;
 import com.example.equipmentmanagement.exception.*;
-import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,7 +26,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             InvalidPasswordException.class,
             UserAlreadyExistsException.class,
-            ValidationException.class,
             BadRequestAlertException.class
     })
     public ResponseEntity<ExceptionResponse> handleBadRequestException(RuntimeException e) {

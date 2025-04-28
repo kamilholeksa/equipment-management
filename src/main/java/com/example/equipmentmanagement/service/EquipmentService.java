@@ -4,6 +4,7 @@ import com.example.equipmentmanagement.dto.equipment.EquipmentDto;
 import com.example.equipmentmanagement.dto.equipment.EquipmentFilter;
 import com.example.equipmentmanagement.dto.equipment.EquipmentSaveDto;
 import com.example.equipmentmanagement.enumeration.EquipmentStatus;
+import com.example.equipmentmanagement.exception.BadRequestAlertException;
 import com.example.equipmentmanagement.exception.ResourceNotFoundException;
 import com.example.equipmentmanagement.mapper.EquipmentMapper;
 import com.example.equipmentmanagement.model.Equipment;
@@ -11,7 +12,6 @@ import com.example.equipmentmanagement.model.User;
 import com.example.equipmentmanagement.repository.EquipmentRepository;
 import com.example.equipmentmanagement.specification.EquipmentSpecification;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -93,19 +93,8 @@ public class EquipmentService {
     }
 
     private Equipment prepareAndValidateEquipment(EquipmentSaveDto dto, Equipment existingEquipment) {
-        dto.setSerialNumber(dto.getSerialNumber() != null && dto.getSerialNumber().isEmpty() ? null : dto.getSerialNumber());
-
-        if (dto.getSerialNumber() != null &&
-                (existingEquipment == null || !dto.getSerialNumber().equals(existingEquipment.getSerialNumber())) &&
-                equipmentRepository.existsBySerialNumber(dto.getSerialNumber())) {
-            throw new ValidationException(String.format("Equipment with serial number \"%s\" already exists", dto.getSerialNumber()));
-        }
-
-        if ((existingEquipment == null || !dto.getInventoryNumber().equals(existingEquipment.getInventoryNumber())) &&
-                equipmentRepository.existsByInventoryNumber(dto.getInventoryNumber())) {
-            throw new ValidationException(String.format("Equipment with inventory number \"%s\" already exists", dto.getInventoryNumber()));
-        }
-
+        dto.setSerialNumber(setStringToNullIfEmpty(dto.getSerialNumber()));
+        validateUniqueness(dto, existingEquipment);
         Equipment equipment = equipmentMapper.equipmentSaveDtoToEquipment(dto);
 
         if (existingEquipment != null) {
@@ -115,5 +104,27 @@ public class EquipmentService {
         }
 
         return equipment;
+    }
+
+    private void validateUniqueness(EquipmentSaveDto dto, Equipment existingEquipment) {
+        if (isSerialNumberChanged(dto, existingEquipment) && equipmentRepository.existsBySerialNumber(dto.getSerialNumber())) {
+            throw new BadRequestAlertException(String.format("Equipment with serial number \"%s\" already exists", dto.getSerialNumber()));
+        }
+
+        if (isInventoryNumberChanged(dto, existingEquipment) && equipmentRepository.existsByInventoryNumber(dto.getInventoryNumber())) {
+            throw new BadRequestAlertException(String.format("Equipment with inventory number \"%s\" already exists", dto.getInventoryNumber()));
+        }
+    }
+
+    private boolean isSerialNumberChanged(EquipmentSaveDto dto, Equipment existingEquipment) {
+        return dto.getSerialNumber() != null && (existingEquipment == null || !dto.getSerialNumber().equals(existingEquipment.getSerialNumber()));
+    }
+
+    private boolean isInventoryNumberChanged(EquipmentSaveDto dto, Equipment existingEquipment) {
+        return existingEquipment == null || !dto.getInventoryNumber().equals(existingEquipment.getInventoryNumber());
+    }
+
+    private String setStringToNullIfEmpty(String value) {
+        return (value != null && value.isBlank()) ? null : value;
     }
 }
