@@ -3,8 +3,7 @@ package com.example.equipmentmanagement.controller;
 import com.example.equipmentmanagement.dto.address.AddressDto;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -17,11 +16,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource(locations = "/application-test.properties")
 class AddressControllerIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private IntegrationTestUtils integrationTestUtils;
+
+    private String accessToken;
+
+    @BeforeAll
+    void setUp() throws JSONException {
+        accessToken = integrationTestUtils.obtainAccessToken();
+    }
 
     @Test
     @DisplayName("Address can be created")
@@ -37,6 +47,7 @@ class AddressControllerIntegrationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(accessToken);
 
         HttpEntity<String> request = new HttpEntity<>(addressRequestJson.toString(), headers);
 
@@ -63,7 +74,8 @@ class AddressControllerIntegrationTest {
     void testGetAllAddresses_whenMissingJwt_returns401() {
         // Given
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> request = new HttpEntity<>(null, headers);
 
